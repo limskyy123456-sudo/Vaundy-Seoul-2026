@@ -270,6 +270,12 @@
       var(--song-cover, url('images/poster-song.jpg')) center 30%/cover no-repeat,
       linear-gradient(180deg,#170504 0%, #260906 100%);
   }
+  .song-body{
+    flex:1;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+  }
   .song-fixed-top{
     flex:none;
   }
@@ -478,6 +484,51 @@
   #app{min-height:100svh;}
   @media (min-width:720px){
     .hero{padding-top:72px;}
+  }
+
+  /* ---------- PC 등 큰 화면: 영상 왼쪽 / 가사 오른쪽 2단 ---------- */
+  @media (min-width:900px){
+    .song-body{
+      flex-direction:row;
+      align-items:stretch;
+    }
+    .song-fixed-top{
+      flex:1 1 62%;
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      overflow-y:auto;
+      padding:16px 0 24px;
+    }
+    .song-fixed-top .video-wrap{
+      margin-top:0;
+      width:100%;
+      /* 가로는 컬럼 폭 전체를 쓰되, 세로가 화면을 넘지 않도록 16:9 기준으로 제한 */
+      max-width:min(100%, calc((100svh - 250px) * 16 / 9));
+      padding:0 24px;
+    }
+    .lyrics-scroll{
+      flex:1 1 38%;
+      min-width:0;
+      border-top:none;
+      border-left:1px solid var(--line);
+    }
+    .lyrics-list{
+      margin-top:0;
+      padding:16px 18px 140px;
+    }
+    /* 2단일 때는 가사 영역이 따로 스크롤되므로 하단 여백을 줄임 */
+    .player-controls{
+      bottom:26px;
+    }
+  }
+
+  /* 아주 넓은 화면에서는 영상 비중을 조금 더 키움 */
+  @media (min-width:1400px){
+    .song-fixed-top{flex:1 1 66%;}
+    .lyrics-scroll{flex:1 1 34%;}
+    .song-fixed-top .video-wrap{padding:0 36px;}
   }
 </style>
 <!-- YouTube IFrame Player API 스크립트 추가 -->
@@ -1687,6 +1738,58 @@
 
       ],
     },
+    {
+      id: "flyaway",
+      title: "날아오를 때 (飛ぶ時)",
+      youtubeId: "ARj1adoUoEU",
+      lyrics: [
+        { time: 19.5, jp: "痛みの数だけ",        ko: [{ text: "이타미노 카즈다케"}],         tr: "아픔의 수만큼" },
+        { time: 26, jp: "それは、僕の静脈を通り",        ko: [{ text: "소레와 보쿠노 조우먀쿠오 토오리"}],         tr: "그것은 내 정맥을 지나" },
+        { time: 33, jp: "心臓を突破して 忘れた頃、到達 脳に",        ko: [{ text: "신조오오 톳파시테 와스레타 코로 토오타츠 노오니"}],         tr: "심장을 뚫고 지나 잊을 즈음, 도달해" },
+        { time: 44, jp: "まぁ辛くはないが この小さな、この小さな",        ko: [{ text: "마아 츠라쿠와 나이가 코노 치이사나 코노 치이사나"}],         tr: "뭐, 괴롭진 않지만 이 작은, 이 작은" },
+        { time: 49.5, jp: "うらみわびの隙間風は 許してくれ",        ko: [{ text: "우라미와비노 스키마카제와 유루시테 쿠레"}],         tr: "원망과 사과 사이의 웃바람은 용서해줘" },
+        { time: 58, jp: "この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" },
+        { time: 61, jp: "僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" },
+        { time: 65, jp: "気分次第で生えた羽だって",        ko: [{ text: "키분 시다이데 하에타 하네닷테"}],         tr: "기분 따라 돋아난 날개라 해도" },
+        { time: 68.5, jp: "今は背で受けておくよ全部",        ko: [{ text: "이마와 세데 우케테오쿠요"}, { text: " 젠부", tag: "chant" }],         tr: "지금은 등으로 받아둘게, 전부" },
+        { time: 71.5, jp: "それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또" },
+        { time: 75, jp: "ここに置いていくから全部",        ko: [{ text: "코코니 오이테이쿠카라 젠부"}],         tr: "여기에 두고 갈게, 전부" },
+        { time: 78.5, jp: "怖くない この空へ",        ko: [{ text: "코와쿠나이 코노 소라에"}],         tr: "무섭지 않아 이 하늘로" },
+        { time: 82, jp: "風に靡く羽に ほら従って",        ko: [{ text: "카제니 나비쿠 하네니 호라 시타갓테"}],         tr: "바람에 나부끼는 날개에 봐, 따라가" },
+        { time: 87, ko: [{ text: "Woah-oh, woah-oh", tag: "chant" }],                                                    },
+        { time: 93.5, ko: [{ text: "Woah-oh, ah, ah, ah, ah", tag: "chant" }],                                                    },
+        { time: 100.5, jp: "言葉の数だけ",        ko: [{ text: "코토바노 카즈다케"}],         tr: "말의 수만큼" },
+        { time: 107, jp: "それは、あなたの神経を通り",        ko: [{ text: "소레와 아나타노 신케이오 토오리"}],         tr: "그것은 너의 신경을 지나" },
+        { time: 114, jp: "脳幹を突破して 忘れた頃、到達 瞳に",        ko: [{ text: "노오칸오 톳파시테 와스레타 코로 토오타츠 히토미니"}],         tr: "뇌간을 뚫고 잊을 즈음, 도달해 눈동자에" },
+        { time: 125.5, jp: "されどイメージしたのは",        ko: [{ text: "사레도 이메에지시타노와"}],         tr: "하지만 떠올린 것은" },
+        { time: 129, jp: "光飛び散った最中",        ko: [{ text: "히카리 토비칫타 사나카"}],         tr: "빛이 흩어지던 한가운데" },
+        { time: 133, jp: "当てはないことを 許してくれ",        ko: [{ text: "아테와 나이 코토오 유루시테 쿠레"}],         tr: "오갈 데 없는 것을 용서해줘" },
+        { time: 139, jp: "この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" },
+        { time: 142.5, jp: "僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" },
+        { time: 146, jp: "向かい風受けた羽だって",        ko: [{ text: "무카이카제 우케타 하네닷테"}],         tr: "맞바람을 받은 날개라도" },
+        { time: 150, jp: "今は背で受けておくよ全部",        ko: [{ text: "이마와 세데 우케테오쿠요 "}, { text: " 젠부", tag: "chant" }],         tr: "지금은 등으로 받아둘게, 전부" },
+        { time: 152.5, jp: "それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또" },
+        { time: 155.5, jp: "ここに置いていくから全部",        ko: [{ text: "코코니 오이테이쿠카라 젠부"}],         tr: "여기에 두고 갈게, 전부" },
+        { time: 159.5, jp: "怖くない この空へ",        ko: [{ text: "코와쿠나이 코노 소라에"}],         tr: "무섭지 않아 이 하늘로" },
+        { time: 163, jp: "風に靡く羽に",        ko: [{ text: "카제니 나비쿠 하네니"}],         tr: "바람에 나부끼는 날개에" },
+        { time: 173, jp: "その鬱蒼としげる兵糧と退路",        ko: [{ text: "소노 웃소오토 시게루 효오료오토"}, { text: " 타이로", tag: "chant" }],         tr: "그 울창하게 뒤엉킨 식량과 퇴로" },
+        { time: 176, jp: "眼前が正解じゃ無いよ",        ko: [{ text: "간젠가 세이카이자"}, { text: " 나이요", tag: "chant" }],         tr: "눈앞이 정답은 아니야" },
+        { time: 177.5, jp: "擦り切れる突風が解廊",        ko: [{ text: "스리키레루 톳푸우가 "}, { text: " 카이로오", tag: "chant" }],         tr: "닳아버릴 듯한 돌풍이 길을 열고" },
+        { time: 179, jp: "僕の運命に 僕がすれ違ってしまう前に",        ko: [{ text: "보쿠노 운메이니 보쿠가 스레치갓테 시마우 마에니"}],         tr: "내 운명에 내가 스쳐 지나가버리기 전에" },
+        { time: 186.5, jp: "この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" },
+        { time: 189.5, jp: "僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" },
+        { time: 193, jp: "気分次第で生えた羽だって",        ko: [{ text: "키분 시다이데 하에타 하네닷테"}],         tr: "기분 따라 돋아난 날개라 해도" },
+        { time: 197, jp: "でも僕の翼だよ全部",        ko: [{ text: "데모 보쿠노 츠바사다요"}, { text: " 젠부", tag: "chant" }],         tr: "그래도 내 날개야, 전부" },
+        { time: 200, jp: "それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또" },
+        { time: 203, jp: "ずっと忘れない 軒並み全部",        ko: [{ text: "즛토 와스레나이 노키나미 젠부"}],         tr: "절대 잊지 않을게 남김없이 전부" },
+        { time: 207, jp: "怖くない、この夜空で 明日を目指す",        ko: [{ text: "코와쿠나이 코노 요조라데 아스오 메자스"}],         tr: "무섭지 않아, 이 밤하늘에서 내일을 향해" },
+        { time: 211.5, jp: "朝焼けに ほら、連なって",        ko: [{ text: "아사야케니 호라 츠라낫테"}],         tr: "아침노을에 봐, 이어져" },
+        { time: 215, ko: [{ text: "Woah-oh, woah-oh", tag: "chant" }],                                                    },
+        { time: 222, ko: [{ text: "Woah-oh, ah, ah, ah, ah", tag: "chant" }],    },
+        { time: 229, ko: [{ text: "Woah-oh, woah-oh", tag: "chant" }],                                                    },
+        { time: 235.5, ko: [{ text: "Woah-oh, ah, ah, ah, ah", tag: "chant" }],    },
+      ],
+    },
   ];
 
   const app = document.getElementById("app");
@@ -1819,29 +1922,30 @@
     currentSong = song;
     app.innerHTML = `
       <div class="song-page"${song.cover ? ` style="--song-cover:url('${song.cover}')"` : ""}>
-        <div class="song-fixed-top">
-          <div class="song-topbar">
-            <button class="back-btn" id="back-btn">← 목록</button>
-            <h1>${escapeHtml(song.title)}</h1>
-          </div>
-
-          <div class="video-wrap">
-            <div class="video-frame">
-              <div id="yt-player"></div>
-            </div>
-            <a class="watch-on-yt" href="https://www.youtube.com/watch?v=${encodeURIComponent(song.youtubeId)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>
-          </div>
-
-          <div class="lyrics-note"><span class="dot">●</span> 가사를 탭하면 해당 위치로 영상이 이동해요. 영상 재생 상태에 따라 가사 하이라이트가 동기화됩니다.</div>
-
-          <div class="lyrics-legend">
-            <span class="legend-item"><span class="legend-icon chant">${MIC_SVG}</span>떼창</span>
-            <span class="legend-item"><span class="legend-icon clap">${CLAP_SVG}</span>박수</span>
-            <span class="legend-item"><span class="legend-icon chant">${MIC_SVG}</span><span class="legend-icon clap">${CLAP_SVG}</span>떼창+박수</span>
-          </div>
+        <div class="song-topbar">
+          <button class="back-btn" id="back-btn">← 목록</button>
+          <h1>${escapeHtml(song.title)}</h1>
         </div>
 
-        <div class="lyrics-scroll">
+        <div class="song-body">
+          <div class="song-fixed-top">
+            <div class="video-wrap">
+              <div class="video-frame">
+                <div id="yt-player"></div>
+              </div>
+              <a class="watch-on-yt" href="https://www.youtube.com/watch?v=${encodeURIComponent(song.youtubeId)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>
+            </div>
+
+            <div class="lyrics-note"><span class="dot">●</span> 가사를 탭하면 해당 위치로 영상이 이동해요. 영상 재생 상태에 따라 가사 하이라이트가 동기화됩니다.</div>
+
+            <div class="lyrics-legend">
+              <span class="legend-item"><span class="legend-icon chant">${MIC_SVG}</span>떼창</span>
+              <span class="legend-item"><span class="legend-icon clap">${CLAP_SVG}</span>박수</span>
+              <span class="legend-item"><span class="legend-icon chant">${MIC_SVG}</span><span class="legend-icon clap">${CLAP_SVG}</span>떼창+박수</span>
+            </div>
+          </div>
+
+          <div class="lyrics-scroll">
           <ul class="lyrics-list" id="lyrics-list">
             ${song.lyrics.map((l,i)=>{
               return `
@@ -1858,6 +1962,7 @@
               </li>`;
             }).join("")}
           </ul>
+          </div>
         </div>
 
         <div class="player-controls">
