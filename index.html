@@ -41,8 +41,9 @@
     font-family:'Anton',sans-serif;
     letter-spacing:.28em;
     font-size:13px;
-    color:var(--gold-soft);
+    color:var(--gold);
     text-transform:uppercase;
+    text-shadow:0 1px 6px rgba(0,0,0,0.85), 0 0 20px rgba(0,0,0,0.6);
   }
 
   /* ---------- HERO / HOME ---------- */
@@ -72,7 +73,7 @@
   .hero::after{
     content:"";
     position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(23,5,4,0.15) 0%, rgba(23,5,4,0.15) 35%, rgba(23,5,4,0.55) 62%, rgba(15,4,3,0.96) 100%);
+    background:linear-gradient(180deg, rgba(23,5,4,0.42) 0%, rgba(23,5,4,0.38) 30%, rgba(23,5,4,0.66) 60%, rgba(15,4,3,0.97) 100%);
     z-index:0;
   }
   .hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;max-width:560px;}
@@ -83,71 +84,92 @@
     font-size:clamp(30px,7vw,44px);
     letter-spacing:.03em;
     color:var(--gold);
-    text-shadow:0 2px 18px rgba(0,0,0,0.5);
+    text-shadow:0 2px 8px rgba(0,0,0,0.9), 0 0 28px rgba(0,0,0,0.65);
     line-height:1.08;
   }
-  .tour-title span{display:block;font-size:.5em;letter-spacing:.34em;color:var(--gold-soft);margin-bottom:6px;}
+  .tour-title span{display:block;font-size:.5em;letter-spacing:.34em;color:var(--gold);margin-bottom:6px;}
 
   .countdown-label{
     margin-top:30px;
     font-family:'Black Han Sans',sans-serif;
-    font-size:14px;
+    font-size:15px;
     letter-spacing:.18em;
-    color:var(--gold-soft);
+    color:var(--gold);
+    text-shadow:0 1px 6px rgba(0,0,0,0.85);
   }
   .countdown{
     display:flex;
-    gap:10px;
-    margin-top:14px;
+    gap:clamp(6px,2vw,12px);
+    margin-top:16px;
+    width:100%;
+    max-width:400px;
+    justify-content:center;
   }
   .cd-box{
-    background:rgba(246,239,217,0.06);
+    background:rgba(20,6,4,0.55);
     border:1px solid var(--line);
-    border-radius:10px;
-    padding:12px 6px 10px;
-    width:70px;
-    backdrop-filter:blur(2px);
+    border-radius:12px;
+    padding:16px 4px 13px;
+    flex:1 1 0;
+    min-width:0;
+    max-width:88px;
+    backdrop-filter:blur(3px);
+    box-shadow:0 6px 20px rgba(0,0,0,0.45);
   }
   .cd-num{
     font-family:'Anton',sans-serif;
-    font-size:clamp(26px,7vw,34px);
+    font-size:clamp(34px,9vw,46px);
     line-height:1;
-    color:var(--cream);
+    color:#fff;
     font-variant-numeric:tabular-nums;
+    text-shadow:0 2px 10px rgba(0,0,0,0.8);
   }
   .cd-unit{
-    margin-top:6px;
-    font-size:10px;
+    margin-top:8px;
+    font-size:11px;
     letter-spacing:.22em;
-    color:var(--gold-soft);
+    color:var(--gold);
+    text-shadow:0 1px 5px rgba(0,0,0,0.8);
   }
   .countdown-done{
     margin-top:16px;
     font-family:'Black Han Sans',sans-serif;
-    font-size:20px;
+    font-size:22px;
     color:var(--teal);
     letter-spacing:.06em;
+    text-shadow:0 2px 10px rgba(0,0,0,0.8);
   }
 
   .show-meta{
-    margin-top:30px;
+    margin-top:64px;
     font-family:'Anton',sans-serif;
     letter-spacing:.04em;
   }
-  .show-date{font-size:clamp(20px,5.4vw,26px);color:var(--cream);}
-  .show-venue{margin-top:2px;font-size:clamp(14px,3.6vw,16px);color:var(--gold-soft);letter-spacing:.14em;}
+  .show-date{
+    font-size:clamp(20px,5.4vw,26px);
+    color:#fff;
+    text-shadow:0 2px 10px rgba(0,0,0,0.85);
+  }
+  .show-venue{
+    margin-top:2px;
+    font-size:clamp(14px,3.6vw,16px);
+    color:var(--gold);
+    letter-spacing:.14em;
+    text-shadow:0 1px 6px rgba(0,0,0,0.85);
+  }
 
   .main-menu{
     position:relative;z-index:1;
     margin-top:46px;
   }
   .menu-btn{
-    display:flex;flex-direction:column;align-items:center;gap:4px;
+    display:flex;flex-direction:column;align-items:center;
     background:rgba(246,239,217,0.06);
     border:1px solid var(--line);
-    border-radius:14px;
-    padding:16px 40px;
+    border-radius:16px;
+    padding:22px 56px;
     cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
     transition:background .2s ease, border-color .2s ease, transform .2s ease;
   }
   .menu-btn:hover, .menu-btn:focus-visible{
@@ -157,23 +179,21 @@
     outline:none;
   }
   .menu-btn-label{
-    font-family:'Black Han Sans',sans-serif;
-    font-size:19px;
-    color:var(--cream);
-    letter-spacing:.02em;
-  }
-  .menu-btn-sub{
     font-family:'Anton',sans-serif;
-    font-size:10px;
-    letter-spacing:.26em;
-    background:linear-gradient(90deg,var(--teal),var(--sky));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
+    font-size:26px;
+    letter-spacing:.06em;
+    color:#fff;
+    text-shadow:0 2px 10px rgba(0,0,0,0.8);
   }
 
   /* ---------- SONG LIST / GUIDE ---------- */
   .guide-page{
     min-height:100svh;
-    background:linear-gradient(180deg,#170504 0%, #0f0403 100%);
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(15,4,3,0.90) 0%, rgba(15,4,3,0.94) 100%),
+      url('images/poster-guide.jpg') center 30%/cover no-repeat,
+      linear-gradient(180deg,#170504 0%, #0f0403 100%);
   }
   .songs-section{
     background:none;
@@ -242,7 +262,10 @@
     display:flex;
     flex-direction:column;
     overflow:hidden;
-    background:linear-gradient(180deg,#170504 0%, #260906 100%);
+    background:
+      linear-gradient(180deg, rgba(15,4,3,0.90) 0%, rgba(23,5,4,0.94) 100%),
+      var(--song-cover, url('images/poster-song.jpg')) center 30%/cover no-repeat,
+      linear-gradient(180deg,#170504 0%, #260906 100%);
   }
   .song-fixed-top{
     flex:none;
@@ -282,7 +305,7 @@
     border:1px solid var(--line);
     background:#000;
   }
-  .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .video-frame iframe, .video-frame div{position:absolute;inset:0;width:100%;height:100%;border:0;}
   .watch-on-yt{
     display:inline-block;
     margin-top:8px;
@@ -328,7 +351,9 @@
   }
   .lyric-line{
     width:100%;
-    display:block;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
     background:none;border:none;
     padding:13px 10px;
     border-radius:10px;
@@ -337,7 +362,24 @@
     transition:background .18s ease, transform .18s ease;
   }
   .lyric-line:hover{background:rgba(246,239,217,0.06);}
-  .lyric-body{min-width:0;display:block;}
+  /* 각 가사 줄에 포함된 파트 종류를 아이콘으로 표시 (떼창/박수/둘 다) */
+  .lyric-icons{
+    flex:none;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    width:22px;
+    padding-top:2px;
+  }
+  .lyric-type-icon{
+    width:22px;height:22px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .lyric-type-icon svg{width:13px;height:13px;}
+  .lyric-type-icon.chant{background:rgba(245,148,44,0.16);color:var(--chant);}
+  .lyric-type-icon.clap{background:rgba(79,168,224,0.16);color:var(--clap);}
+  .lyric-body{min-width:0;display:block;flex:1;}
   .lyric-jp{
     display:block;
     font-size:clamp(13px,3.6vw,14px);
@@ -358,16 +400,30 @@
     line-height:1.5;
     margin-top:1px;
   }
-  /* 한 줄 안에서도 구간별로 떼창(주황) 부분만 색이 달라짐 */
+  /* 4번째 줄 — 코러스처럼 뒤에 깔리는 떼창 (백킹 코러스) */
+  .lyric-bg{
+    display:block;
+    margin-top:3px;
+    font-size:clamp(13px,3.6vw,15px);
+    font-weight:700;
+    line-height:1.5;
+    color:var(--chant);
+    font-style:italic;
+  }
   .seg-chant{color:var(--chant);}
   .seg-clap{color:var(--clap);}
+  /* 떼창 + 박수 동시: 주황 글자 + 파란 밑줄로 두 가지를 함께 표시 */
+  .seg-both{
+    color:var(--chant);
+    border-bottom:2px solid var(--clap);
+    padding-bottom:1px;
+  }
 
   .lyric-line.active{
     background:linear-gradient(90deg, rgba(94,205,196,0.14), rgba(63,143,214,0.08));
     transform:translateX(2px);
   }
 
-  /* ---------- 우측 하단 고정 컨트롤 ---------- */
   .player-controls{
     position:fixed;
     right:18px;bottom:22px;
@@ -375,7 +431,6 @@
     display:flex;flex-direction:column;align-items:flex-end;gap:10px;
   }
 
-  /* AUTO SCROLL 필 스위치 (참고 이미지 스타일) — 크기 절반 */
   .autoscroll-toggle{
     display:flex;align-items:center;gap:7px;
     background:linear-gradient(180deg, #2c130c, #1c0a06);
@@ -422,126 +477,1231 @@
     .hero{padding-top:72px;}
   }
 </style>
+<!-- YouTube IFrame Player API 스크립트 추가 -->
+<script src="https://www.youtube.com/iframe_api"></script>
 </head>
 
 <body>
 <div id="app"></div>
 
 <script>
-/* =========================================================================
-   VAUNDY ASIA ARENA TOUR 2026 "HORO" — SEOUL 떼창 가이드
-   -------------------------------------------------------------------------
-   ▼ 아래 SONGS 배열에 실제 세트리스트 정보를 채워 넣으세요.
-   ▼ id          : URL에 쓰일 영문/숫자 slug (예: 'kaijuu')
-   ▼ title       : 화면에 보일 곡명
-   ▼ youtubeId   : 유튜브 영상 ID (watch?v=  뒤에 오는 11자리 문자열)
-   ▼ lyrics      : 한 소절씩 아래 형식의 객체 배열
-       {
-         time: 초단위 타임스탬프 (영상에서 이 소절이 시작되는 시점 · 화면에는
-               표시되지 않고 영상 이동에만 쓰임),
-         jp:   일본어 원문,
-         ko:   한글 발음. 아래 둘 중 하나로 넣으세요.
-               1) 문자열 그대로 넣으면 구분 없이 기본색으로 표시됩니다.
-                  예: ko: "한글 발음 전체"
-               2) 한 줄 안에서 떼창(주황)·박수(파랑) 구간만 색을 다르게
-                  하고 싶으면 배열로 나눠서 넣으세요. 각 조각의 tag 값:
-                  "chant" = 떼창(주황), "clap" = 박수(파랑), 생략 = 기본색.
-                  예: ko: [
-                        { text: "앞부분 몇 글자는 떼창", tag: "chant" },
-                        { text: " 이 부분은 박수", tag: "clap" },
-                        { text: " 뒷부분은 기본색" },
-                      ]
-                  조각들은 이어붙여서 한 줄로 표시되니 필요하면 조각
-                  사이에 띄어쓰기를 text 안에 포함해 주세요.
-         tr:   한국어 해석,
-       }
-     * 떼창·박수 아이콘은 각 곡 화면 맨 위에 한 번만(범례) 표시되고,
-       가사 줄 앞에는 더 이상 표시되지 않습니다.
-     * 저작권 보호를 받는 실제 가사 원문·발음·해석은 이 코드에 미리
-       채워둘 수 없어 예시 문구로 대체해 두었습니다.
-       실제 배포 전에 공식 가사/발음/해석과 떼창·박수 구간을 직접
-       확인해서 교체해 주세요.
-   ========================================================================= */
-  const SHOW_DATETIME = "2026-09-19T17:00:00+09:00"; // 공연 시작 카운트다운 기준
+  const SHOW_DATETIME = "2026-09-19T17:00:00+09:00";
+
+  /* 가사 한 줄의 형식
+     {
+       time: 12.5,              // 영상에서 이 소절이 시작되는 시점(초)
+       jp:   "일본어 원문",
+       ko:   "한글 발음",        // 문자열이면 전체 기본색
+             // 또는 배열로 구간별 색 지정:
+             // [{ text:"떼창구간", tag:"chant" },   ← 주황(떼창)
+             //  { text:"박수구간", tag:"clap"  },   ← 파랑(박수)
+             //  { text:"동시구간", tag:"both"  },   ← 주황글자+파란밑줄
+             //  { text:"기본색구간" }]              ← tag 생략
+       tr:   "한국어 해석",
+       bg:   "코러스 떼창"        // (선택) 4번째 줄 — 코러스처럼 뒤에 깔리는 떼창
+             // ko와 동일하게 문자열 또는 배열 모두 사용 가능.
+             // bg가 있으면 그 줄에는 자동으로 떼창 아이콘이 붙습니다.
+     }
+     실제 가사·발음·해석은 저작권이 있으니 직접 입력해 주세요. */
 
   const SONGS = [
     {
       id: "Tokimeki",
-      title: "[Tokimeki]",
+      title: "두근거림 (ときめき)",
       youtubeId: "-_PKhPMXMDY", // ← 실제 유튜브 영상 ID로 교체
       lyrics: [
         { time: 0, jp: "目に映るのは 確かなときめきで光る魔法",        ko: [{ text: "메니 우츠루노와 타시카나 토키메키데 히카루 마호", tag: "clap" }],                                                     tr: "눈에 비치는 것은 확실한 두근거림으로 빛나는 마법" },
         { time: 9, jp: "思い当たるのは 誰かの 涙が落ちる音",        ko: [{ text: "오모이아타루노와 다레카노 나미다가 오치루 오토", tag: "clap" }],                                                     tr: "마음에 짚이는 것은 누군가의 눈물이 떨어지는 소리" },
         { time: 17, jp: "Hu Hu Hu Ya Ya x3",        ko: [{ text: "Hu Hu Hu Ya Ya x3", tag: "chant" }],                                                    tr: "Hu Hu Hu Ya Ya x3" },
-        { time: 21, jp: "それは、軽やかな魔法 Hu Hu Hu Ya Ya x2", ko: [{ text: "소레와 카로야카나 마호-" }, { text: " Hu Hu Hu Ya Ya x2", tag: "chant" }],               tr: "그것은 경쾌한 마법 Hu Hu Hu Ya Ya x2" },
+        { time: 22.5, jp: "それは、軽やかな魔法 Hu Hu Hu Ya Ya x2", ko: [{ text: "소레와 카로야카나 마호-" }, { text: " Hu Hu Hu Ya Ya x2", tag: "chant" }],               tr: "그것은 경쾌한 마법 Hu Hu Hu Ya Ya x2" },
         { time: 29,  jp: "美しいほど 止まらぬCRY", ko: "우츠쿠시이 호도 토마라누 CRY",                                 tr: "아름다울수록멈추지 않는 CRY" },
-        { time: 32, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 33, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
         { time: 38, jp: "(DA-DA-DA) 涙流して笑えばいいさ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "나미다 나가시테 와라에바 이-사"}],               tr: "(DA-DA-DA) 눈물 흘리며 웃으면 되는 거야" },
-        { time: 43, jp: "見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: "(나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
-        { time: 48, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 44, jp: "見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: " (나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
+        { time: 49, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
         { time: 54, jp: "(DA-DA-DA) あくびしてる暇なんかないぜ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "아쿠비시테루 히마난카 나이제"}],               tr: "(DA-DA-DA) 하품하고 있을 시간 따윈 없어" },
-        { time: 59, jp: "ほら、ほらもっと聞かせて Hu Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu Hu" },
+        { time: 59.5, jp: "ほら、ほらもっと聞かせて Hu Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu Hu" },
         { time: 73, jp: "聞こえてるのは 確かな ときめきで歌う魔法",        ko: [{ text: "키코에테루노와 타시카나 토키메키데 히카루 마호", tag: "clap" }],                                                     tr: "들리는 것은 확실한 두근거림으로 빛나는 마법" },
-        { time: 82, jp: "思い当たるのは 誰かの 鼻歌のイントロ",        ko: [{ text: "오모이아타루노와 다레카노 하나우타노 인토로", tag: "clap" }],                                                     tr: "마음에 짚이는 것은 누군가의 콧노래의 인트로" },
+        { time: 81, jp: "思い当たるのは 誰かの 鼻歌のイントロ",        ko: [{ text: "오모이아타루노와 다레카노 하나우타노 인토로", tag: "clap" }],                                                     tr: "마음에 짚이는 것은 누군가의 콧노래의 인트로" },
         { time: 89, jp: "Hu Hu Hu Ya Ya x3",        ko: [{ text: "Hu Hu Hu Ya Ya x3", tag: "chant" }],                                                    tr: "Hu Hu Hu Ya Ya x3" },
-        { time: 94, jp: "それは、鮮やかな魔法 Hu Hu Hu Ya Ya x2", ko: [{ text: "소레와 아자야카나 마호-" }, { text: " Hu Hu Hu Ya Ya x2", tag: "chant" }],               tr: "그것은 산뜻한 마법 Hu Hu Hu Ya Ya x2" },
-        { time: 100,  jp: "聞こえてるのは", ko: "키코에테루노와",                                 tr: "들리는 것은" },
-        { time: 104, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 95, jp: "それは、鮮やかな魔法 Hu Hu Hu Ya Ya x2", ko: [{ text: "소레와 아자야카나 마호-" }, { text: " Hu Hu Hu Ya Ya x2", tag: "chant" }],               tr: "그것은 산뜻한 마법 Hu Hu Hu Ya Ya x2" },
+        { time: 101,  jp: "聞こえてるのは", ko: "키코에테루노와",                                 tr: "들리는 것은" },
+        { time: 105, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
         { time: 110, jp: "(DA-DA-DA) 涙流して笑えばいいさ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "나미다 나가시테 와라에바 이-사"}],               tr: "(DA-DA-DA) 눈물 흘리며 웃으면 되는 거야" },
-        { time: 115, jp: "見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: "(나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
-        { time: 120, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
-        { time: 125, jp: "(NA-NA-NA) あくびしてる暇なんかないぜ", ko: [{ text: "(NA-NA-NA) ", tag: "chant" }, { text: "아쿠비시테루 히마난카 나이제"}],               tr: "(NA-NA-NA) 하품하고 있을 시간 따윈 없어" },
-        { time: 131, jp: "ほら、ほらもっと聞かせて Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu" },
-        { time: 135, jp: "途切れない 悲しみは点で 線を描いてるようだ",        ko: [{ text: "토기레나이 카나시미와 텐데 센오 에가이테루 요-다", tag: "clap" }],                                                     tr: "끝나지 않는 슬픔이라는 점이 선을 그리고 있는 것 같아" },
+        { time: 115.9, jp: "見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: " (나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
+        { time: 121, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 126, jp: "(NA-NA-NA) あくびしてる暇なんかないぜ", ko: [{ text: "(NA-NA-NA) ", tag: "chant" }, { text: "아쿠비시테루 히마난카 나이제"}],               tr: "(NA-NA-NA) 하품하고 있을 시간 따윈 없어" },
+        { time: 131.5, jp: "ほら、ほらもっと聞かせて Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu" },
+        { time: 137, jp: "途切れない 悲しみは点で 線を描いてるようだ",        ko: [{ text: "토기레나이 카나시미와 텐데 센오 에가이테루 요-다", tag: "clap" }],                                                     tr: "끝나지 않는 슬픔이라는 점이 선을 그리고 있는 것 같아" },
         { time: 145, jp: "震え出す その線のせいで 動き出してしまうの",        ko: [{ text: "후루에다스 소노 센노 세이데 우고키다시테 시마우노", tag: "clap" }],                                                     tr: "떨고 있는 그 선 때문에 움직여 버리고 말아" },
         { time: 153, jp: "Hu Hu Hu Ya Ya x2",        ko: [{ text: "Hu Hu Hu Ya Ya x2", tag: "chant" }],                                                     tr: "Hu Hu Hu Ya Ya x2" },
-        { time: 156, jp: "止まれないのは ときめきのせい", ko: [{ text: "토마레나이노와" }, { text: " 토키메키노 세-", tag: "chant" }],               tr: "멈출 수 없는 것은 두근거림 때문이야" },
-        { time: 160, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 157.5, jp: "止まれないのは ときめきのせい", ko: [{ text: "토마레나이노와" }, { text: " 토키메키노 세-", tag: "chant" }],               tr: "멈출 수 없는 것은 두근거림 때문이야" },
+        { time: 161, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
         { time: 166, jp: "(DA-DA-DA) 涙流して笑えばいいさ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "나미다 나가시테 와라에바 이-사"}],               tr: "(DA-DA-DA) 눈물 흘리며 웃으면 되는 거야" },
-        { time: 171, jp: "見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: "(나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
-        { time: 176, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 172, jp: "見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: " (나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
+        { time: 177, jp: "DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
         { time: 182, jp: "(DA-DA-DA) あくびしてる暇なんかないぜ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "아쿠비시테루 히마난카 나이제"}],               tr: "(DA-DA-DA) 하품하고 있을 시간 따윈 없어" },
-        { time: 187, jp: "ほら、ほらもっと聞かせて Hu Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu Hu" },
+        { time: 187.5, jp: "ほら、ほらもっと聞かせて Hu Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu Hu" },
       ],
+    },
+    {
+      id: "KaijuNoHanauta",
+      title: "괴수의 꽃노래 (怪獣の花唄)",
+      youtubeId: "UM9XNpgrqVk",
+      lyrics: [
+       { time: 8, jp: "思い出すのは 君の歌 会話よりも鮮明だ",        ko: [{ text: "오모이다스노와 키미노 우타 카이와요리모 센메이다", tag: "clap" }],                                                     tr: "떠오르는 건 너의 노래 대화보다도 선명해" },
+       { time: 15, jp: "どこに行ってしまったの いつも探すんだよ",        ko: [{ text: "도코니 잇테시맛타노 이츠모 사가순다요", tag: "clap" }],                                                     tr: "어디로 가버린 거야 늘 찾고 있어" },
+       { time: 21.5, jp: "思い出すのは 君の歌 歌い笑う顔が鮮明だ",        ko: [{ text: "오모이다스노와 키미노 우타 우타이 와라우 카오가 센메이다", tag: "clap" }],                                                     tr: "떠오르는 건 너의 노래 노래하며 웃는 얼굴이 선명해" },
+       { time: 28, jp: "君に似合うんだよ ずっと見ていたいよ",        ko: [{ text: "키미니 니아운다요 즛토 미테이타이요", tag: "clap" }],                                                     tr: "너에게 어울려 계속 보고 싶어" },
+       { time: 34, jp: "でも最後に見たいのは きっともう君の夢の中",        ko: [{ text: "데모 사이고니 미타이노와 킷토 모우 키미노 유메노 나카", tag: "clap" }],                                                     tr: "하지만 마지막에 보고 싶은 건 분명 이제 너의 꿈속" },
+       { time: 40.5, jp: "もう一度 また聞かせてくれよ 聞きたいんだ もっと", ko: [{ text: "모우 이치도 마타 키카세테 쿠레요 키키타인다", tag: "clap" }, { text: " 못토", tag: "chant" }],               tr: "한 번 더 다시 들려줘 듣고 싶어 좀더" },
+       { time: 47.5,  jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて ", ko: "사와게 카이주우노 우타 마다 키에나이 유메노 우타 토나에테",                                 tr: "떠들어라 괴수의 노래 아직 사라지지 않아 꿈의 노래를 불러" },
+       { time: 58.5,  jp: "君がいつも  歌う怪獣の歌", ko: "키미가 이츠모 우타우 카이주우노 우타",                                 tr: "네가 언제나 부르는 괴수의 노래" },
+       { time: 64.5,  jp: "まだ消えない 口ずさんでしまうよ", ko: "마다 키에나이 쿠치즈산데 시마우요",                                 tr: "아직 사라지지 않아 나도 모르게 흥얼거려" },
+       { time: 72.5, jp: "思い出すのは 君がいた ギター持ってる 君がいた",        ko: [{ text: "오모이다스노와 키미가 이타 기타아 못테루 키미가 이타", tag: "clap" }],                                                     tr: "떠오르는 건 네가 있었어 기타를 들고 있는 네가 있었어" },
+       { time: 79, jp: "忘れられないんだよ だから僕が歌うよ",        ko: [{ text: "와스레라레나인다요 다카라 보쿠가 우타우요", tag: "clap" }],                                                     tr: "잊을 수가 없어 그래서 내가 노래할게" },
+       { time: 85.5, jp: "でも最後に見たいのは きっともう君の夢の中",        ko: [{ text: "데모 사이고니 미타이노와 킷토 모우 키미노 유메노 나카", tag: "clap" }],                                                     tr: "하지만 마지막에 보고 싶은 건 분명 이제 너의 꿈속" },
+       { time: 91.5, jp: "もう一度 また聞かせてくれよ 聞きたいんだ もっと", ko: [{ text: "모우 이치도 마타 키카세테 쿠레요 키키타인다", tag: "clap" }, { text: " 못토", tag: "chant" }],               tr: "한 번 더 다시 들려줘 듣고 싶어 좀더" },
+       { time: 98.5,  jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて ", ko: "사와게 카이주우노 우타 마다 키에나이 유메노 우타 토나에테",                                 tr: "떠들어라 괴수의 노래 아직 사라지지 않아 꿈의 노래를 불러" },
+       { time: 110,  jp: "君がいつも  歌う怪獣の歌", ko: "키미가 이츠모 우타우 카이주우노 우타",                                 tr: "네가 언제나 부르는 괴수의 노래" },
+       { time: 116,  jp: "まだ消えない 口ずさんでしまうよ", ko: "마다 키에나이 쿠치즈산데 시마우요",                                 tr: "아직 사라지지 않아 나도 모르게 흥얼거려" },
+       { time: 123.5, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데 미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고 보여주고 싶은 미래는 섬세하고" },
+       { time: 130, jp: "すぎてく日々には鈍感な君へ",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게" },
+       { time: 137, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데 미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고 보여주고 싶은 미래는 섬세하고" },
+       { time: 143, jp: "すぎてく日々には鈍感な君へ ねぇ、もっと",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에 네에 못토", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게 있잖아, 좀더" },
+       { time: 150,  jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて ", ko: "사와게 카이주우노 우타 마다 키에나이 유메노 우타 토나에테",                                 tr: "떠들어라 괴수의 노래 아직 사라지지 않아 꿈의 노래를 불러" },
+       { time: 161,  jp: "君がいつも  歌う怪獣の歌", ko: "키미가 이츠모 우타우 카이주우노 우타",                                 tr: "네가 언제나 부르는 괴수의 노래" },
+       { time: 167,  jp: "まだ消えない 口ずさんでしまうよ ねぇ、僕ら", ko: "마다 키에나이 쿠치즈산데 시마우요 네에 보쿠라",                                 tr: "아직 사라지지 않아 나도 모르게 흥얼거려 있잖아, 우리" },
+       { time: 175.5, jp: "眠れない夜に手を伸ばして ", ko: [{ text: "네무레나이 요루니", tag: "chant" }, { text: " 테오 노바시테"}],               tr: "잠 못 드는 밤에 손을 뻗어" },
+       { time: 178.5, jp: "眠らない夜をまた伸ばして ", ko: [{ text: "네무라나이 요루오", tag: "chant" }, { text: " 마타 노바시테"}],               tr: "잠들지 않는 밤을 또 늘려서" },
+       { time: 182, jp: "眠くないまだね そんな日々でいたいのにな 懲りずに", ko: [{ text: "네무쿠나이 마다네", tag: "chant" }, { text: " 손나 히비데 이타이노니나 코리즈니"}],               tr: "아직 안 졸려, 그렇지 그런 날들이었으면 좋겠는데 지치지 않고" },
+       { time: 188.5, jp: "眠れない夜に手を伸ばして ", ko: [{ text: "네무레나이 요루니", tag: "chant" }, { text: " 테오 노바시테"}],               tr: "잠 못 드는 밤에 손을 뻗어" },
+       { time: 191.5, jp: "眠らない夜をまた伸ばして ", ko: [{ text: "네무라나이 요루오", tag: "chant" }, { text: " 마타 노바시테"}],               tr: "잠들지 않는 밤을 또 늘려서" },
+       { time: 195, jp: "眠くないまだね そんな夜に歌う 카이주우노 우타", ko: [{ text: "네무쿠나이 마다네", tag: "chant" }, { text: " 손나 요루니 우타우 카이주우노 우타"}],               tr: "아직 안 졸려, 그런 밤에 부르는 괴수의 노래" },
+       { time: 201, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데 미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고 보여주고 싶은 미래는 섬세하고" },
+       { time: 206.5, jp: "すぎてく日々には鈍感な君へ",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게" },
+       { time: 213.5, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데 미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고 보여주고 싶은 미래는 섬세하고" },
+       { time: 219.5, jp: "すぎてく日々には鈍感な君へ",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게" },
 
-    },
-    {
-      id: "song-2",
-      title: "[곡명 2를 입력하세요]",
-      youtubeId: "dQw4w9WgXcQ",
-      lyrics: [
-        { time: 0,  jp: "(예시) 日本語 원문 가사 첫 줄", ko: "(예시) 한글 발음 첫 줄",                                 tr: "(예시) 한국어 해석 첫 줄" },
-        { time: 10, jp: "(예시) 떼창 파트 원문",         ko: [{ text: "(예시) 떼창 파트 한글 발음", tag: "chant" }],  tr: "(예시) 떼창 파트 해석" },
-        { time: 20, jp: "(예시) 박수 파트 원문",         ko: [{ text: "(예시) 박수 파트 한글 발음", tag: "clap" }],   tr: "(예시) 박수 파트 해석" },
       ],
     },
     {
-      id: "song-3",
-      title: "[곡명 3을 입력하세요]",
-      youtubeId: "dQw4w9WgXcQ",
+      id: "CHAINSAWBLOOD",
+      title: "CHAINSAW BLOOD",
+      youtubeId: "FL1QjjkZVm4",
       lyrics: [
-        { time: 0,  jp: "(예시) 日本語 원문 가사 첫 줄", ko: "(예시) 한글 발음 첫 줄",                                tr: "(예시) 한국어 해석 첫 줄" },
-        { time: 12, jp: "(예시) 떼창 파트 원문",         ko: [{ text: "(예시) 떼창 파트 한글 발음", tag: "chant" }], tr: "(예시) 떼창 파트 해석" },
-        { time: 32, jp: "(예시) 한 줄 안에서 떼창·박수 나눠지는 원문", ko: [{ text: "앞부분은 떼창 ", tag: "chant" }, { text: "뒷부분은 박수", tag: "clap" }],               tr: "(예시) 앞부분은 떼창, 뒷부분은 박수인 해석" },
+        { time: 19, jp: "急ぐ雑踏も軽くcrackな視点",        ko: [{ text: "이소구 잣토-모 카루쿠 쿠락쿠나 시텐", tag: "clap" }],                                                     tr: "서두르는 군중조차 가볍게 crack한 시점" },
+        { time: 22.5, jp: "居ても泣いても立てぬflatな視点",        ko: [{ text: "이테모 나이테모 타테누 후렛토나 시텐", tag: "clap" }],                                                     tr: "있어도 울어도 일어설수 없는, flat한 시점" },
+        { time: 25.5, jp: "弾む鼓動は刻むclap無しで",        ko: [{ text: "하즈무 비-토와 키자무 쿠랏푸나시데", tag: "clap" }],                                                     tr: "튀어오르는 고동은 clap없이" },
+        { time: 29, jp: "忘れたいほど怒るchain回して",        ko: [{ text: "와스레타이호도 이카루 체인마와시테", tag: "clap" }],                                                     tr: "잊고 싶을 만큼 격노한 채, chain을 돌려" },
+        { time: 32.5, jp: "Hu Hu Hu Hu  Hu Hu Hu Hu Hu",        ko: [{ text: "Hu Hu Hu Hu  Hu Hu Hu Hu Hu", tag: "chant" }],                                                     tr: "Hu Hu Hu Hu  Hu Hu Hu Hu Hu" },
+        { time: 35.5, jp: "全てをかき消してengine音 Hu-Hu-Hu-Hu", ko: [{ text: "스베테오 카키케시테 엔진온"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "모든 것을 지워버리는 엔진 음 Hu-Hu-Hu-Hu" },
+        { time: 40, jp: "舌鳴らし今 錆び付け黒く CHAINSAW BLOOD", ko: [{ text: "시타나라시 이마 사비츠케 쿠로쿠"}, { text: " CHAINSAW BLOOD", tag: "chant" }],               tr: "혀를 차고, 지금 녹슬게 해, 새까맣게 CHAINSAW BLOOD" },
+        { time: 45.5, jp: "血がたぎってもう煮立ってもう やめれない", ko: "치가 타깃테 모- 니탓테 모- 야메레나이",                                 tr: "피가 끓고, 들끓어도 멈출 수 없어" },
+        { time: 48.5, jp: "砕ききっても穿っても止まぬ Hu-Hu-Hu-Hu", ko: [{ text: "쿠다키킷테모 우갓테모 야마누"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "완전히 부숴도, 꿰뚫어도 멈추지 않아 Hu-Hu-Hu-Hu" },
+        { time: 54.5, jp: "Tell me why cry? Tell me why CHAINSAW BLOOD", ko: [{ text: "Tell me why cry? Tell me why"}, { text: " CHAINSAW BLOOD", tag: "chant" }],               tr: "Tell me why cry? Tell me why CHAINSAW BLOOD" },
+        { time: 58.5, jp: "血がたぎってもう煮立ってもう 止まれない", ko: "치가 타깃테 모- 니탓테 모- 토마레나이",                                 tr: "피가 끓고, 들끓어도 멈출 수 없어" },
+        { time: 61.5, jp: "血を喰らうたび悪夢また よぎる Hu-Hu-Hu-Hu", ko: [{ text: "치오 쿠라우타비 아쿠무 마타 요기루"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "피를 삼킬 때마다 악몽이 또 스쳐 지나가 Hu-Hu-Hu-Hu" },
+        { time: 68, jp: "Tell me why cry? Tell me why you grinning?", ko: "Tell me why cry? Tell me why you grinning?",                                 tr: "Tell me why cry? Tell me why you grinning?" },
+        { time: 84, jp: "妄想に侵された 右脳操作不能機能の相殺法に",        ko: [{ text: "모-소-니 오카사레타 우노-소-사 후노-키노-노 소-사이호-니", tag: "clap" }],                                                     tr: "망상에 침식되어 우뇌 조작 불능의 기능을 상쇄하는 법에" },
+        { time: 88.5, jp: "使った愛の手！ (ハイッ ハイッ)", ko: [{ text: "치츠캇타 아이노 테", tag: "clap"}, { text: " (하잇 하잇)", tag: "chant" }],               tr: "써 버렸지 사랑의 손길! (하잇 하잇)" },
+        { time: 90, jp: "笑かしたbadなschemeを食ってしまう紳士",        ko: [{ text: "와라카시타 맛토나 스키-무오 쿳테 시마우 신시", tag: "clap" }],                                                     tr: "우스운 bad한 scheme까지 집어삼켜 버리는 신사" },
+        { time: 92.5, jp: "フワァと立ちくらみ言葉を有し",        ko: [{ text: "후와-토 타치쿠라미 코토바오 유우시", tag: "clap" }],                                                     tr: "어질어질 휘청이며, 말을 지닌 채" },
+        { time: 94, jp: "CHAINSAW is 使える愛の手 (あ？なんだって？)", ko: [{ text: "체인소 이스 츠카에루 아이노 테", tag: "chant"}, { text: " (아 난닷테)"}],               tr: "써 버렸지 사랑의 손길! (하잇 하잇)" },
+        { time: 97.5, jp: "見える雑踏も軽くcrackな始点",        ko: [{ text: "미에루 잣토-모 카루쿠 쿠락쿠나 시텐", tag: "chant" }],                                                     tr: "보이는 혼잡도 가볍게 crack한 시작점" },
+        { time: 100.5, jp: "居ても泣いても立てぬflatな始点",        ko: [{ text: "이테모 나이테모 타테누 후렛토나 시텐", tag: "chant" }],                                                     tr: "있어도 울어도 서지 못한 flat한 시작점" },
+        { time: 104, jp: "弾む鼓動は歪むclean toneで",        ko: [{ text: "하즈무 비-트와 히즈무 클린톤데", tag: "chant" }],                                                     tr: "튀는 고동은 일그러진 clean tone으로" },
+        { time: 107.5, jp: "忘れたいから早くchain回して",        ko: [{ text: "와스레타이카라 하야쿠 체인마와시테", tag: "chant" }],                                                     tr: "잊고 싶으니까 빨리 chain을 돌려" },
+        { time: 111, jp: "Hu Hu Hu Hu  Hu Hu Hu Hu Hu",        ko: [{ text: "Hu Hu Hu Hu  Hu Hu Hu Hu Hu", tag: "chant" }],                                                     tr: "Hu Hu Hu Hu  Hu Hu Hu Hu Hu" },
+        { time: 114, jp: "全てをかき消してengine音 Hu-Hu-Hu-Hu", ko: [{ text: "스베테오 카키케시테 엔진온"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "모든 것을 지워버리는 엔진 음 Hu-Hu-Hu-Hu" },
+        { time: 118.5, jp: "歯軋りで、ほら 焼き付く赤く CHAINSAW BLOOD", ko: [{ text: "하기시리데 호라 야키츠쿠 아카쿠"}, { text: " CHAINSAW BLOOD", tag: "chant" }],               tr: "이를 갈며,봐 불타 새겨져, 붉게 CHAINSAW BLOOD" },
+        { time: 123.5, jp: "血がたぎってもう煮立ってもう やめれない", ko: "치가 타깃테 모- 니탓테 모- 야메레나이",                                 tr: "피가 끓고, 들끓어도 멈출 수 없어" },
+        { time: 127, jp: "砕ききっても穿っても止まぬ Hu-Hu-Hu-Hu", ko: [{ text: "쿠다키킷테모 우갓테모 야마누"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "완전히 부숴도, 꿰뚫어도 멈추지 않아 Hu-Hu-Hu-Hu" },
+        { time: 133, jp: "Tell me why cry? Tell me why CHAINSAW BLOOD", ko: [{ text: "Tell me why cry? Tell me why"}, { text: " CHAINSAW BLOOD", tag: "chant" }],               tr: "Tell me why cry? Tell me why CHAINSAW BLOOD" },
+        { time: 136.5, jp: "血がたぎってもう煮立ってもう 止まれない", ko: "치가 타깃테 모- 니탓테 모- 토마레나이",                                 tr: "피가 끓고, 들끓어도 멈출 수 없어" },
+        { time: 140, jp: "血を喰らうたび悪夢また よぎる Hu-Hu-Hu-Hu", ko: [{ text: "치오 쿠라우타비 아쿠무 마타 요기루"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "피를 삼킬 때마다 악몽이 또 스쳐 지나가 Hu-Hu-Hu-Hu" },
+        { time: 146, jp: "Tell me why cry? Tell me why", ko: "Tell me why cry? Tell me why",                                 tr: "Tell me why cry? Tell me why" },
+        { time: 149.5, jp: "轟いたbad news 平和目論む悪魔のpartyで",        ko: [{ text: "토도로이타 밧토 뉴스 헤-와 모쿠로무 아쿠마노 파티데", tag: "clap" }],                                                     tr: "널리 퍼진 bad news 평화를 꾀하는 악마의 party에서" },
+        { time: 156.5, jp: "須くengineかき鳴らした CHAINSAW BLOOD", ko: [{ text: "스베카라쿠 엔진 카키나라시타", tag: "clap"}, { text: " CHAINSAW BLOOD", tag: "chant" }],               tr: "마땅히 엔진을 울려 연주했어 CHAINSAW BLOOD" },
+        { time: 164.5, jp: "血がたぎってもう煮立ってもう やめれない", ko: "치가 타깃테 모- 니탓테 모- 야메레나이",                                 tr: "피가 끓고, 들끓어도 멈출 수 없어" },
+        { time: 168, jp: "砕ききっても穿っても止まぬ Hu-Hu-Hu-Hu", ko: [{ text: "쿠다키킷테모 우갓테모 야마누"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "완전히 부숴도, 꿰뚫어도 멈추지 않아 Hu-Hu-Hu-Hu" },
+        { time: 174, jp: "Tell me why cry? Tell me why CHAINSAW BLOOD", ko: [{ text: "Tell me why cry? Tell me why"}, { text: " CHAINSAW BLOOD", tag: "chant" }],               tr: "Tell me why cry? Tell me why CHAINSAW BLOOD" },
+        { time: 177.5, jp: "血がたぎってもう煮立ってもう 止まれない", ko: "치가 타깃테 모- 니탓테 모- 토마레나이",                                 tr: "피가 끓고, 들끓어도 멈출 수 없어" },
+        { time: 180.5, jp: "血を喰らうたび悪夢また よぎる Hu-Hu-Hu-Hu", ko: [{ text: "치오 쿠라우타비 아쿠무 마타 요기루"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "피를 삼킬 때마다 악몽이 또 스쳐 지나가 Hu-Hu-Hu-Hu" },
+        { time: 187, jp: "Tell me why cry? Tell me why you grinning?", ko: "Tell me why cry? Tell me why you grinning?",                                 tr: "Tell me why cry? Tell me why you grinning?" },
+
+      ],   
+    },
+    {
+      id: "KoikazeniNosete",
+      title: "사랑 감기에 실려 (恋風邪にのせて)",
+      youtubeId: "1FIhcdocT-k",
+      lyrics: [
+        { time: 19,         ko: [{ text: "전주비트에 맞춰 박수", tag: "clap" }],                                                    },
+        { time: 37.5, jp: "変わりゆく景色 窓越しに覗いた",        ko: [{ text: "카와리유쿠 케시키 마도고시니 노조이타", tag: "clap" }],                                                     tr: "변해가는 풍경 창 너머로 들여다 봤던" },
+        { time: 42, jp: "懐かしい風が呼んできた どっかで",        ko: [{ text: "나츠카시이 카제가 욘데키타 돗카데", tag: "clap" }],                                                     tr: "그리운 바람이 불러왔어 어디선가" },
+        { time: 48.5, jp: "見えない 互いを互いに 合図して そっと",        ko: [{ text: "미에나이 타가이오 타가이니 아이즈시테 솟토", tag: "clap" }],                                                     tr: "보이지 않는 서로를 서로에게 신호를 보내고 살짝" },
+        { time: 53.5, jp: "二人 目をそらして気付いたの ",        ko: [{ text: "후타리 메오 소라시테 키즈이타노", tag: "clap" }],                                                     tr: "둘이서 눈을 피하고서야 깨달은 거야" },
+        { time: 60.5, jp: "くだらない愛で 僕たちはいつも笑っている ", ko: [{ text: "쿠다라나이"}, { text: " 아이데", tag: "chant" }, { text: " 보쿠타치와 이츠모 와랏테이루"}],               tr: "보잘것 없는 사랑으로 우리는 늘 웃고 있어" },
+        { time: 68.5, jp: "思い出す日々が  僕たちを悲しませるの ねぇ", ko: [{ text: "오모이다스"}, { text: " 히비가", tag: "chant" }, { text: " 보쿠타치오 카나시마세루노 네-"}],               tr: "떠올리던 날들이 우릴 슬프게 하곤해 있잖아" },
+        { time: 77, jp: "くだらない愛で 僕たちはいつも笑っていた ", ko: [{ text: "쿠다라나이"}, { text: " 아이데", tag: "chant" }, { text: " 보쿠타치와 이츠모 와랏테이타"}],               tr: "보잘것없는 사랑으로 우리는 늘 웃고 있었지" },
+        { time: 85, jp: "繰り返す日々が  僕たちを振り向かせるの ねぇ", ko: [{ text: "쿠리카에스 "}, { text: " 히비가", tag: "chant" }, { text: " 보쿠타치오 후리무카세루노 네-"}],               tr: "되풀이하는 나날이 우리를 돌아보게 하는 거야 있잖아" },
+        { time: 93.5, jp: "そっと二人 魔法を唱えるの 恋風邪にのせて", ko: [{ text: "솟토 후타리 마호-오 토나에루노 코이카제니 노세테"}],               tr: "살짝 둘이서 마법을 외치는 거야 사랑 감기에 실어서" },
+        { time: 107,         ko: [{ text: "전주비트에 맞춰 박수", tag: "clap" }],                                                    },
+        { time: 118.5, jp: "混ざりゆく景色 雨越しに覗いた",        ko: [{ text: "마자리유쿠 케시키 아메고시니 노조이타", tag: "clap" }],                                                     tr: "뒤섞여 가는 풍경이 빗물 너머로 비쳤어" },
+        { time: 123.5, jp: "暖かい風が呼んできた どっかで",        ko: [{ text: "아타타카이 카제가 욘데키타 돗카데", tag: "clap" }],                                                     tr: "따뜻한 바람이 날 불러왔어 어딘가에서" },
+        { time: 129.5, jp: "消えない 互いを互いに 合図して そっと",        ko: [{ text: "키에나이 타가이오 타가이니 아이즈시테 솟토", tag: "clap" }],                                                     tr: "사라지지 않는 서로를 서로에게 신호를 보내고 살짝" },
+        { time: 135.5, jp: "二人 目を凝らして気付いたの",        ko: [{ text: "후타리 메오 코라시테 키즈이타노", tag: "clap" }],                                                     tr: "둘이서 눈을 가늘게 뜨다 깨달았어" },
+        { time: 142, jp: "くだらない愛で 僕たちはいつも笑っている ", ko: [{ text: "쿠다라나이"}, { text: " 아이데", tag: "chant" }, { text: " 보쿠타치와 이츠모 와랏테이루"}],               tr: "보잘것 없는 사랑으로 우리는 늘 웃고 있어" },
+        { time: 150, jp: "思い出す日々が  僕たちを悲しませるの ねぇ", ko: [{ text: "오모이다스"}, { text: " 히비가", tag: "chant" }, { text: " 보쿠타치오 카나시마세루노 네-"}],               tr: "떠올리던 날들이 우릴 슬프게 하곤해 있잖아" },
+        { time: 158.5, jp: "くだらない愛で 僕たちはいつも笑っていた ", ko: [{ text: "쿠다라나이"}, { text: " 아이데", tag: "chant" }, { text: " 보쿠타치와 이츠모 와랏테이타"}],               tr: "보잘것없는 사랑으로 우리는 늘 웃고 있었지" },
+        { time: 166.5, jp: "繰り返す日々が  僕たちを振り向かせるの ねぇ", ko: [{ text: "쿠리카에스 "}, { text: " 히비가", tag: "chant" }, { text: " 보쿠타치오 후리무카세루노 네-"}],               tr: "되풀이하는 나날이 우리를 돌아보게 하는 거야 있잖아" },
+        { time: 175, jp: "そっと二人 魔法を唱えるの", ko: [{ text: "솟토 후타리 마호-오 토나에루노 "}],               tr: "살짝 둘이서 마법을 외치는 거야" },
+        { time: 183.5, jp: "言葉が深める惑星の夜に今",        ko: [{ text: "코토바가 후카메루 와쿠세- 노 요루 니 이마", tag: "clap" }],                                                     tr: "말이 깊어지는, 행성의 밤에 지금" },
+        { time: 190, jp: "あなたを探して 答えた",        ko: [{ text: "아나타오 사가시테 코타에타", tag: "clap" }],                                                     tr: "너를 찾아 헤매며 대답했어" },
+        { time: 194, jp: "「心枯れるまで、共に笑っていよう」",        ko: [{ text: "「코코로 카레루 마데, 토모니 와랏테 이요」", tag: "clap" }],                                                     tr: "「코코로 카레루 마데, 토모니 와랏테 이요」" },
+        { time: 199, jp: "やっと二人 目を合わせて気付いたの",        ko: [{ text: "얏토 후타리 메오 아와세테 키즈이타노", tag: "clap" }],                                                     tr: "마침내 둘이 눈을 마주치고서 깨달았어" },
+        { time: 209.5, jp: "くだらない愛で 僕たちはいつも笑っている ", ko: [{ text: "쿠다라나이"}, { text: " 아이데", tag: "chant" }, { text: " 보쿠타치와 이츠모 와랏테이루"}],               tr: "보잘것 없는 사랑으로 우리는 늘 웃고 있어" },
+        { time: 217, jp: "思い出す日々が  僕たちを悲しませるの ねぇ", ko: [{ text: "오모이다스"}, { text: " 히비가", tag: "chant" }, { text: " 보쿠타치오 카나시마세루노 네-"}],               tr: "떠올리던 날들이 우릴 슬프게 하곤해 있잖아" },
+        { time: 225.5, jp: "くだらない愛で 僕たちはいつも笑っていた ", ko: [{ text: "쿠다라나이"}, { text: " 아이데", tag: "chant" }, { text: " 보쿠타치와 이츠모 와랏테이타"}],               tr: "보잘것없는 사랑으로 우리는 늘 웃고 있었지" },
+        { time: 233.5, jp: "繰り返す日々が  僕たちを振り向かせるの ねぇ", ko: [{ text: "쿠리카에스 "}, { text: " 히비가", tag: "chant" }, { text: " 보쿠타치오 후리무카세루노 네-"}],               tr: "되풀이하는 나날이 우리를 돌아보게 하는 거야 있잖아" },
+        { time: 242, jp: "そっと二人 魔法を唱えるの 恋風邪にのせて", ko: [{ text: "솟토 후타리 마호-오 토나에루노 코이카제니 노세테"}],               tr: "살짝 둘이서 마법을 외치는 거야 사랑 감기에 실어서" },
+      ],
+    },
+    {
+      id: "Odoriko",
+      title: "무희 (踊り子)",
+      youtubeId: "7HgJIAUtICU",
+      lyrics: [
+        { time: 0,         ko: [{ text: "전주비트에 맞춰 박수", tag: "clap" }],                                                    },
+        { time: 18.5, jp: "ねぇ、どっかに置いてきたような",        ko: [{ text: "네 돗카니 오이테키타 요나", tag: "clap" }],                                                     tr: "있잖아, 어딘가에 두고 온 듯한" },
+        { time: 24, jp: "事が一つ二つ浮いているけど",        ko: [{ text: "코토가 히토츠 후타츠 우이테이루케도", tag: "clap" }],                                                     tr: "것들이 하나둘 떠오르고 있는데 말이야" },
+        { time: 31, jp: "ねぇ、ちゃんと拾っておこう",        ko: [{ text: "네- 챤토 히롯테오코-", tag: "clap" }],                                                     tr: "저기、제대로 주워 두자" },
+        { time: 36.5, jp: "はじけて忘れてしまう前に",        ko: [{ text: "하지케테 와스레테 시마우 마에니", tag: "clap" }],                                                     tr: "터져서 잊어버리기 전에" },
+        { time: 43, jp: "回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
+        { time: 49.5, jp: "止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
+        { time: 55.5, jp: "回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
+        { time: 62, jp: "づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
+        { time: 68, jp: "とぅるるる とぅるるる とぅるる x 4",        ko: [{ text: "투루루루 투루루루 투루루 x 4", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 4" },
+        { time: 80, jp: "あのね、私あなたに会ったの",        ko: [{ text: "아노네 와타시 아나타니 앗타노", tag: "clap"  }],                                                     tr: "있잖아、나 너를 만났어" },
+        { time: 85.5, jp: "夢の中に置いてきたけどね",        ko: [{ text: "유메노 나카니 오이테키타케도네", tag: "clap"  }],                                                     tr: "꿈속에 두고 왔지만 말이야" },
+        { time: 92, jp: "ねぇ、どうして私が好きなの",        ko: [{ text: "네- 도-시테 와타시가 스키나노", tag: "clap"  }],                                                     tr: "저기、어째서 나를 좋아하니" },
+        { time: 98, jp: "一度しか会ったことがないのにね",        ko: [{ text: "이치도시카 앗타 코토가 나이노니네", tag: "clap"  }],                                                     tr: "한 번밖에 만난 적 없는데 말이야" },
+        { time: 104.5, jp: "思いを蹴って 二人でしてんだ",        ko: [{ text: "오모이오 켓테 후타리데 시텐다", tag: "clap"  }],                                                     tr: "생각을 멈추고 둘이서 함께 해온" },
+        { time: 107.5, jp: "壊れない愛を歌う 言葉を二人に課して",        ko: [{ text: "와스레나이 아이오 우타우 코토바오 후타리 카시테", tag: "clap"  }],                                                     tr: "깨지지 않을 사랑을 노래해 서로에게 말을 짊어지게 하고" },
+        { time: 112, jp: "誓いをたてんだ 忘れない愛を歌うようにね",        ko: [{ text: "치카이오 타텐다 와스레나이 아이오 우타우요-니네", tag: "clap"  }],                                                     tr: "굳게 맹세하고 있어 잊지 못할 사랑을 노래하듯이 말이야" },
+        { time: 116.5, jp: "回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
+        { time: 122.5, jp: "止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
+        { time: 129, jp: "回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
+        { time: 135, jp: "づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
+        { time: 141, jp: "とぅるるる とぅるるる とぅるる x 8",        ko: [{ text: "투루루루 투루루루 투루루 x 8", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 8" },
+        { time: 168.5, jp: "回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
+        { time: 175, jp: "止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
+        { time: 181, jp: "回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
+        { time: 187, jp: "づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
+        { time: 193, jp: "時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" },
+        { time: 199.5, jp: "僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" },
+        { time: 205.5, jp: "時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" },
+        { time: 211.5, jp: "僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" },
+        { time: 218, jp: "とぅるるる とぅるるる とぅるる x 4",        ko: [{ text: "투루루루 투루루루 투루루 x 4", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 4" },
+      ],
+    },
+    {
+      id: "HadakaNoYusha",
+      title: "벌거벗은 용사 (裸の勇者)",
+      youtubeId: "FT0GKCuSaW0",
+      lyrics: [
+        { time: 0, jp: "誰かが変な涙を 飲み込んで 呑み込んでいる",        ko: [{ text: "다레카가 헨나 나미다오 노미콘데 노미콘데이루", tag: "clap" }],                                                     tr: "누군가가 이상한 눈물을 삼키고 삼키고 있어" },
+        { time: 11, jp: "力が伴う 悪意振り解いて",        ko: [{ text: "치카라가 토모나우 아쿠이 후리호도이테"}],                                                     tr: "힘이 따르는 악의를 뿌리치고" },
+        { time: 17, jp: "耳は聞こえちゃいない だが勇者は今",        ko: [{ text: "미미와 키코에챠이나이 다가 유-샤와 이마"}],                                                     tr: "귀는 들리지도 않아 하지만 용사는 지금" },
+        { time: 23, jp: "力は要らない 身に任せて 小さなこの手は今",        ko: [{ text: "치카라와 이라나이 미니 마카세테 치이사나 코노 테와 이마"}],                                                     tr: "힘은 필요없어 몸에 맡겨 작은 이 손은 지금" },
+        { time: 34.5, jp: "愛してしまった全部全部 降りかかった呪いも全部", ko: [{ text: "아이시테시맛타 젠부 젠부", tag: "chant" }, { text: " 후리카캇타 노로이모 젠부"}],               tr: "사랑해버렸어 전부 전부 덮쳐 온 저주까지도 전부 전부" },
+        { time: 46, jp: "もう愛してしまった想いを全部 守れるほどの光を",        ko: [{ text: "모- 아이시테시맛타 오모이오 젠부 마모레루 호도노 히카리오"}],                                                     tr: "이미 사랑해버린 추억을 전부 지킬 수 있을 만큼의 빛을" },
+        { time: 59.5, jp: "何処からか舞った悲しみが 飛び交って 飛び交っている",        ko: [{ text: "도코카라카 맛타 카나시미가 토비캇테 토비캇테이루", tag: "clap" }],                                                     tr: "어디선가 흘러내린 슬픔이 난무하며 난무하고 있어" },
+        { time: 71, jp: "失って また失って 膝をつき 息をしている",        ko: [{ text: "우시낫테 마타 우시낫테 히자오 츠키 이키오 시테이루", tag: "clap" }],                                                     tr: "잃고 또 잃고 무릎을 꿇고 숨을 쉬고 있어" },
+        { time: 82, jp: "それは涙と対になって 悲しみと力となって", ko: [{ text: "소레와 나미다토 츠이니 낫테 카나시미토 치카라토 낫테", tag: "chant" }],               tr: "그것은 눈물과 짝이 되어 슬픔과 힘이 되어" },
+        { time: 89, jp: "愛しさが何かを壊していく",        ko: [{ text: "이토시사가 나니카오 코와시테 이쿠"}],                                                     tr: "사랑스러움이 무언가를 부숴 가" },
+        { time: 94, jp: "そこは涙と対になって 懐疑が溢れ返って", ko: [{ text: "소코와 나미다토 츠이니 낫테 카이기가 아후레카엣테", tag: "chant" }],               tr: "그것은 눈물과 짝이 되어 회의감이 넘쳐 흘러서" },
+        { time: 100, jp: "この全てを背負った手を",        ko: [{ text: "코노 스베테오 세옷타 테오"}],                                                     tr: "이 모든 것을 짊어진 손을" },
+        { time: 105, jp: "愛してしまった全部全部 降りかかった呪いも全部", ko: [{ text: "아이시테시맛타 젠부 젠부", tag: "chant" }, { text: " 후리카캇타 노로이모 젠부"}],               tr: "사랑해버렸어 전부 전부 덮쳐 온 저주까지도 전부" },
+        { time: 116.5, jp: "もう愛してしまった思いを全部守れるほどの光を",        ko: [{ text: "모-아이시테 시맛타 오모이오 젠부 마모레루 호도노 히카리오"}],                                                     tr: "이제는 사랑해 버린 이 마음을 전부 지켜낼 만큼의 빛을" },
+        { time: 129, jp: "誰もが求めた剣はこの誰かが残してった鈍が",        ko: [{ text: "다레모가 모토메타 츠루기와 사비다라케데 츠카에나캇타", tag: "clap" }],                                                     tr: "모두가 갈망하던 검은 녹투성이어서 쓸 수가 없었어" },
+        { time: 141, jp: "この誰かが残してった鈍が闇を裂いてしまう前に",        ko: [{ text: "코노 다레카가 노코시텟타 나마쿠라가 야미오 사이테 시마우 마에니", tag: "clap" }],                                                     tr: "이 누군가가 남겨두고 간 무딘 칼이 어둠을 갈라버리기 전에" },
+        { time: 152, jp: "愛してしまった全部全部 降りかかった呪いも全部", ko: [{ text: "아이시테시맛타 젠부 젠부", tag: "chant" }, { text: " 후리카캇타 노로이모 젠부"}],               tr: "사랑해버렸어 전부 전부 덮쳐 온 저주까지도 전부 전부" },
+        { time: 164, jp: "もう愛してしまった想いを全部 守れるほどの光を",        ko: [{ text: "모- 아이시테시맛타 오모이오 젠부 마모레루 호도노 히카리오"}],                                                     tr: "이미 사랑해버린 추억을 전부 지킬 수 있을 만큼의 빛을" },
+        { time: 176, jp: "力が伴う悪意振り解いて耳は聞こえちゃいない",        ko: [{ text: "치카라가 토모나우 아쿠이 후리호도이테 미미와 키코에챠 이나이"}],                                                     tr: "힘이 따라오고 악의를 떨쳐내 귀는 아무것도 듣지 못해" },
+        { time: 185, jp: "だが勇者は今力はいらない身に任せて",        ko: [{ text: "다가 유-샤와 이마 치카라와 이라나이 미니 마카세테"}],                                                     tr: "하지만 용사는 지금 힘은 필요 없다고 몸에 맡긴 채로" },
+        { time: 194, jp: "カゲは迫る「お前はなんだ」と",        ko: [{ text: "카게와 세마루 “오마에와 난다” 토"}],                                                     tr: "그림자는 가까워져 와 ‘너는 뭐지’라고" },
+
+
+
+      ],
+    },
+    {
+      id: "Fukakouryoku",
+      title: "불가행력 (不可幸力)",
+      youtubeId: "Gbz2C2gQREI",
+      lyrics: [
+        { time: 0,         ko: [{ text: "전주비트에 맞춰 박수", tag: "clap" }],                                                    },
+        { time: 19, jp: "どこにいっても行き詰まりそして息道理を",        ko: [{ text: "도코니 잇테모 이키츠마리 소시테 이키도오리오", tag: "clap" }],                                                     tr: "어딜 가봐도 막다른 길 그리고 분노를" },
+        { time: 23, jp: "そのままどっかに出すくだり",        ko: [{ text: "소노 마마 돗카니 다스쿠다리", tag: "clap" }],                                                     tr: "그대로 어딘가로 내뱉은 대사" },
+        { time: 25, jp: "そんな劣等も葛藤もみんな持ってる その理由は同じ",        ko: [{ text: "손나 레이토모 캇토모 민나 못테루", tag: "clap" }, { text: " 소노 리유와 오나지", tag: "chant"}],                                             tr: "그런 열등도 갈등도 모두 가지고 있지 그 이유는 같아" },
+        { time: 30.5, jp: "なんでもかんでも欲しがる世界じゃない？",        ko: [{ text: "난데모 칸데모 호시가루 세카이쟈나이", tag: "clap" }],                                                     tr: "뭐든 다 바라는 세상이잖아?" },
+        { time: 32.5, jp: "また回る世界に飲まれているそれも理由は同じ",        ko: [{ text: "마타 마와루 세카이니 노마레테이루 소레모 리유와 오나지", tag: "clap" }],                                                     tr: "또다시 돌고 도는 세상에 삼켜지고 있어 그것도 이유는 같아" },
+        { time: 37, jp: "膨らんだ、妄想、幻想、真相を、いやあれを探してる",        ko: [{ text: "후쿠란다 모소 겐소 신소오 이야 아레오 사가시테루", tag: "clap" }],                                                     tr: "부풀어올랐어 망상 환상 진상을, 아니, 저걸 찾고있어" },
+        { time: 41.5, jp: "あれ、なに、わからないよ それ、なに、甘い理想に落ちる",        ko: [{ text: "아레 나니", tag: "chant"}, { text: " 와카라나이요", tag: "clap"}, { text: " 소레 나니", tag: "chant"}, { text: " 아마이 리소니 오치루", tag: "clap"}],         tr: "저거, 뭐야, 모르겠어 그거, 뭐야, 단 맛의 이상에 떨어져" },
+        { time: 54, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 55.5, jp: "みんな心の中までイカレちまっている",        ko: [{ text: "민나 코코로노 나카마데 이카레치맛테이루"}],         tr: "모두 마음 속까지 맛이 가버렸어" },
+        { time: 59, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 61, jp: "そんな世界にみんなで寄り添いあっている",        ko: [{ text: "손나 세카이니 민나데 요리소이앗테이루"}],         tr: "그런 세상에서 모두 바짝 붙어있어" },
+        { time: 64, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 66, jp: "みんな心の中から弱って朽ちていく",        ko: [{ text: "민나 코코로노 나카카라 요왓테 쿠치테이쿠"}],         tr: "모두 마음 속에서부터 약해지며 시들어가" },
+        { time: 69.5, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 71, jp: "そんな世界だから皆慰めあっている",        ko: [{ text: "손나 세카이다카라 민나 나구사메앗테이루"}],         tr: "그런 세상이기에 모두 서로 위로하고 있어" },
+        { time: 85, jp: "あれ、なに、わからないよ それ、なに、辛い日々に沈む",        ko: [{ text: "아레 나니", tag: "chant"}, { text: " 와카라나이요", tag: "clap"}, { text: " 소레 나니", tag: "chant"}, { text: " 츠라이 히비니 시즈무", tag: "clap"}],         tr: "저거, 뭐야, 모르겠어 그거, 뭐야, 괴로운 나날에 잠겨가" },
+        { time: 97.5, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 99, jp: "みんな心の中までイカレちまっている",        ko: [{ text: "민나 코코로노 나카마데 이카레치맛테이루"}],         tr: "모두 마음 속까지 맛이 가버렸어" },
+        { time: 102.5, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 104.5, jp: "そんな世界にみんなで寄り添いあっている",        ko: [{ text: "손나 세카이니 민나데 요리소이앗테이루"}],         tr: "그런 세상에서 모두 바짝 붙어있어" },
+        { time: 108, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 109.5, jp: "みんな心の中から弱って朽ちていく",        ko: [{ text: "민나 코코로노 나카카라 요왓테 쿠치테이쿠"}],         tr: "모두 마음 속에서부터 약해지며 시들어가" },
+        { time: 113, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 114.5, jp: "そんな世界だから皆慰めあっている",        ko: [{ text: "손나 세카이다카라 민나 나구사메앗테이루"}],         tr: "그런 세상이기에 모두 서로 위로하고 있어" },
+        { time: 121.5, jp: "愛で揺れる世界の中で僕達はキスをしあって生きている",        ko: [{ text: "아이데 유레루 세카이노 나카데 보쿠타치와 키스오 시앗테 이키테이루"}, { text: ""}],         tr: "사랑으로 흔들리는 세상 속에서 우리는 서로 키스하며 살아가고 있어" },
+        { time: 133, jp: "揺れる世界の中を僕達は揺れる世界の中を僕達は手を取り合っている",        ko: [{ text: "유레루 세카이노 나카오 보쿠타치와 테오 토리앗테이루"}],         tr: "흔들리는 세상 속에서 우리는 서로 손을 잡고 있어" },
+        { time: 142.5, jp: "なぁなんて美しい世界だ僕ら何度裏切りあっていても",        ko: [{ text: "나 난테 우츠쿠시이 세카이다 보쿠라 난도 우라기리앗테이테모"}],         tr: "뭐 이 얼마나 아름다운 세상인가 우린 몇번이고 서로를 배신해도" },
+        { time: 148, jp: "まぁなんとか手を取り合うんだ",        ko: [{ text: "마 난토카 테오 토리아운다"}],         tr: "뭐, 어떻게든 손을 잡게 돼" },
+        { time: 150, jp: "まるで恋愛映画のラストシーンのような",        ko: [{ text: "마루데 렌아이에-가노 라스토 신노 요-나"}],         tr: "마치 연애영화의 라스트 신 같아" },
+        { time: 154.5, jp: "愛で靡く世界の中で僕達はキスをしあって生きている",        ko: [{ text: "아이데", tag: "chant" }, { text: " 나비쿠 세카이노 나카데 보쿠타치와 키스오 시앗테 이키테이루"}],                                             tr: "사랑으로 나부끼는 세상 속에서 우리는 서로 키스하며 살아가고 있어" },
+        { time: 166, jp: "靡く世界の中を僕達は目を合わせあって生きる",        ko: [{ text: "나비쿠 세카이노", tag: "chant" }, { text: " 나카오 보쿠타치와 메오 아와세앗테 이키루"}],                                             tr: "나부끼는 세상 속을 우리는 서로 눈을 마주치며 살고 있어" },
+        { time: 176.5, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 178.5, jp: "みんな心の中までイカレちまっている",        ko: [{ text: "민나 코코로노 나카마데 이카레치맛테이루"}],         tr: "모두 마음 속까지 맛이 가버렸어" },
+        { time: 181.5, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 183.5, jp: "そんな世界にみんなで寄り添いあっている",        ko: [{ text: "손나 세카이니 민나데 요리소이앗테이루"}],         tr: "그런 세상에서 모두 바짝 붙어있어" },
+        { time: 187, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 188.5, jp: "みんな心の中から弱って朽ちていく",        ko: [{ text: "민나 코코로노 나카카라 요왓테 쿠치테이쿠"}],         tr: "모두 마음 속에서부터 약해지며 시들어가" },
+        { time: 192, jp: "welcome to the dirty night",        ko: [{ text: "welcome to the dirty night", tag: "chant"}],         tr: "welcome to the dirty night" },
+        { time: 193.5, jp: "そんな世界だから皆慰めあっている",        ko: [{ text: "손나 세카이다카라 민나 나구사메앗테이루"}],         tr: "그런 세상이기에 모두 서로 위로하고 있어" },
+      ],
+    },
+    {
+      id: "Reunion",
+      title: "재회 (再会)",
+      youtubeId: "WcaSSvtHFeM",
+      lyrics: [
+        { time: 20.5,         ko: [{ text: "전주비트에 맞춰 박수", tag: "clap" }],                                                    },
+        { time: 40, jp: "one more time もう少しで起こすよmagic",        ko: [{ text: "one more time", tag: "chant"}, { text: " 모-스코시데 오코스요 매직", tag: "clap"}],         tr: "one more time 조금만 더 하면 될꺼야 magic" },
+        { time: 46.5, jp: "超TRY 光を貸してbody",        ko: [{ text: "SUPER TRY 히카리오 카시테 바디", tag: "clap"}],         tr: "SUPER TRY 빛을 빌려줘 body" },
+        { time: 51.5, jp: "どうにかしてでも一つ願い、聞いてくれ",        ko: [{ text: "도-니카 시테데모 히토츠 네가이 키이테쿠레", tag: "clap"}],         tr: "무슨짓을 해서라도 하나만 소원을 들어줘" },
+        { time: 58, jp: "どうこうよりも一つ想い、悟ってくれ",        ko: [{ text: "도-코- 요리모 히토츠 오모이 사톳테쿠레", tag: "clap"}],         tr: "이러니 저러니 하는것 보다 이 마음을 부디 알아줘" },
+        { time: 66, jp: "宇宙一の悲しみと霧覚める静けさと",        ko: [{ text: "우츄- 이치노 카나시미토 키리 사메루 시즈케사토", tag: "clap"}],         tr: "우주 제일의 슬픔과 안개가 걷히는 고요함과" },
+        { time: 72.5, jp: "僕の心拍でもしもしもし",        ko: [{ text: "보쿠노 신파쿠데 모시 모시 모시", tag: "clap"}],         tr: "내 심박으로 만약 만약 만약" },
+        { time: 77, jp: "もしもここからまた出会えるのなら",        ko: [{ text: "모시모 코코카라 마타 데아에루노나라"}],         tr: "만약 이제부터 다시 만날 수 있다면" },
+        { time: 81, jp: "この先は一瞬も一寸の隅も",        ko: [{ text: "코노 사키와 잇슌 모 잇슨노 스키모"}],         tr: "이 앞으로는 한순간도 조금도" },
+        { time: 88, jp: "忘れず全部覚えておこう",        ko: [{ text: "와스레즈 젠부 오보에테오코"}],         tr: "잊지말고 전부 기억해두자" },
+        { time: 91.5, jp: "目を閉じあうたびまぶたで久しく",        ko: [{ text: "메오 토지아우 타비 마부타데 히사시쿠"}],         tr: "눈을 감을 때 마다 눈꺼풀 안에서, 오랜만에" },
+        { time: 97.5, jp: "君に出会えるからまた夏で話そう",        ko: [{ text: "키미니 데아에루카라 마타 코코데 하나소오"}],         tr: "너와 만날 수 있을 테니 또 여기서 다시 이야기하자" },
+        { time: 117, jp: "one more time もう少しで起こすよmagic",        ko: [{ text: "one more time", tag: "chant"}, { text: " 모-스코시데 오코스요 매직", tag: "clap"}],         tr: "one more time 조금만 더 하면 될꺼야 magic" },
+        { time: 123, jp: "超HIGHもうすでに力んでるマジ",        ko: [{ text: "SUPER HIGH 모- 스데니 리킨데루 마지", tag: "clap"}],         tr: "SUPER HIGH 이미 노력중이야 진짜로" },
+        { time: 128, jp: "どう見たってもう無謀のコース蠱毒みたいだね",        ko: [{ text: "도- 미탓테 모오 무보-우노 코-스 코도쿠 미타이 다네", tag: "clap"}],         tr: "아무리봐도 이젠 무모한 코스, 고독에 갇힌것 같네" },
+        { time: 135, jp: "どうこうよりも秘匿の情を掘りおこしてくれ",        ko: [{ text: "도- 코- 요리모 히토쿠노 조-오 호리 오코시테쿠레", tag: "clap"}],         tr: "이러니 저러니 하는것 보다 감춰둔 마음을 파헤쳐 줘" },
+        { time: 143, jp: "宇宙一の快感と咳き込める重圧と",        ko: [{ text: "우츄- 이치노 카이칸토 세키 코메루 쥬-아츠토", tag: "clap"}],         tr: "우주 제일의 쾌감과 기침이 나올 정도의 중압과" },
+        { time: 149.5, jp: "僕の情熱でもしもしもし",        ko: [{ text: "보쿠노 죠-네츠데 모시 모시 모시", tag: "clap"}],         tr: "우주 제일의 쾌감과 기침이 나올 정도의 중압과" },
+        { time: 194, jp: "黄泉の果て繋ぐ呪文と航路の",        ko: [{ text: "요미노 하테 츠나구 주몬토 코-로노"}],         tr: "황천의 끝으로 이어진 주문과 길" },
+        { time: 200, jp: "在処など僕が知らなかったら",        ko: [{ text: "아리카나도 보쿠가 시라나캇타라"}],         tr: "이 있는 곳을 내가 몰랏다면" },
+        { time: 206, jp: "君はそれでも、胸の奥僕の 何かの",        ko: [{ text: "키미와 소레데모 무네노 오쿠 보쿠노 나니카노", tag: "clap"}],         tr: "그럼에도 너는, 가슴 깊은곳 나의 무언가가" },
+        { time: 212.5, jp: "在処をそれでも、探すだろうかねぇ、もしも",        ko: [{ text: "아리카오 소레데모 사가스다로-카 네- 모시모 ", tag: "clap"}],         tr: "있는 곳을 그럼에도, 찾으려 할까 있잖아 만약" },
+        { time: 225, jp: "もしもここからまた出会えるのなら",        ko: [{ text: "모시모 코코카라 마타 데아에루노나라"}],         tr: "만약 이제부터 다시 만날 수 있다면" },
+        { time: 229, jp: "これまでの一瞬も一寸の隅も",        ko: [{ text: "코레 마데노 잇슌 모 잇슨노 스키모"}],         tr: "이 앞으로는 한순간도 조금도" },
+        { time: 236, jp: "忘れず全部覚えておこう",        ko: [{ text: "와스레즈 젠부 오보에테오코"}],         tr: "잊지말고 전부 기억해두자" },
+        { time: 239.5, jp: "目を閉じあうたびまぶたで久しく",        ko: [{ text: "메오 토지아우 타비 마부타데 히사시쿠"}],         tr: "눈을 감을 때 마다 눈꺼풀 안에서, 오랜만에" },
+        { time: 245.5, jp: "君に出会えるからまた夏で話そう",        ko: [{ text: "키미니 데아에루카라 마타 코코데 하나소오"}],         tr: "너와 만날 수 있을 테니 또 여기서 다시 이야기하자" },
+
+
+
+
+
+      ],
+    },
+    {
+      id: "hanaurana",
+      title: "꽃점 (花占い)",
+      youtubeId: "onhBN0qkUcE",
+      lyrics: [
+        { time: 1.5, jp: "街の夕焼けに溶けた僕たちはまだニ人だろうか",        ko: [{ text: "마치노 유-야케니 토케타 보쿠타치와 마다 후타리다로-카", tag: "clap"}],         tr: "거리의 노을에 녹아든 우리는 여전히 두 명이었을까" },
+        { time: 8, jp: "風が吹く僕たちを乗せて",        ko: [{ text: "카제가 후쿠 보쿠타치오 노세테", tag: "clap"}],         tr: "바람이 부네 우리를 태우고" },
+        { time: 12, jp: "ニ人でちぎった花に願いを込めて",        ko: [{ text: "후타리데 치깃타 하나니 네가이오 코메테", tag: "clap"}],         tr: "둘이서 뜯어낸 꽃잎에 소원을 담아서" },
+        { time: 32.5, jp: "願うなら 僕たちを出会うよりもずっと遠くに",        ko: [{ text: "네가우나라 보쿠타치오 데아우요리모 즛토 토오쿠니", tag: "clap"}],         tr: "소원을 빌면 우리를 만나기 훨씬 더 전으로" },
+        { time: 40, jp: "叶うなら 僕たちの運命さえももっと遠くに",        ko: [{ text: "카나우나라 보쿠타치노 운메이사에모 못토 토오쿠니", tag: "clap"}],         tr: "이루어진다면 우리의 운명마저도 더 먼 곳으로" },
+        { time: 46.5, jp: "なんて笑って吐いて捨てては",        ko: [{ text: "난테 와랏테 하이테 스테테와", tag: "chant"}],         tr: "그렇게 웃으며 뱉으며 버리고는" },
+        { time: 50, jp: "君を思い出す そんな思いを",        ko: [{ text: "키미오 오모이다스 손나 오모이오"}],         tr: "너를 떠올려 그 생각을" },
+        { time: 53.5, jp: "抱いて抱えて悶えた先には",        ko: [{ text: "이다이테 카카에테 모다에타 사키니와", tag: "chant"}],         tr: "껴안으며 품으며 고민한 끝에는" },
+        { time: 57.5, jp: "いつも君がいる そんな事より",        ko: [{ text: "이츠모 키미가 이루 손나 코토요리"}],         tr: "항상 네가 있다는 그런 이야기보다" },
+        { time: 61, jp: "恋路の果てには何があるくだらない話をニ人でしよう",        ko: [{ text: "코이지노 하테니와 나니가 아루 쿠다라나이 하나시오 후타리데 시요", tag: "clap"}],         tr: "사랑의 끝에는 무엇이 있는 걸까 형편없는 이야기를 둘이서 하자" },
+        { time: 74, jp: "僕達の千年の恋は相槌で折れる花のようだ",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 오레루 하나노 요다"}],         tr: "우리의 천 년의 사랑은 맞장구에 부러진 꽃과 같아" },
+        { time: 81, jp: "僕達は千年後もまだ同じ様にまってんだ笑っちゃうよね",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니 맛텐다 와랏챠우요네"}],         tr: "우리는 천 년 뒤에도 여전히 변함없이 기다리고 있어 웃긴 이야기지" },
+        { time: 96.5, jp: "貴方と以外もう何処にも行けない",        ko: [{ text: "아나타토 이가이 모 도코니모 이케나이", tag: "clap"}],         tr: "당신이 있는 곳이 아니라면 이제 어디에도 갈 수없어" },
+        { time: 101, jp: "波の中で混じり合わない日々の中で",        ko: [{ text: "나미노 나카데 마지리아와나이 히비노 나카데", tag: "clap"}],         tr: "파도 속에서 섞이지 않는 나날 속에서" },
+        { time: 107, jp: "2人がたっている永劫を",        ko: [{ text: "후타리가 탓테 이루 에이고-오"}],         tr: "두 사람이 견디고 있는 영겁을" },
+        { time: 110.5, jp: "なんて笑って吐いて捨てては",        ko: [{ text: "난테 와랏테 하이테 스테테와", tag: "chant"}],         tr: "그렇게 웃으며 뱉으며 버리고는" },
+        { time: 114.5, jp: "君を思い出す そんな思いを",        ko: [{ text: "키미오 오모이다스 손나 오모이오"}],         tr: "너를 떠올려 그 생각을" },
+        { time: 118, jp: "抱いて抱えて悶えた先には",        ko: [{ text: "이다이테 카카에테 모다에타 사키니와", tag: "chant"}],         tr: "껴안으며 품으며 고민한 끝에는" },
+        { time: 121.5, jp: "いつも君がいる そんな事より",        ko: [{ text: "이츠모 키미가 이루 손나 코토요리"}],         tr: "항상 네가 있다는 그런 이야기보다" },
+        { time: 125, jp: "願いは君との先にあるたわいない話を2人でしよう",        ko: [{ text: "네가이와 키미토노 사키니 아루 타와이나이 하나시오 후타리데 시요-", tag: "clap"}],         tr: "소원은 너와의 그 너머에 있어 시시한 얘기를 둘이서 하자" },
+        { time: 138, jp: "僕達の千年の恋は相槌で折れる花のようだ",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 오레루 하나노 요다"}],         tr: "우리의 천 년의 사랑은 맞장구에 부러진 꽃과 같아" },
+        { time: 145, jp: "僕達は千年後もまだ同じ様にまってんだ笑っちゃうよね",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니 맛텐다 와랏챠우요네"}],         tr: "우리는 천 년 뒤에도 여전히 변함없이 기다리고 있어 웃긴 이야기지" },
+        { time: 160, jp: "何年経っても妄想が根を張って",        ko: [{ text: "난넨 탓테모 모-소-가 네오 핫테", tag: "both"}],         tr: "몇 년이 지나도 망상이 뿌리를 내려" },
+        { time: 163, jp: "もうこんなに溢れ出している",        ko: [{ text: "모- 콘나니 아후레다시테 이루", tag: "both"}],         tr: "벌써 이렇게나 넘쳐흘러 나오고 있어" },
+        { time: 166.5, jp: "願いは花が散るほど溢れ出していく",        ko: [{ text: "네가이와"}, { text: "하나가 치루 호도 아후레다시테 이쿠", tag: "both"}],         tr: "소원은 꽃이 질 만큼 흘러넘쳐 가" },
+        { time: 171.5, jp: "花占う恋歌",        ko: [{ text: "하나우라나우 렌카"}],         tr: "꽃점을 치는 사랑 노래" },
+        { time: 173.5, jp: "僕達の千年の恋は相槌で咲く花のように",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 사쿠 하나노 요니"}],         tr: "우리의 천 년의 사랑은 맞장구에 피는 꽃처럼" },
+        { time: 181, jp: "僕達は千年後もまだ同じように",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니"}],         tr: "우리는 천 년 뒤에도 여전히 똑같이" },
+        { time: 185.5, jp: "ちぎってまた笑っていたいよね",        ko: [{ text: "치깃테 마타 와랏테 이타이요네"}],         tr: "뜯어 또다시 웃고 있고 싶지, 그치" },
+        { time: 188.5, jp: "何年経っても妄想が根を張って",        ko: [{ text: "난넨 탓테모 모-소-가 네오 핫테", tag: "chant"}],         tr: "몇 년이 지나도 망상이 뿌리를 내려" },
+        { time: 191.5, jp: "もうこんなに溢れ出している",        ko: [{ text: "모- 콘나니 아후레다시테 이루", tag: "chant"}],         tr: "벌써 이렇게나 넘쳐흘러 나오고 있어" },
+        { time: 194.5, jp: "願えば",        ko: [{ text: "네가에바"}],         tr: "소원을 빈다면" },
+        { time: 196, jp: "何年経っても妄想が根を張って",        ko: [{ text: "난넨 탓테모 모-소-가 네오 핫테", tag: "chant"}],         tr: "몇 년이 지나도 망상이 뿌리를 내려" },
+        { time: 198.5, jp: "もうこんなに溢れ出している",        ko: [{ text: "모- 콘나니 아후레다시테 이루", tag: "chant"}],         tr: "벌써 이렇게나 넘쳐흘러 나오고 있어" },
+
+
+      ],
+    },
+    {
+      id: "Yobigoe",
+      title: "부르는 소리 (呼び声)",
+      youtubeId: "CI2x2aSi8aI",
+      lyrics: [
+        { time: 1, jp: "この惑星の真ん中で時折り描いた暗闇照らす何か",        ko: [{ text: "코노 호시노 만나카데 토키오리 카이타 쿠라야미 테라스 나니카", tag: "clap"}],         tr: "이 별의 한가운데서 가끔씩 그려왔던 어둠을 밝히는 무언가" },
+        { time: 12.5, jp: "この部屋を立ち籠めている何か",        ko: [{ text: "코노 헤야오 타치코메테이루 나니카", tag: "clap"}],         tr: "이 방을 가득 채운 무언가" },
+        { time: 17, jp: "それは紅色の記憶のような空いた穴を埋めていくような何か", ko: [{ text: "소레와 베니이로노 ", tag: "chant" }, { text: " 키오쿠노 요-나 아이타 아나오 우메테이쿠 요-나 나니카", tag: "clap"}],               tr: "그건 선홍색의 기억과 같은 빈 구멍을 매워가는 것 같은 무언가" },
+        { time: 28.5, jp: "天井のしみ無数の何か",        ko: [{ text: "텐죠-노 시미 무스우노 나니카", tag: "clap"}],         tr: "천장의 얼룩 무수한 무언가" },
+        { time: 32.5, jp: "「この夢が覚めたら」逃げ出してしまうかこのまま", ko: [{ text: "코노 유메가 사메타라 ", tag: "chant" }, { text: " 니게다시테 시마우카 코노 마마"}],               tr: "「이 꿈에서 깨면」도망쳐 버릴까 이대로" },
+        { time: 41, jp: "「この夢が覚めたら」寂しくなるよだからいつまでも", ko: [{ text: "코노 유메가 사메타라 ", tag: "chant" }, { text: " 사비시쿠 나루요"}, { text: " 다카라 이츠마데모", tag: "chant"}],               tr: "「이 꿈에서 깨면」외로워질거야 그러니 언제까지나" },
+        { time: 49, jp: "今 チェンジどんな夜も輝いて消えないものに", ko: [{ text: "이마 첸지 돈나 요루모 카가야이테 Ah~", tag: "chant" }, { text: " 키에나이 모노니"}],               tr: "지금 체인지 어떤 밤이라도 빛나서 사라지지 않는 것에" },
+        { time: 56.5, jp: "手を伸ばして僕らまだ不確かな未来歌えるよ", ko: [{ text: "테오" }, { text: " 노바시테", tag: "chant"}, { text: " 보쿠라 마다 후타시카나 미라이 우타에루요" }],               tr: "손을 뻗어 우린 아직 불확실한 미래를 노래할 수 있어" },
+        { time: 63.5, jp: "チェンジ どんな日々も輝いて消えてくものさ、", ko: [{ text: "첸지 돈나 히비모 카가야이테 Ah~", tag: "chant" }, { text: " 키에테쿠 모노사"}],               tr: "체인지 어떤 날들도 빛나서 사라져 가는 거야" },
+        { time: 70.5, jp: "手を伸ばして僕らまだ不確かな未来歌えるよチェンジ ", ko: [{ text: "테오" }, { text: " 노바시테", tag: "chant"}, { text: " 보쿠라 마다 후타시카나"}, { text: " 미라이 우타에루요 첸지", tag: "chant"}],               tr: "손을 뻗어 우린 아직 불확실한 미래를 노래할 수 있어 체인지" },
+        { time: 78.5, jp: "ほら待ってるよ 「今チェンジ」",        ko: [{ text: "Ah~ 호라 맛테루요 이마 체인지", tag: "chant"}],         tr: "자 기다리고 있어 지금 체인지" },
+        { time: 91.5, jp: "この惑星の真ん中で差し詰め、希望に似た溢れる何か",        ko: [{ text: "코노 호시노 만나카데 사시즈메 키보-니 니타 아후레루 나니카", tag: "clap"}],         tr: "이 별의 한가운데서 결국, 희망을 닮은 넘치는 무언가" },
+        { time: 103, jp: "余さず描いた立ち籠めていた何か",        ko: [{ text: "이마사즈 카이타 타치코메테이타 나니카", tag: "clap"}],         tr: "남김없이 그려낸 가득 채운 무언가" },
+        { time: 107, jp: "まだ紅色幕開け前か", ko: [{ text: "마다 베니이로", tag: "chant" }, { text: " 마쿠아케 마에카", tag: "clap"}],               tr: "아직 선홍색 막이 오르기 전인가" },
+        { time: 115, jp: "隙間風たどりここまで来ていた",        ko: [{ text: "스키마카제 타도리 코코마데 키테이타", tag: "clap"}],         tr: "외풍이 여기까지 와있었어" },
+        { time: 118.5, jp: "明白だが、まだ知らない何か",        ko: [{ text: "메이하쿠다가 마다 시라나이 나니카", tag: "clap"}],         tr: "명백하지만, 아직 알 수 없는 무언가" },
+        { time: 122.5, jp: "あの夢が覚めたらこれじゃ 不安だらけ勘違いだらけ独りよがりじゃないか",        ko: [{ text: "아노 유메가 사메타라", tag: "chant"}, { text: " 코레쟈 후안다라케 칸치가이다라케 히토리요가리쟈 나이카"}],         tr: " 저꿈에서 깨어나면 이래서는 불안투성이 착각투성이 독선적이지는 않은가" },
+        { time: 130.5, jp: "あの夢が覚めたらでも 震えてる声武者震いは「今チェンジ」",        ko: [{ text: "아노 유메가 사메타라", tag: "chant"}, { text: " 데모 후루에테루 코에 무샤부루이와 이마 첸지"}],         tr: " 저꿈에서 깨어나면 하지만 떨리는 목소리 설렘에 몸이 떨리는 건 「지금 체인지」" },
+        { time: 136, jp: "このままこの続きを今 チェンジ",        ko: [{ text: "코노 마마 코노 츠즈키오 이마 첸지", tag: "chant"}],         tr: "이대로 이 다음을 지금 체인지" },
+        { time: 140, jp: "どんな夜も輝いて",        ko: [{ text: "돈나 요루모 카가야이테 Ah~", tag: "chant"}],         tr: "어떤 밤이라도 빛나서" },
+        { time: 144, jp: "消えないものに手を伸ばして",        ko: [{ text: "키에나이 모노니 테오"}, { text: " 노바시테", tag: "chant"}],         tr: "사라지지 않는 것에 손을 뻗어" },
+        { time: 148, jp: "僕らまだ不確かな未来歌えるよチェンジ",        ko: [{ text: "보쿠라 마다 후타시카나"}, { text: " 미라이 우타에루요 첸지", tag: "chant"}],         tr: "우린 아직 불확실한 미래를 노래할 수 있어 체인지" },
+        { time: 166.5, jp: "「この夢が覚めたら」呼び声はもう覚えた", ko: [{ text: "코노 유메가 사메타라 ", tag: "chant" }, { text: " 요비고에와 모- 오보에타"}],               tr: "「이 꿈에서 깨면」부르는 소리는 이미 외웠어" },
+        { time: 175, jp: "「この夢が覚めたら」呼び声はもう覚えた 今 チェンジ x 4", ko: [{ text: " 코노 유메가 사메타라 ", tag: "chant" }, { text: " 토나에루와"}, { text: " 이마 첸지 x 4 ", tag: "chant" }],               tr: "「이 꿈에서 깨면」외칠게 지금 체인지 x 4" },
+        { time: 184, jp: "どんな夜も輝いて消えないものに手を伸ばして",        ko: [{ text: "돈나 요루모 카가야이테 키에나이 모노니 테오 노바시테", tag: "both"}],         tr: "어떤 밤이라도 빛나서 사라지지 않는 것에 손을 뻗어" },
+        { time: 192, jp: "僕ら今確かに、見上げているはず",        ko: [{ text: "보쿠라 이마 타시카니 미아게테이루하즈", tag: "clap"}],         tr: "우린 지금 분명히 올려다보고 있을거야" },
+        { time: 197, jp: "今 チェンジどんな時も輝いて",        ko: [{ text: "이마 첸지 돈나 토키모 카가야이테 Ah~ ", tag: "chant"}],         tr: "지금 체인지 어떤 때에도 빛나서" },
+        { time: 202.5, jp: "消えないものに手を",        ko: [{ text: "키에나이 모노니 테오"}],         tr: "사라지지 않는 것에 손을" },
+        { time: 205, jp: "伸ばして僕ら今確かに、未来歌えるよチェンジ",        ko: [{ text: "노바시테 보쿠라 이마 타시카니 미라이 우타에루요 첸지", tag: "chant"}],         tr: "뻗어 우린 지금 확실히 미래를 노래할 수 있어 체인지" },
+        { time: 212, jp: "どんな夜も Ah~ 今チェンジ x 5",        ko: [{ text: "돈나 요루모 Ah~ 이마 첸지 x 5", tag: "chant"}],         tr: "어떤 밤이라도 Ah~ 지금 체인지 x 5" },
+
+
+      ],
+    },
+    {
+      id: "Tomoshibi",
+      title: "등불 (灯火)",
+      youtubeId: "nrLZ-vTiQa4",
+      lyrics: [
+        { time: 10, jp: "単調な足音にメロディーを乗せたら",        ko: [{ text: "탄쵸-나 아시오토니 메로디-오 노세타라"}],         tr: "단조로운 발소리에 멜로디를 실으면" },
+        { time: 19, jp: "感情が淘汰してく自尊心と僕の悲哀を",        ko: [{ text: "칸죠-가 토-타시테쿠 지손신토 보쿠노 히아이오"}],         tr: "감정이 도태되어 가 자존심과 나의 비애를" },
+        { time: 27.5, jp: "見えない見えないものを見えてる見えてる「本当」に",        ko: [{ text: "미에나이 미에나이 모노오 미에테루 미에테루 혼토-니"}],         tr: "보이지 않고 보이지 않는 것을 보이고 보이는「진실」로" },
+        { time: 32, jp: "見えない見えない本当を見えてる見えてる感動に",        ko: [{ text: "미에나이 미에나이 혼토-오 미에테루 미에테루 칸도-니"}],         tr: "보이지 않고 보이지 않는 진실을 보이고 보이는 감동으로" },
+        { time: 36, jp: "探した僕の運命と揺るぎない世界の歌",        ko: [{ text: "사가시타 보쿠노 운메이토 유루기나이 세카이노 우타"}],         tr: "찾았던 나의 운명과 변함없는 세계의 노래" },
+        { time: 40, jp: "そんな場所に僕たちはいつまでも生きている",        ko: [{ text: "손나 바쇼니 보쿠타치와 이츠마데모 이키테이루"}],         tr: "그런 곳에서 우리들은 언제까지나 살아있어" },
+        { time: 44.5, jp: "交わした天の約束を裏切られたとしても",        ko: [{ text: "카와시타 텐노 야쿠소쿠오 우라기라레타토 시테모"}],         tr: "서로 나눈 하늘의 약속을 배신당했다 하더라도" },
+        { time: 49, jp: "そんなことに僕たちは気付かずに生きていくだけだけ",        ko: [{ text: "손나 코토니 보쿠타치와 키즈카즈니 이키테이쿠다케 다케"}],         tr: "그런 것에 우리들은 눈치채지 못하고 살아갈 뿐" },
+        { time: 63, jp: "完璧な理想郷など僕らにはあり得はしないから",        ko: [{ text: "칸베키나 리소-쿄-나도 보쿠라니와 아리에와 시나이카라"}],         tr: "완벽한 이상향 같은 건 우리에게는 있을 수 없는 일이니까" },
+        { time: 71, jp: "見えない見えないものを見えてる見えてる「本当」に",        ko: [{ text: "미에나이 미에나이 모노오 미에테루 미에테루 혼토-니"}],         tr: "보이지 않고 보이지 않는 것을 보이고 보이는「진실」로" },
+        { time: 75.5, jp: "見えない見えない本当を見えてる見えてる感動に",        ko: [{ text: "미에나이 미에나이 혼토-오 미에테루 미에테루 칸도-니"}],         tr: "보이지 않고 보이지 않는 진실을 보이고 보이는 감동으로" },
+        { time: 79.5, jp: "探した僕の運命と揺るぎない世界の歌",        ko: [{ text: "사가시타 보쿠노 운메이토 유루기나이 세카이노 우타"}],         tr: "찾았던 나의 운명과 변함없는 세계의 노래" },
+        { time: 83.5, jp: "そんな場所に僕たちはいつまでも生きている",        ko: [{ text: "손나 바쇼니 보쿠타치와 이츠마데모 이키테이루"}],         tr: "그런 곳에서 우리들은 언제까지나 살아있어" },
+        { time: 88, jp: "交わした天の約束を裏切られたとしても",        ko: [{ text: "카와시타 텐노 야쿠소쿠오 우라기라레타토 시테모"}],         tr: "서로 나눈 하늘의 약속을 배신당했다 하더라도" },
+        { time: 92, jp: "そんなことに僕たちは気付かずに生きていくだけ",        ko: [{ text: "손나 코토니 보쿠타치와 키즈카즈니 이키테이쿠다케"}],         tr: "그런 것에 우리들은 눈치채지 못하고 살아갈 뿐" },
+        { time: 105.5, jp: "揺るぎないね僕たちは何度も声を上げて",        ko: [{ text: "유루기나이네 보쿠타치와 난도모 코에오 아게테", tag: "clap"}],         tr: "변함없네 우리들은 몇번이고 목소리를 높여" },
+        { time: 110, jp: "ありもしない滑走路羽を広げ走る",        ko: [{ text: "아리모시나이 캇소-로 하네오 히로게 하시루", tag: "clap"}],         tr: "있지도 않은 활주로 날개를 펼쳐 달려" },
+        { time: 114.5, jp: "揺るぎはしないよ僕たちは何度も声を上げて",        ko: [{ text: "유루기와 시나이요 보쿠타치와 난도모 코에오 아게테", tag: "clap"}],         tr: "변함없을 거야 우리들은 몇번이고 목소리를 높여" },
+        { time: 118.5, jp: "何度も声を上げて何度も声を上げてねぇ",        ko: [{ text: "난도모 코에오 아게테 난도모 코에오 아게테", tag: "clap"}, { text: " 네-", tag: "chant"}],         tr: "몇번이고 목소리를 높여 몇번이고 목소리를 높여 있잖아" },
+        { time: 123.5, jp: "どうしようどこへ行こうか僕が今惨憺と声に出して",        ko: [{ text: "도-시요- 도코에 이코-카 보쿠가 이마 산탄토 코에니 다시테"}],         tr: "어쩌지 어디로 갈까 내가 지금 참담하게 목소리를 내서" },
+        { time: 131, jp: "また見えない地図を僕は必死に探して歩いている",        ko: [{ text: "마타 미에나이", tag: "chant"}, { text: " 치즈오 보쿠와 힛시니 사가시테 아루이테이루"}],         tr: "다시 보이지 않아 지도를 나는 필사적으로 찾아서 걷고 있어" },
+        { time: 140, jp: "けどまだどうしようここにいようか",        ko: [{ text: "케도 마다", tag: "chant"}, { text: " 도-시요- 코코니 이요-카"}],         tr: "하지만 아직 어쩌지 여기에 있을까" },
+        { time: 144, jp: "いつかまた目が見え始めるまで",        ko: [{ text: "이츠카 마타 메가 미에하지메루마데"}],         tr: "언젠가 다시 눈이 보이기 시작할 때까지" },
+        { time: 148.5, jp: "まだ見えない未来を僕ら灯火で照らしていくから",        ko: [{ text: "마다 미에나이 미라이오 보쿠라 토모시비데 테라시테 이쿠카라"}],         tr: "아직 보이지 않아 미래를 우리들은 등불로 밝게 비춰나갈 거니까" },
+        { time: 158, jp: "探した僕の運命と揺るぎない世界の歌",        ko: [{ text: "사가시타 보쿠노 운메이토 유루기나이 세카이노 우타", tag: "chant"}],         tr: "찾았던 나의 운명과 변함없는 세계의 노래" },
+        { time: 162, jp: "そんな場所に僕たちはいつまでも生きている",        ko: [{ text: "손나 바쇼니 보쿠타치와 이츠마데모 이키테이루", tag: "chant"}],         tr: "그런 곳에서 우리들은 언제까지나 살아있어" },
+        { time: 166.5, jp: "交わした天の約束を裏切られたとしても",        ko: [{ text: "카와시타 텐노 야쿠소쿠오 우라기라레타토 시테모", tag: "chant"}],         tr: "서로 나눈 하늘의 약속을 배신당했다 하더라도" },
+        { time: 171, jp: "そんなことに僕たちは気付かずに生きていくだけ",        ko: [{ text: "손나 코토니 보쿠타치와 키즈카즈니 이키테이쿠다케", tag: "chant"}],         tr: "그런 것에 우리들은 눈치채지 못하고 살아갈 뿐" },
+
+      ],
+    },
+    {
+      id: "HowdoIknow'",
+      title: "나는 어떻게 아는 걸까 (僕にはどうしてわかるんだろう)",
+      youtubeId: "x4aWXNWPrtY",
+      lyrics: [
+        { time: 28, jp: "今晩は降りる駅を変え僕の心に咲いていた",        ko: [{ text: "콘반와 오리루 에키오 카에 보쿠노 코코로니 사이테이타"}],         tr: "오늘밤은 내릴 역을 바꿔 내 마음에 피어있던" },
+        { time: 34, jp: "小さなプライドの行方を探したずっと気づけなかったんだ",        ko: [{ text: "치이사나 프라이도노 유쿠-에오 사가시타 즛토 키즈케나캇탄다"}],         tr: "작은 프라이드의 행방을 찾았어. 계속 눈치채지 못했어" },
+        { time: 43, jp: "僕の心がどうにもあの聴きなれたリリックで",        ko: [{ text: "보쿠노 코코로가 도오니모 아노키키나레타 리릿쿠데"}],         tr: "내 마음이 아무래도 자주듣던 그 가사에" },
+        { time: 48, jp: "涙を流し出すまで今どうにか言い訳探して",        ko: [{ text: "나미-다오 나가시 다스마데 이마 도오니카 이이와케 사가시테"}],         tr: "눈물을 흘릴때 까지. 지금 어떻게든 변명거릴 찾아서" },
+        { time: 58.5, jp: "目をそらしてみようがきっと僕以上に",        ko: [{ text: "메오 소라시테 미요오가 킷토 보쿠이조오니"}],         tr: "눈을 돌리려 해도 분명 나 이상으로" },
+        { time: 64.5, jp: "僕以前に僕よりも僕のことつくってる",        ko: [{ text: "보쿠이젠니 보쿠요리모 보쿠노 코토 츠쿳테루"}],         tr: "나 보다 먼저, 나 보다 더 나 라는 것을 만들어 온-" },
+        { time: 75, jp: "僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
+        { time: 80, jp: "迷える日々がこれとない味のエッセイ",        ko: [{ text: "마요에루 히비가 코레토 나이 아지노 엣세이"}],         tr: "헤매이던 날들이 지금껏 본 적 없는 맛의 에세이라는걸" },
+        { time: 87, jp: "僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
+        { time: 91.5, jp: "挫折の日々は色づくため全部モノクロ",        ko: [{ text: "자세츠노 히비와 이로즈쿠 타메- 젠부 모노쿠로"}],         tr: "좌절의 날들은 색으로 물들기 위해 전부 흑백이었어" },
+        { time: 102, jp: "今晩は歩く道を変え僕の心に撒いていた",        ko: [{ text: "콘반와 아루쿠 미치오 카에 보쿠노 코코로니 마이테이타"}],         tr: "오늘밤은 걷던 길을 바꿔 내 마음에 뿌려둔" },
+        { time: 108, jp: "小さなプライドの香りを辿ったが",        ko: [{ text: "치이사나 푸라이도노 카오-리오 타돗타가"}],         tr: "작은 프라이드의 향기를 따라 나아갔지만" },
+        { time: 113.5, jp: "時は真夏荒天と海神蒼炎際立つ",        ko: [{ text: "토키와 마나츠 코오텐토 와타츠 소오엔 키와타츠"}],         tr: "때는 한여름 비바람과 바다 푸른 불꽃 타올라" },
+        { time: 117.5, jp: "骨相青に溶けモノクロは焦シアン蒼白へ",        ko: [{ text: "콧소오 아오니 토케 모노쿠로와 쇼오 시안 소오 하쿠 에"}],         tr: "그 몸 푸름에 녹아 흑백은 타오르는 청록, 청백색으로" },
+        { time: 122.5, jp: "言葉足らずでいつも見失うの",        ko: [{ text: "코토바타라즈데 이츠모 미우시나우노"}],         tr: "진심을 전하지 못해 매번 놓쳐버려" },
+        { time: 127, jp: "悲しみは言い訳の数で目を閉ざしてみようが",        ko: [{ text: "카나시미와 이이와케노 카즈데 메오 토자시테미요오가"}],         tr: "슬픔은 변명의 수만큼 눈을 감아보아도" },
+        { time: 136, jp: "ずっと僕以上に 僕以前に 僕よりも",        ko: [{ text: "즛토 보쿠이조오니 보쿠이젠니 보쿠요리모"}],         tr: "계속 나 이상으로 나 보다 먼저 나 보다 더" },
+        { time: 141.5, jp: "僕のことつくってるまぶたに映った映画",        ko: [{ text: "보쿠노 코토 츠쿳테루 마부타니 우츳타 에이가"}],         tr: "나 라는 것을 만들어 온 눈꺼풀에 비친 영화" },
+        { time: 149, jp: "僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
+        { time: 154, jp: "全てのことが走馬灯、胸に残っている",        ko: [{ text: "스베테노 코토가 소우마토오 무네니 노콧테이루"}],         tr: "그 모든게 주마등으로 가슴에 남아있어" },
+        { time: 161, jp: "僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
+        { time: 166, jp: "全てのことが色で満ちていたモノクロ",        ko: [{ text: "스베테노 코토가 이로데 미치테이타 모노쿠로"}],         tr: "이 모든 것이 여러 색으로 가득하던 흑백" },
+        { time: 185.5, jp: "あの港から光を手繰ってここまで来たんだ",        ko: [{ text: "아노 미나토카라 히카리오 타굿테 코코마데 키탄다"}],         tr: "그 항구에서 빛을 더듬어 여기까지 온 거야" },
+        { time: 195, jp: "じっと鼓動を聞いていた",        ko: [{ text: "짓토 코도오오 키이테이타"}],         tr: "가만히 고동을 듣고 있었어" },
+        { time: 199, jp: "「僕たちは、翡翠の軌跡を生きている」",        ko: [{ text: "보쿠타치와 히스이노 키세키오 이키테이루"}],         tr: "「우리는, 청록의 궤적을 살아가고 있어」" },
+        { time: 208, jp: "僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
+        { time: 213.5, jp: "全てのことが走馬灯、胸に残っている",        ko: [{ text: "스베테노 코토가 소우마토오 무네니 노콧테이루"}],         tr: "그 모든게 주마등으로 가슴에 남아있어" },
+        { time: 220, jp: "僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
+        { time: 225, jp: "全てのことがまるで明くる前のよう",        ko: [{ text: "스베테노 코토가 마루데 아쿠루 마에노 요오"}],         tr: "이 모든것이 마치 날이 밝기 전과 같아" },
+        { time: 232, jp: "僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
+        { time: 237, jp: "全ての日々がこれとない味のエッセイ",        ko: [{ text: "스베테노 히비가 코레토 나이 아지노 엣세이"}],         tr: "모든 날들이 지금껏 본 적 없는 맛의 에세이" },
+        { time: 244, jp: "僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
+        { time: 249, jp: "全ての景色が思い出すためのモノクロ",        ko: [{ text: "스베테노 케시키가 오모이다스 타메노 모노쿠로"}],         tr: "이 모든 풍경이 다시 떠올리기 위한 흑백" },
+
+
+      ],
+    },
+    {
+      id: "Shiwaawase'",
+      title: "주름맞추기 (しわあわせ)",
+      youtubeId: "JwmGruvGt_I",
+      lyrics: [
+        { time: 35, jp: "僕の時価総額400円の心臓と",        ko: [{ text: "보쿠노 지카소가쿠 욘햐쿠엔노 신조토"}],         tr: "내 시가총액 400엔짜리 심장과" },
+        { time: 41, jp: "絵に描いたような君の綺麗な心臓を",        ko: [{ text: "에니 카이타 요나 키미노 키레이나 신조오"}],         tr: "그림 같은 너의 아름다운 심장을" },
+        { time: 48, jp: "合わせてできたしわの数が僕達の未来の価値だ",        ko: [{ text: "아와세테 데키타 시와노 카즈가 보쿠타치노 미라이노 카치다"}],         tr: "합쳐서 생긴 주름의 수가 우리의 미래의 가치야" },
+        { time: 59, jp: "残された時間が少ないのなら",        ko: [{ text: "노코사레타 지칸가 스쿠나이노나라"}],         tr: "남겨진 시간이 적다면" },
+        { time: 62, jp: "崩れてく時間が増えてくのなら零さないようにあわせて",        ko: [{ text: "쿠즈레테쿠 지칸가 후에테쿠노나라 코보사나이 요니 아와세테"}],         tr: "무너져가는 시간이 늘어난다면 엎지르지 않도록 잘 맞춰줘어" },
+        { time: 71, jp: "変わらない 変われないよ 僕ら今もしっかり握っている",        ko: [{ text: "카와라나이 카와레나이요 보쿠라 이마모 싯카리 니깃테이루"}],         tr: "변하지 않아 변할 수 없어 우리는 지금도 단단히 손에 쥐고 있어" },
+        { time: 83, jp: "ちぎれない ちぎらないよ 僕ら今もしっかり繋いでる手",        ko: [{ text: "치기레나이 치기라나이요 보쿠라 이마모 싯카리 츠나이데루 테"}],         tr: "찢어질 수 없어 찢어지지 않아 우리는 지금도 단단히 잡고 있는 손" },
+        { time: 107.5, jp: "僕の一生分なり続けている心拍と",        ko: [{ text: "보쿠노 잇쇼분나리 츠즈케테이루 신파쿠토"}],         tr: "내 일생동안 이어질 심박과" },
+        { time: 113, jp: "透き通るような君の綺麗な一拍を",        ko: [{ text: "스키토오루 요나 키미노 키레이나 잇파쿠오"}],         tr: "속이 비치는 듯한 너의 아름다운 심박 한 번을" },
+        { time: 120, jp: "合わせてできた波の数だけ僕達は揺らめきあってた",        ko: [{ text: "아와세테 데키타 나미노 카즈다케 보쿠타치와 유라메키 앗테타"}],         tr: "합쳐서 생긴 물결의 수만큼 우리는 흔들려왔어" },
+        { time: 131, jp: "過ぎていく時が早すぎるのなら",        ko: [{ text: "스기테이쿠 토키가 하야스기루노나라"}],         tr: "지나가는 시간이 너무 빠르다면" },
+        { time: 134, jp: "有り余る隙間が悲しいのなら零さないようにあわせて",        ko: [{ text: "아리아마루 스키마가 카나시이노나라 코보사나이 요니 아와세테"}],         tr: "남아있는 시간이 슬프게 느껴진다면 엎지르지 않도록 잘 맞춰줘" },
+        { time: 143, jp: "変わらない 変われないよ 僕ら今もしっかり握っている",        ko: [{ text: "카와라나이 카와레나이요 보쿠라 이마모 싯카리 니깃테이루"}],         tr: "변하지 않아 변할 수 없어 우리는 지금도 단단히 손에 쥐고 있어" },
+        { time: 154.5, jp: "ちぎれない ちぎらないよ 僕ら今もしっかり繋いでる",        ko: [{ text: "치기레나이 치기라나이요 보쿠라 이마모 싯카리 츠나이데루"}],         tr: "찢어질 수 없어 찢어지지 않아 우리는 지금도 단단히 잡고 있는" },
+        { time: 167, jp: "重なるひびを僕達は流るるひびも僕達は",        ko: [{ text: "카사나루 히비오 보쿠타치와 나가루루 히비모 보쿠타치와", tag: "chant"}],         tr: "겹쳐지는 나날을 우리는 흘러가는 나날도 우리는" },
+        { time: 173.5, jp: "思い出すこともなくなって",        ko: [{ text: "오모이다스 코토모 나쿠낫테", tag: "chant"}],         tr: "떠올릴 일도 없어지고" },
+        { time: 176, jp: "しまうんだろう しまうんだろうって",        ko: [{ text: "시마운다로 시마운다롯테", tag: "chant"}],         tr: "말아버리겠지 말아버린다니" },
+        { time: 179, jp: "重なるひびを僕達は流るるひびも僕達は",        ko: [{ text: "카사나루 히비오 보쿠타치와 나가루루 히비모 보쿠타치와", tag: "chant"}],         tr: "겹쳐지는 나날을 우리는 흘러가는 나날도 우리는" },
+        { time: 185, jp: "思い出すこともなくなってそんな しわあわせで",        ko: [{ text: "오모이다스 코토모 나쿠낫테  손나", tag: "chant"}, { text: " 시와아와세데"}],         tr: "떠올릴 일도 없어지고 그렇게 주름과 행복을 맞추며" },
+        { time: 192.5, jp: "変わらない 変われないよ 僕ら今もしっかり握っている",        ko: [{ text: "카와라나이 카와레나이요 보쿠라 이마모 싯카리 니깃테이루"}],         tr: "변하지 않아 변할 수 없어 우리는 지금도 단단히 손에 쥐고 있어" },
+        { time: 204.5, jp: "ちぎれない ちぎらないよ 僕ら今もしっかり繋いでる手",        ko: [{ text: "치기레나이 치기라나이요 보쿠라 이마모 싯카리 츠나이데루 테"}],         tr: "찢어질 수 없어 찢어지지 않아 우리는 지금도 단단히 잡고 있는 손" },
+        { time: 217, ko: [{ text: "(코러스 떼창)카사나루 히비오 보쿠타치와 나가루루 히비모 보쿠타치와", tag: "chant"}]},
+        { time: 218, jp: "溢れ出す願い込めて僕らは",        ko: [{ text: "아후레다스 네가이코메테 보쿠라와"}],         tr: "흘러넘치는 소원을 담고 우리는" },
+        { time: 223, ko: [{ text: "(코러스 떼창)오모이다스 코토모 나쿠낫테 시마운다로 시마운다룻테", tag: "chant"}]},
+        { time: 223.5, jp: "今から君の見てる方へと",        ko: [{ text: "이마카라 키미노 미테루 호에토"}],         tr: "지금부터 네가 보고 있는 쪽으로" },
+        { time: 228, ko: [{ text: "(코러스 떼창)카사나루 히비오 보쿠타치와 나가루루 히비모 보쿠타치와", tag: "chant"}]},
+        { time: 229, jp: "やるせない夢が覚めた頃に",        ko: [{ text: "야루세나이 유메가 사메타 코로니"}],         tr: "안타까운 꿈에서 깨어날 때" },
+        { time: 235, ko: [{ text: "(코러스 떼창)오모이다스 코토모 나쿠낫테 시마운다로 시마운다룻테", tag: "chant"}]},
+        { time: 236, jp: "また しわをあわせて",        ko: [{ text: "마타 시와오 아와세테"}],         tr: "다시 주름을 맞추며" },
+        { time: 241, ko: [{ text: "(코러스 떼창)카사나루 히비오 보쿠타치와 나가루루 히비모 보쿠타치와", tag: "chant"}]},
+        { time: 246, ko: [{ text: "(코러스 떼창)오모이다스 코토모 나쿠낫테 시마운다로 시마운다룻테", tag: "chant"}]},
+        { time: 252.5, ko: [{ text: "(코러스 떼창)카사나루 히비오 보쿠타치와 나가루루 히비모 보쿠타치와", tag: "chant"}]},
+        { time: 258.5, ko: [{ text: "(코러스 떼창)오모이다스 코토모 나쿠낫테 시마운다로 시마운다룻테", tag: "chant"}]},
+        { time: 264.5, ko: [{ text: "(코러스 떼창)카사나루 히비오 보쿠타치와 나가루루 히비모 보쿠타치와", tag: "chant"}]},
+        { time: 270.5, ko: [{ text: "(코러스 떼창)오모이다스 코토모 나쿠낫테 시마운다로 시마운다룻테", tag: "chant"}]},
+
+
+      ],
+    },
+    {
+      id: "Homunculus",
+      title: "호문클루스 (ホムンクルス)",
+      youtubeId: "ZhUa0CumyxQ",
+      lyrics: [
+        { time: 8, ko: [{ text: "Oh-yeah, yeah-yeah-yeah x 3", tag: "chant"}]},
+        { time: 27, ko: [{ text: "호문클루스", tag: "chant"}]},
+        { time: 46, jp: "せっかくだからそうね、肩でも揉んでダーリン",        ko: [{ text: "셋카쿠 다카라 소오네, 카타데모 몬데 다ㅡ링", tag: "clap"}],         tr: "모처럼이니까 그래, 어깨라도 주물러줘 달링" },
+        { time: 52, jp: "小さくても次第にグツグツ煮立って終いにゃ それを鼓舞する",        ko: [{ text: "치이사쿠데모 시다이니 구츠구츠니탓데 시마이니 소레오 코부스루", tag: "clap"}],         tr: "쪼그매도 점점 부글거려 끓어오르지, 끝날 땐 그걸 고무시켜" },
+        { time: 59, jp: "イチ・ニー・サン起爆上等Alright",        ko: [{ text: "이치 니 산 키바쿠죠오토오 Alright", tag: "chant"}],         tr: "하나 둘 셋- 기폭준비완료 Alright" },
+        { time: 62.5, jp: "ヨン で開幕起爆、解放万歳",        ko: [{ text: "욘데 카이마쿠 키바쿠 카이호오반자이", tag: "chant"}],         tr: "넷 에 개막 기폭, 해방만세" },
+        { time: 65.5, jp: "サン・ニー・イチ・ハイ‼ 起爆、障壁崩壊",        ko: [{ text: "산 니 이치 하이 키바쿠 쇼오헤키호오카이", tag: "chant"}],         tr: "셋 둘 하나 하이!! 기폭, 장벽붕괴" },
+        { time: 68.5, jp: "行くぜ喝采気は満ちたあれはホムンクルス",        ko: [{ text: "이쿠제 캇사이 키와 미치타 아레와 "}, { text: " 호문클루스", tag: "chant"}],         tr: "가자고, 갈채 기운 넘치게 그건 호문클루스" },
+        { time: 73, jp: "目覚めたる不穏に晴れ、濁す不確かの到来 ホムンクルス",        ko: [{ text: "메자메타루 후온니 하레 니고스 후타시카노 토오라이"}, { text: " 호문클루스", tag: "chant"}],         tr: "깨어나는 불온에 맑아 흐려 불확실함의 도래 호문쿨루스" },
+        { time: 79, jp: "風の目の方に歩き出す脱、言念、且つ自暴論",        ko: [{ text: "카제노메노 호오니 아루키다스 타츠 곤넨 카츠 지보우론"}],         tr: "바람이 불어오는 쪽으로 걸어나가 해방, 언념과 자포(자기)론 " },
+        { time: 85, ko: [{ text: "Oh-oh, Oh-oh, Oh-oh Oh-yeah, yeah-yeah-yeah", tag: "chant"}]},
+        { time: 96, jp: "ギリ奪取いきりたつ一時run away",        ko: [{ text: "기리 닷슈 이키리타츠 이치지 run away", tag: "clap"}],         tr: "아슬아슬하게 빼앗아 흥분해 잠깐 도망가" },
+        { time: 99, jp: "今肩でも揉むよダーリン",        ko: [{ text: "이마 카타데모 모무요 다-린", tag: "clap"}],         tr: "이제 어깨라도 주물러 줄게? 달링" },
+        { time: 102, jp: "ニキビ Flash迷走→帰結無事誤解のway",        ko: [{ text: "니키비 Flash 메에소오 케츠 부지 고노 way", tag: "clap"}],         tr: "여드름 Flash 방황 → 귀결 무사(無事)오해의 way" },
+        { time: 105.5, jp: "feeling 脱線 but まだこんなんじゃ懲りない",        ko: [{ text: "feeling닷센 but 마다 콘난쟈 코리나이", tag: "clap"}],         tr: "feeling 탈선 but 아직 이정도론 모자라" },
+        { time: 109.5, jp: "イチ・ニー・サン起爆上等Alright",        ko: [{ text: "이치 니 산 키바쿠죠오토오 Alright", tag: "chant"}],         tr: "하나 둘 셋- 기폭준비완료 Alright" },
+        { time: 112.5, jp: "ヨン で開幕起爆、解放万歳",        ko: [{ text: "욘데 카이마쿠 키바쿠 카이호오반자이", tag: "chant"}],         tr: "넷 에 개막 기폭, 해방만세" },
+        { time: 115.5, jp: "サン・ニー・イチ・ハイ‼ 起爆、障壁崩壊",        ko: [{ text: "산 니 이치 하이 키바쿠 쇼오헤키호오카이", tag: "chant"}],         tr: "셋 둘 하나 하이!! 기폭, 장벽붕괴" },
+        { time: 119, jp: "行くぜ喝采俺が来たこれがホムンクルス",        ko: [{ text: "이쿠제 캇사이 오레가 키타 코레가"}, { text: " 호문클루스", tag: "chant"}],         tr: "가자고, 갈채 내가 왔다! 이게 호문클루스" },
+        { time: 123, jp: "目覚めたる不穏に晴れ、濁す不確かの到来",        ko: [{ text: "메자메타루 후온니 하레 니고스 후타시카노 토오라이"}, { text: " 호문클루스", tag: "chant"}],         tr: "깨어나는 불온에 하레 니고스 불확실함의 도래 호문클루스" },
+        { time: 129, jp: "風の目の方に歩き出す脱、言念、且つ自暴論",        ko: [{ text: "카제노메노 호오니아루키다스 타츠 곤넨 카츠 지보우론"}],         tr: "바람이 불어오는 쪽으로 걸어나가 해방, 언념과 자포(자기)론" },
+        { time: 146.5, jp: "どうして心満たして振り払おうとしているんだろう",        ko: [{ text: "도오시테 코코로 미타시테 후리하라오오토 시테이룬다로오", tag: "clap"}],         tr: "왜 지금 행복 하면서 그걸 뿌리치려 하는거야" },
+        { time: 155, jp: "ねぇ痛いでしょて、参ってしまうほど",        ko: [{ text: "네에이타이데쇼-테", tag: "clap"}, { text: " 마잇테 시마우호도"}],         tr: "아프지 않니 라며, 지쳐버릴 정도로" },
+        { time: 161, jp: "あなたを愛してしまったって、このままが美しいと",        ko: [{ text: "아나타오 아이시테 시맛탓테 코도마마가 우츠쿠시이토"}],         tr: "당신을 사랑하게 되어버렸다고! 이대로가 아름답다는" },
+        { time: 170, jp: "飾ったままで、言霊をもう一度希望抱くほどの未来",        ko: [{ text: "카잣타 마마데 코토다마오 모오이치도 키보오 이다쿠호도노 미라이"}],         tr: "행세를 하며 그 이야기를 다시 한번 더 희망을 품을 정도의 미래" },
+        { time: 179.5, jp: "そこに見たんだよ確かめ合うかより大切で",        ko: [{ text: "소코니 미탄다요"}, { text: " 타시카메아우카 요리", tag: "chant"}, { text: " 타이세츠데"}],         tr: "거기에서 본거야 서로 확인하는것 보다 소중해서" },
+        { time: 187.5, jp: "思い合えるより温かくて",        ko: [{ text: "오모이아에루요리", tag: "chant"}, { text: " 아타타카쿠테"}],         tr: "마음이 맞는것 보다 따뜻해서" },
+        { time: 190.5, jp: "振り剥がせるかより愚かに、浸ってしまうほど",        ko: [{ text: "후리 하가세루요리", tag: "chant"}, { text: " 오로카니 히탓테 시마우호도"}],         tr: "뿌리쳐 떼어내는것 보다 어리석게 빠져버릴 정도로" },
+        { time: 196.5, jp: "時に歩み合うかより大切で",        ko: [{ text: "토키니"}, { text: " 아유미아우카 요리", tag: "chant"}, { text: " 타이세츠데"}],         tr: "때때로 함께 나아가는것 보다 소중해서" },
+        { time: 200, jp: "抱きしめ合えるより温かく思う未来を見たいんだよ",        ko: [{ text: "다키시메아에루 요리", tag: "chant"}, { text: " 아타타카쿠 오모우 미라이오 미타인다요"}],         tr: "서로 끌어안는것 보다 따뜻하게 느껴지는 미래를 보고 싶은거야" },
+        { time: 209, ko: [{ text: "Oh-yeah, yeah-yeah-yeah x 3", tag: "chant"}]},
+        { time: 227.5, ko: [{ text: "호문클루스", tag: "chant"}]},
+
+      ],
+    },
+    {
+      id: "soramimi",
+      title: "soramimi",
+      youtubeId: "Jh_0EW6G3gQ",
+      lyrics: [
+        { time: 0,         ko: [{ text: "전주비트에 맞춰 박수", tag: "clap" }],                                                    },
+        { time: 16.5, jp: "今日も愉快だね叶えたい想像に塞いだ目",        ko: [{ text: "쿄- 모 유카이 다네", tag: "chant"}, { text: " 카나에타이 소-조- 니 후사이다 메"}],         tr: "오늘도 유쾌하네 이루고 싶은 상상에 막아버린 눈" },
+        { time: 20.5, jp: "だいたいそんなもん理不尽がお決まりの世界だもん",        ko: [{ text: "다이타이 손나 몬", tag: "chant"}, { text: " 리후진 가 오키마리 노 세카이 다몬"}],         tr: "대충 그런 거지 부조리가 당연한 세상이잖아" },
+        { time: 24.5, jp: "で、まぁいいかな",        ko: [{ text: "데 마- 이- 카나", tag: "chant"}],         tr: "그래서, 뭐, 괜찮겠지" },
+        { time: 26, jp: "このくらいがちょうどいいかなって",        ko: [{ text: "코노 쿠라이 가 쵸-도 이- 카나떼"}],         tr: "이 정도가 딱 좋겠나 싶어서" },
+        { time: 28, jp: "自分にも周りの人にもバレないように手を抜いて",        ko: [{ text: "지분니모 마와리노 히토니모 바레나이 요-니"}, { text: " 테오 누이테", tag: "chant"}],         tr: "나 자신에게도, 주변 사람들에게도 들키지 않도록 대충 힘을 빼고" },
+        { time: 39, jp: "今日も愉快だね支えたいと君に伝えた日",        ko: [{ text: "쿄- 모 유카이 다네", tag: "chant"}, { text: " 사사에타이토 키미니 츠타에타 히"}],         tr: "오늘도 유쾌하네 지탱해 주고 싶다고 너에게 전했던 날" },
+        { time: 43, jp: "だいたいそんなもん振られるくらいが僕らしいんだもん",        ko: [{ text: "다이타이 손나 몬", tag: "chant"}, { text: " 후라레루 쿠라이 가 보쿠라시인다몬"}],         tr: "대충 그런 거지 차이는 게 나답잖아" },
+        { time: 46.5, jp: "で、まぁいいから",        ko: [{ text: "데 마- 이- 카라", tag: "chant"}],         tr: "그래서, 뭐, 됐으니까" },
+        { time: 48, jp: "そのエロい体を貸してくれ",        ko: [{ text: "소노 에로이 카라다오 카시테 쿠레"}],         tr: "그 야한 몸을 빌려줘" },
+        { time: 50, jp: "誰も知らないミッドナイト携帯越しのタッグファイト",        ko: [{ text: "다레모 시라나이 밋도나이토 케-타이 고시 노 탓구 화이토"}],         tr: "아무도 모르는 한밤중 휴대폰 너머의 태그 파이트" },
+        { time: 54, jp: "散々だな後悔はないけど",        ko: [{ text: "산잔 다나", tag: "chant"}, { text: " 코-카이 와 나이 케도"}],         tr: "엉망진창이네, 후회는 없지만" },
+        { time: 57.5, jp: "先天的だ過敏なこの衝動",        ko: [{ text: "센텐테키다", tag: "chant"}, { text: " 카빈 나 코노 쇼-도-"}],         tr: "선천적이야, 예민한 이 충동" },
+        { time: 61.5, jp: "珍回答だ僕は気にしないけど",        ko: [{ text: "칭카이토- 다", tag: "chant"}, { text: " 보쿠 와 키니 시나이 케도"}],         tr: "엉뚱한 답이래도, 난 신경 안 쓰지만" },
+        { time: 65, jp: "1発打ったこのビートを鳴らしてよさぁ",        ko: [{ text: "잇파츠 웃타", tag: "chant"}, { text: " 코노 비-토 오 나라시테요 사-"}],         tr: "한 발 쏜 이 비트를 울려줘 자" },
+        { time: 70, ko: [{ text: "Distance This Dance? x 2 ", tag: "chant"}]},
+        { time: 94.5, jp: "今日も愉快だねでも何もかもが不快だね",        ko: [{ text: "쿄- 모 유카이 다네", tag: "chant"}, { text: " 데모 나니모카모 가 후카이 다네"}],         tr: "오늘도 유쾌하네 하지만 뭐든 전부 불쾌하네" },
+        { time: 98, jp: "だいたいそんなもん自己満たちが踊る世界だもん",        ko: [{ text: "다이타이 손나 몬", tag: "chant"}, { text: " 지코만 타치 가 오도루 세카이 다몬"}],         tr: "대충 그런 거지 자기만족쟁이들이 춤추는 세상이잖아" },
+        { time: 102, jp: "で、まぁいいかな",        ko: [{ text: "데 마- 이- 카나", tag: "chant"}],         tr: "그래서, 뭐, 괜찮겠지" },
+        { time: 103.5, jp: "このくらいがちょうどいいかなって",        ko: [{ text: "코노 쿠라이 가 쵸-도 이- 카나떼"}],         tr: "이 정도가 딱 좋겠나 싶어서" },
+        { time: 105.5, jp: "自分にも周りの人にもバレないように利を振って",        ko: [{ text: "지분니모 마와리노 히토니모 바레나이 요-니"}, { text: " 리오훗떼", tag: "chant"}],         tr: "나 자신에게도, 주변 사람들에게도 들키지 않도록 대충 힘을 빼고" },
+        { time: 116.5, jp: "今日も愉快だね刺さった枯れ木に注いだ火",        ko: [{ text: "쿄- 모 유카이 다네", tag: "chant"}, { text: " 사삿타 카레키니 소소이다 히"}],         tr: "오늘도 유쾌하네 찔린 말라붙은 나무에 부어댄 불" },
+        { time: 120.5, jp: "だいたいこんなもん世間は許しちゃくれやせんよ",        ko: [{ text: "다이타이 손나 몬", tag: "chant"}, { text: " 세켄와 유루시챠 쿠레야센요"}],         tr: "세상은 그렇게 쉽게 용서해 주지 않아" },
+        { time: 124, jp: "ぁあ、まぁいいからそんなことはどうでもいいからって?",        ko: [{ text: "아아, 마- 이- 카라", tag: "chant"}, { text: " 손나 코토 와 도-데모 이- 카라떼?"}],         tr: "아아, 됐으니까 그런 건 아무래도 좋으니까, 라고?" },
+        { time: 128, jp: "大炎上 x 5",        ko: [{ text: "다이엔조- x 5", tag: "chant"}],         tr: "대형 화재 x 5" },
+        { time: 131.5, jp: "散々だな後悔はないけど",        ko: [{ text: "산잔 다나", tag: "chant"}, { text: " 코-카이 와 나이 케도"}],         tr: "엉망진창이네, 후회는 없지만" },
+        { time: 135.5, jp: "先天的だ過敏なこの衝動",        ko: [{ text: "센텐테키다", tag: "chant"}, { text: " 카빈 나 코노 쇼-도-"}],         tr: "선천적이야, 예민한 이 충동" },
+        { time: 139, jp: "珍回答だ僕は気にしないけど",        ko: [{ text: "칭카이토- 다", tag: "chant"}, { text: " 보쿠 와 키니 시나이 케도"}],         tr: "엉뚱한 답이래도, 난 신경 안 쓰지만" },
+        { time: 142.5, jp: "1発打ったこのビートを鳴らしてよさぁ",        ko: [{ text: "잇파츠 웃타 코노 비-토 오 나라시테요 사-", tag: "chant"}],         tr: "한 발 쏜 이 비트를 울려줘 자" },
+        { time: 147.5, ko: [{ text: "Distance This Dance? x 4 ", tag: "chant"}]},
+
+      ],
+    },
+    {
+      id: "TokyoFlash",
+      title: "도쿄플래쉬 (東京フラッシュ)",
+      youtubeId: "SIuF37EWaLU",
+      lyrics: [
+        { time: 22.5, jp: "相槌がうまくなったんだできてるできてる",        ko: [{ text: "아이즈치가 우마쿠 낫탄다"}, { text: " 데키테루 데키테루", tag: "chant"}],         tr: "맞장구 치는 게 능숙해졌어 잘하고 있나 잘하고 있나" },
+        { time: 30, jp: "ぁあ、君もうまいね合図なしで攻撃してきたんだ",        ko: [{ text: "아- 키미모 우마이네 아이즈나시데 코게키시테 키탄다"}],         tr: "아아 너도 능숙하구나 신호없이 공격해왔어" },
+        { time: 37.5, jp: "わるくないわるくないあぁ、もういいのかい",        ko: [{ text: "와루쿠나이 와루쿠나이", tag: "chant"}, { text: " 아- 모 이이노카이"}],         tr: "나쁘지 않아 나쁘지 않아 아아 이제 됐니" },
+        { time: 42, jp: "STAYまだここにいてね君の",        ko: [{ text: "STAY", tag: "chant"}, { text: " 마다 코코니 이테네 키미노"}],         tr: "STAY 계속 여기 있어줘 너의" },
+        { time: 47, jp: "FAKEの笑顔をみせてよみせてよ",        ko: [{ text: "FAKE", tag: "chant"}, { text: " 노 에가오오 미세테요 미세테요"}],         tr: "FAKE인 미소를 보여줘 보여줘" },
+        { time: 52, jp: "STAGE4の癌にかかっているみたいかい",        ko: [{ text: "STAGE", tag: "chant"}, { text: " 4노 간니 카캇테이루 미타이카이"}],         tr: "STAGE4의 암에 걸려버린 느낌이니" },
+        { time: 57, jp: "AGEごしの性愛者でいいの",        ko: [{ text: "AGE", tag: "chant"}, { text: " 고시노 세이아이샤데 이이노"}],         tr: "AGE를 뛰어넘은 성애자면 된 거야" },
+        { time: 63, jp: "東京フラッシュ君の目が覚めたら",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}, { text: " 키미노 메가 사메타라"}],         tr: "도쿄 플래시 네가 눈을 뜨면" },
+        { time: 69, jp: "どこへ行こうどこへ行こう変わらないよ",        ko: [{ text: "도코에 이코 도코에 이코", tag: "chant"}, { text: " 카와라나이요"}],         tr: "어디로 갈까 어디로 갈까 변하지 않아" },
+        { time: 73, jp: "東京フラッシュ君と手を繋いだら",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}, { text: " 키미토 테오 츠나이다라"}],         tr: "도쿄 플래시 너의 손을 잡으면" },
+        { time: 79, jp: "どこへ行こうどこへ行こう変わらないよ",        ko: [{ text: "도코에 이코 도코에 이코", tag: "chant"}, { text: " 카와라나이요"}],         tr: "어디로 갈까 어디로 갈까 변하지 않아" },
+        { time: 82.5, jp: "東京フラッシュ",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}],         tr: "도쿄 플래시" },
+        { time: 103.5, jp: "断崖絶壁で愛していたできてるできてる",        ko: [{ text: "단가이젯페키데 아이시테이타"}, { text: " 데키테루 데키테루", tag: "chant"}],         tr: "단애 절벽에서 사랑을 했어 잘하고 있나 잘하고 있나" },
+        { time: 110.5, jp: "あぁ今日も深いね断片的で単純ストーリーだ",        ko: [{ text: "아- 쿄오모 후카이네 단펜테키데 탄쥰 스토리다"}],         tr: "아아 오늘도 깊구나 단편적이면서 단순한 스토리야" },
+        { time: 118, jp: "わるくないわるくないあぁ、もういいよ",        ko: [{ text: "와루쿠나이 와루쿠나이", tag: "chant"}, { text: " 아- 모 이이요"}],         tr: "나쁘지 않아 나쁘지 않아 아아 이제 됐어" },
+        { time: 123, jp: "STAYまだここにいてね君の",        ko: [{ text: "STAY", tag: "chant"}, { text: " 마다 코코니 이테네 키미노"}],         tr: "STAY 계속 여기 있어줘 너의" },
+        { time: 128, jp: "FAKEの笑顔をみせてよみせてよ",        ko: [{ text: "FAKE", tag: "chant"}, { text: " 노 에가오오 미세테요 미세테요"}],         tr: "FAKE인 미소를 보여줘 보여줘" },
+        { time: 133, jp: "STAGE4の癌にかかっているみたいかい",        ko: [{ text: "STAGE", tag: "chant"}, { text: " 4노 간니 카캇테이루 미타이카이"}],         tr: "STAGE4의 암에 걸려버린 느낌이니" },
+        { time: 137.5, jp: "AGEごしの性愛者でいいの",        ko: [{ text: "AGE", tag: "chant"}, { text: " 고시노 세이아이샤데 이이노"}],         tr: "AGE를 뛰어넘은 성애자면 된 거야" },
+        { time: 143.5, jp: "東京フラッシュ君の目が覚めたら",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}, { text: " 키미노 메가 사메타라"}],         tr: "도쿄 플래시 네가 눈을 뜨면" },
+        { time: 150, jp: "どこへ行こうどこへ行こう変わらないよ",        ko: [{ text: "도코에 이코 도코에 이코", tag: "chant"}, { text: " 카와라나이요"}],         tr: "어디로 갈까 어디로 갈까 변하지 않아" },
+        { time: 153.5, jp: "東京フラッシュ君と手を繋いだら",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}, { text: " 키미토 테오 츠나이다라"}],         tr: "도쿄 플래시 너의 손을 잡으면" },
+        { time: 159.5, jp: "どこへ行こうどこへ行こう変わらないよ",        ko: [{ text: "도코에 이코 도코에 이코", tag: "chant"}, { text: " 카와라나이요"}],         tr: "어디로 갈까 어디로 갈까 변하지 않아" },
+        { time: 163.5, jp: "東京フラッシュ",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}],         tr: "도쿄 플래시" },
+        { time: 174.5, jp: "もうやめにしようかなんで思うんだあぁでも",        ko: [{ text: "모 야메니 시요카 난테 오모운다 아- 데모"}],         tr: "이제 그만둘까 생각하고 있어 아아 그래도" },
+        { time: 183.5, jp: "君の笑顔や仕草がまたほらクセになってんだ",        ko: [{ text: "키미노 에가오야 시구사가 마타 호라 쿠세니 낫텐다"}],         tr: "너의 미소와 행동이 버릇이 돼버렸어" },
+        { time: 195, jp: "東京フラッシュ君の目が覚めたら",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}, { text: " 키미노 메가 사메타라"}],         tr: "도쿄 플래시 네가 눈을 뜨면" },
+        { time: 201.5, jp: "どこへ行こうどこへ行こう変わらないよ",        ko: [{ text: "도코에 이코 도코에 이코", tag: "chant"}, { text: " 카와라나이요"}],         tr: "어디로 갈까 어디로 갈까 변하지 않아" },
+        { time: 205, jp: "東京フラッシュ君と手を繋いだら",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}, { text: " 키미토 테오 츠나이다라"}],         tr: "도쿄 플래시 너의 손을 잡으면" },
+        { time: 211, jp: "どこへ行こうどこへ行こう変わらないよ",        ko: [{ text: "도코에 이코 도코에 이코", tag: "chant"}, { text: " 카와라나이요"}],         tr: "어디로 갈까 어디로 갈까 변하지 않아" },
+        { time: 215, jp: "東京フラッシュ君の目が覚めたら",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}, { text: " 키미노 메가 사메타라"}],         tr: "도쿄 플래시 네가 눈을 뜨면" },
+        { time: 221, jp: "どこへ行こうどこへ行こう変わらないよ",        ko: [{ text: "도코에 이코 도코에 이코", tag: "chant"}, { text: " 카와라나이요"}],         tr: "어디로 갈까 어디로 갈까 변하지 않아" },
+        { time: 225, jp: "東京フラッシュ君と手を繋いだら",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}, { text: " 키미토 테오 츠나이다라"}],         tr: "도쿄 플래시 너의 손을 잡으면" },
+        { time: 230.5, jp: "どこへ行こうどこへ行こう変わらないよ",        ko: [{ text: "도코에 이코 도코에 이코", tag: "chant"}, { text: " 카와라나이요"}],         tr: "어디로 갈까 어디로 갈까 변하지 않아" },
+        { time: 234.5, jp: "東京フラッシュ",        ko: [{ text: "토-쿄- 후랏슈", tag: "chant"}],         tr: "도쿄 플래시" },
+      ],
+    },
+    {
+      id: "NakiJizo",
+      title: "우눈지장 (泣き地蔵)",
+      youtubeId: "XQTM2M5iD_I",
+      lyrics: [
+        { time: 16, jp: "僕たちは少数の利益のためのピラミッド",        ko: [{ text: "보쿠타치와 쇼스노 리에키노 타메노 피라밋도", tag: "clap"}],         tr: "우리는 적은 이익을 위해 지어진 피라미드" },
+        { time: 19.5, jp: "ねぇ感想はあぁ、聞かないよ",        ko: [{ text: "네 칸소와 아- 키카나이요", tag: "clap"}],         tr: "네 감상은 어때 아아 듣지 않을래" },
+        { time: 21.5, jp: "さも幸せかのよなその笑顔",        ko: [{ text: "사모 시아와세카노 요나 소노 에가오", tag: "clap"}],         tr: "정말로 행복해 보이는 그 웃음" },
+        { time: 23.5, jp: "もう精一杯をもう一回 ねぇ神様もういいだろって",        ko: [{ text: "모 세잇파이오 모 잇카이", tag: "chant"}, { text: " 네 카미사마 모 이이다롯테"}],         tr: "힘껏 한 번만 더 신님, 이제 됐잖아요 라며" },
+        { time: 27.5, jp: "ねぇもう一回を精一杯",        ko: [{ text: "네 모 잇카이오 세잇파이", tag: "chant"}],         tr: "한 번만 더 힘껏" },
+        { time: 29.5, jp: "ねぇ苦難と努力の洗脳でしたっけ?",        ko: [{ text: "네 쿠난토 도료쿠노 세노데시탓케"}],         tr: "고난과 노력의 세뇌였던 거야?" },
+        { time: 39.5, jp: "あぁもう何回目の最後の警告?",        ko: [{ text: "아- 모", tag: "chant"}, { text: " 난카이메노 사이고노 케이코쿠"}],         tr: "아아 이젠 몇 번째 마지막 경고지?" },
+        { time: 42.5, jp: "じゃあここらで 祈り繋いどく？",        ko: [{ text: "쟈 코코라데 이노리 츠나이도쿠"}],         tr: "그럼 이쯤에서 기도를 엮어놓을까?" },
+        { time: 44.5, jp: "感動も何もない自暴自棄の中で",        ko: [{ text: "칸도모 나니모 나이 지보지키노 나카데"}],         tr: "감동도 뭣도 없는 자포자기 속에서" },
+        { time: 48.5, jp: "何回目の愛のお買い得？",        ko: [{ text: "난카이메노 아이노 오카이도쿠"}],         tr: "몇 번째 사랑을 사는 거지?" },
+        { time: 50.5, jp: "じゃあここらで 心繋いどく？",        ko: [{ text: "쟈 코코라데 코코로 츠나이도쿠"}],         tr: "그럼 이쯤에서 마음을 엮어놓을까?" },
+        { time: 52.5, jp: "感覚が落とした僕は泣き地蔵",        ko: [{ text: "칸카쿠가 오토시타 보쿠와 나키지조"}],         tr: "감각이 사라진 나는 우는 지장보살" },
+        { time: 58, jp: "あぁ 私たちに流れるこの血は",        ko: [{ text: "아- 와타시타치니 나가레루 코노 치와", tag: "clap"}],         tr: "아아 우리에게 흐르는 이 피는" },
+        { time: 60, jp: "惨憺たる日々を彩るためか",        ko: [{ text: "산탄타루 히비오 이로도루 타메카", tag: "clap"}],         tr: "참담한 나날을 물들이기 위함일까" },
+        { time: 62.5, jp: "たぎり出したこの命の種は",        ko: [{ text: "타기리다시타 코노 이노치노 타네와", tag: "clap"}],         tr: "끓어오르는 이 생명의 씨앗은" },
+        { time: 64.5, jp: "考えるほどに断崖絶壁だ",        ko: [{ text: "칸가에루 호도니 단가이젯페키다", tag: "clap"}],         tr: "생각한대로 단애절벽이야" },
+        { time: 66.5, jp: "相容れぬだろうこのままここは",        ko: [{ text: "아이이레누다로 코노 마마 코코와"}],         tr: "함께할 순 없겠지 이대로 여기는" },
+        { time: 70.5, jp: "知らぬ仏より馴染みの地獄で",        ko: [{ text: "시라누 호토케 요리 나지미노 지고쿠데"}],         tr: "모르는 불상보다는 익숙한 지옥으로" },
+        { time: 81.5, jp: "あぁもう何回目の最後の警告?",        ko: [{ text: "아- 모", tag: "chant"}, { text: " 난카이메노 사이고노 케이코쿠"}],         tr: "아아 이젠 몇 번째 마지막 경고지?" },
+        { time: 84.5, jp: "じゃあここらで 祈り繋いどく？",        ko: [{ text: "쟈 코코라데 이노리 츠나이도쿠"}],         tr: "그럼 이쯤에서 기도를 엮어놓을까?" },
+        { time: 86.5, jp: "感動も何もない自暴自棄の中で",        ko: [{ text: "칸도모 나니모 나이 지보지키노 나카데"}],         tr: "감동도 뭣도 없는 자포자기 속에서" },
+        { time: 90.5, jp: "何回目の愛のお買い得？",        ko: [{ text: "난카이메노 아이노 오카이도쿠"}],         tr: "몇 번째 사랑을 사는 거지?" },
+        { time: 92.5, jp: "じゃあここらで 心繋いどく？",        ko: [{ text: "쟈 코코라데 코코로 츠나이도쿠"}],         tr: "그럼 이쯤에서 마음을 엮어놓을까?" },
+        { time: 94.5, jp: "感覚が落とした僕は泣き地蔵",        ko: [{ text: "칸카쿠가 오토시타 보쿠와 나키지조"}],         tr: "감각이 사라진 나는 우는 지장보살" },
+        { time: 107, jp: "僕もずっと笑う夢を見ていたい",        ko: [{ text: "보쿠모 즛토 와라우 유메오 미테이타이"}],         tr: "나도 계속 웃는 꿈을 꾸고 싶어" },
+        { time: 115.5, jp: "でもずっと願うほどの夢じゃなかった気がして",        ko: [{ text: "데모 즛토 네가우 호도노 유메쟈나캇타 키가 시테"}],         tr: "그런데 계속 이렇게까지 원한 꿈은 아닌 것 같은 기분이 들어서" },
+        { time: 124.5, jp: "何回目の最後の警告?",        ko: [{ text: " 난카이메노 사이고노 케이코쿠", tag: "chant"}],         tr: "이젠 몇 번째 마지막 경고지?" },
+        { time: 126.5, jp: "じゃあここらで 祈り繋いどく？",        ko: [{ text: "쟈 코코라데 이노리 츠나이도쿠", tag: "chant"}],         tr: "그럼 이쯤에서 기도를 엮어놓을까?" },
+        { time: 128.5, jp: "感動も何もない自暴自棄の中で",        ko: [{ text: "칸도모 나니모 나이 지보지키노 나카데"}],         tr: "감동도 뭣도 없는 자포자기 속에서" },
+        { time: 132.5, jp: "何回目の愛のお買い得？",        ko: [{ text: "난카이메노 아이노 오카이도쿠", tag: "chant"}],         tr: "몇 번째 사랑을 사는 거지?" },
+        { time: 134.5, jp: "じゃあここらで 心繋いどく？",        ko: [{ text: "쟈 코코라데 코코로 츠나이도쿠", tag: "chant"}],         tr: "그럼 이쯤에서 마음을 엮어놓을까?" },
+        { time: 136.5, jp: "感覚が落とした僕は泣き地蔵",        ko: [{ text: "칸카쿠가 오토시타 보쿠와 나키지조"}],         tr: "감각이 사라진 나는 우는 지장보살" },
+
+      ],
+    },
+     {
+      id: "napori",
+      title: "napori",
+      youtubeId: "ZeIGVnkYX04",
+      lyrics: [
+        { time: 15, jp: "ろくな音楽もなくてそんなひびをまた2人で",        ko: [{ text: "로쿠나 온가쿠모 나쿠테 손나 히비오 마타 후타리데"}],         tr: "제대로 된 음악도 없는 그런 나날을 또다시 둘이서" },
+        { time: 23, jp: "僕ら指にラブソングで今夜も二人で歩いてこ",        ko: [{ text: "보쿠라 유비니 라브송구데 콘야모 후타리데 아루이테코"}],         tr: "우리 손가락에는 러브송을 두고 오늘밤도 둘이서 걸어가자" },
+        { time: 30, jp: "2人になって 君を待って思い出したんだ思い出したんだ",        ko: [{ text: "후타리니 낫테 키미오 맛테 오모이다시탄다"}],         tr: "오늘밤도 둘이서 걸어가자 두 명이 돼고 너를 기다리다 떠올랐어" },
+        { time: 36, jp: "僕が 大人になって思い出すのは君じゃないかな",        ko: [{ text: "보쿠가 오토나니 낫테 오모이다스노와 키미쟈나이카나"}],         tr: "내가 어른이 돼서 떠올리게 될 것은 네가 아닐까 싶어" },
+        { time: 43.5, jp: "あれは縁そっと flight",        ko: [{ text: "아레와 베리 솟토 플라이토"}],         tr: "그것은 아주 살짝 flight" },
+        { time: 47, jp: "僕ら互いの指を絡めあってもう",        ko: [{ text: "보쿠라 타가이노 유비오 카라메앗테모"}],         tr: "우리는 서로의 손가락을 휘감으며" },
+        { time: 52, jp: "Napori ずっといたいよ",        ko: [{ text: "나포리 즛토 이타이요"}],         tr: "Napori 영원히 여기 있고 싶어" },
+        { time: 55, jp: "ここで見つめあって互いに安堵する",        ko: [{ text: "코코데 미츠메앗테 타가이니 안도스루"}],         tr: "여기서 서로를 바라보며 서로 안심하네" },
+        { time: 60, ko: [{ text: "Oh right x 3", tag: "chant"}]},
+        { time: 65, jp: "絡めあっていく",        ko: [{ text: "카라메앗테이쿠"}],         tr: "휘감아가며" },
+        { time: 67, ko: [{ text: "Oh right x 3", tag: "chant"}]},
+        { time: 73, jp: "当然こんな夜にはコーヒーがいいだろ",        ko: [{ text: "토젠 콘나 요루니와 코히가 이이다로"}],         tr: "당연히 이런 밤엔 커피가 좋겠지" },
+        { time: 77.5, jp: "そんな僕の横でハイボールを1口",        ko: [{ text: "손나 보쿠노 요코데 하이보루오 히토쿠치"}],         tr: "그런 나의 옆에서 하이볼을 한 입" },
+        { time: 81, jp: "もう なんて言うんだろそう君見てると",        ko: [{ text: "모 난테 이운다로소 키미 미테루토"}],         tr: "뭐라 말해야 할까 그런 너를 보고 있으면" },
+        { time: 85, jp: "酒入ってなくても酔いが回るんだな",        ko: [{ text: "사케 하잇테나쿠테모 요이가 마와룬다나"}],         tr: "술을 마시지 않아도 취기가 올라오는걸" },
+        { time: 89, jp: "音になって 大人になって思い出したんだ",        ko: [{ text: "오토니 낫테 오토나니 낫테 오모이다시탄다"}],         tr: "소리가 울리고 어른이 되고 떠올랐어" },
+        { time: 95, jp: "君が 大人になって思い出すのは ぼくじゃないかな",        ko: [{ text: "키미가 오토나니 낫테 오모이다스노와 보쿠쟈나이카나"}],         tr: "네가 어른이 돼서 떠올리게 될 것은 내가 아닐까 싶어" },
+        { time: 102.5, jp: "いずれ縁そっと flight",        ko: [{ text: "이즈레 베리 솟토 플라이토"}],         tr: "아무래도 아주 살짝 flight" },
+        { time: 106, jp: "僕ら互いの指を絡めあってもう",        ko: [{ text: "보쿠라 타가이노 유비오 카라메앗테모"}],         tr: "우리는 서로의 손가락을 휘감으며" },
+        { time: 111, jp: "Napori ずっといたいよ",        ko: [{ text: "나포리 즛토 이타이요"}],         tr: "Napori 영원히 여기 있고 싶어" },
+        { time: 114, jp: "ここで見つめあって互いに安堵する",        ko: [{ text: "코코데 미츠메앗테 타가이니 안도스루"}],         tr: "여기서 서로를 바라보며 서로 안심하네" },
+        { time: 119, ko: [{ text: "Oh right x 3", tag: "chant"}]},
+        { time: 124, jp: "絡めあっていく",        ko: [{ text: "카라메앗테이쿠"}],         tr: "휘감아가며" },
+        { time: 126.5, ko: [{ text: "Oh right x 3", tag: "chant"}]},
+        { time: 149, jp: "君と 縁そっと flight",        ko: [{ text: "키미토 베리 솟토 플라이토"}],         tr: "너와 함께 아주 살짝 flight" },
+        { time: 152.5, jp: "僕ら互いの指を絡めあってもう",        ko: [{ text: "보쿠라 타가이노 유비오 카라메앗테모"}],         tr: "우리는 서로의 손가락을 휘감으며" },
+        { time: 157, jp: "Napori ずっといたいよ",        ko: [{ text: "나포리 즛토 이타이요"}],         tr: "Napori 영원히 여기 있고 싶어" },
+        { time: 160, jp: "ここで見つめあって互いに安堵する",        ko: [{ text: "코코데 미츠메앗테 타가이니 안도스루"}],         tr: "여기서 서로를 바라보며 서로 안심하네" },
+        { time: 165, ko: [{ text: "Oh right x 3", tag: "chant"}]},
+        { time: 170, jp: "絡めあっていく",        ko: [{ text: "카라메앗테이쿠"}],         tr: "휘감아가며" },
+        { time: 172.5, ko: [{ text: "Oh right x 3", tag: "chant"}]},
+        { time: 177.5, jp: "二人はキスをする",        ko: [{ text: "후타리와 키스오 스루"}],         tr: "두 사람은 키스하네" },
+        { time: 180, ko: [{ text: "Oh right x 3", tag: "chant"}]},
+        { time: 185, jp: "絡めあっていく",        ko: [{ text: "카라메앗테이쿠"}],         tr: "휘감아가며" },
+        { time: 187, ko: [{ text: "Oh right x 3", tag: "chant"}]},
+      ],
+    },
+    {
+      id: "Backlight",
+      title: "역광 (逆光)",
+      youtubeId: "RhDxXvn6YaQ",
+      lyrics: [
+        { time: 27.5, jp: "散々な思い出は悲しみを穿つほど",        ko: [{ text: "산잔나 오모이데와 카나시미오 우가츠호도"}],         tr: "지독한 추억은 슬픔을 꿰뚫을 만큼" },
+        { time: 34, jp: "やるせない恨みはアイツのために置いてきたのさ",        ko: [{ text: "야루세나이 우라미와 아이츠노 타메니 오이테 키타노사"}],         tr: "어찌할 수 없는 원한은 그 녀석을 위해서 두고 온 거야" },
+        { time: 41, jp: "あんたらわかっちゃないだろ",        ko: [{ text: "안타라 와캇챠나이다로"}],         tr: "너희들은 알 리가 없지" },
+        { time: 42.5, jp: "本当に傷む孤独を今だけ箍外してきて",        ko: [{ text: "혼토니 이타무 코도크오 이마다케 타가하즈시테키테"}],         tr: "정말로 쓰라린 고독을 지금만은 틀에서 벗어나 버려​" },
+        { time: 46.5, jp: "怒りよ今悪党ぶっ飛ばしてそりゃあ愛ある罰だ",        ko: [{ text: "이카리요 이마 아크토- 붓토바시테 소랴- 아이아루바츠다"}],         tr: "분노야 지금, 악당 끝장내 버리고 그거야 사랑이 있는 벌이야​" },
+        { time: 53.5, jp: "もう眠くはないやないやないや",        ko: [{ text: "모-네무쿠와"},{ text: " 나이야 나이야 나이야", tag: "chant"}],         tr: "이젠 졸리지는 않네 않네 않네​" },
+        { time: 56.5, jp: "もう悲しくないさないさ",        ko: [{ text: "모-카나시쿠"}, { text: " 나이사 나이사", tag: "chant"}],         tr: "이젠 슬프지 않아 않아​" },
+        { time: 59, jp: "そう 怒りよ今 悪党蹴り飛ばして そりゃあ愛への罰だ",        ko: [{ text: "소- 이카리요 이마 아크토- 케리토바시테 소랴- 아이에노 바츠다"}],         tr: "그래 분노야 지금, 악당 걷어차 버리고 그거야 사랑에게 벌이야​" },
+        { time: 66.5, jp: "もう眠くはないやないやないや",        ko: [{ text: "모-네무쿠와"},{ text: " 나이야 나이야 나이야", tag: "chant"}],         tr: "이젠 졸리지는 않네 않네 않네​" },
+        { time: 70, jp: "もう悲しくないさないさ 逆光よ",        ko: [{ text: "모-카나시쿠"}, { text: " 나이사 나이사 갹코-요", tag: "chant"}],         tr: "이젠 슬프지 않아 않아 역광이여​​" },
+        { time: 87, jp: "惨憺たる結末は美しさを纏うほど",        ko: [{ text: "산탄타루 케츠마츠와 우츠쿠시사오 마토우호도"}],         tr: "참담한 결말은 아름다움을 휘감을 만큼" },
+        { time: 93.5, jp: "限りなく、体温に近い 「赤」に彩られていた",        ko: [{ text: "카기리나쿠, 타이온니 치카이 아카니 이로도라레테이타"}],         tr: "끝도 없게, 체온에 가까운 「빨강」으로 수놓아져 있었어" },
+        { time: 100.5, jp: "散漫な視界でも美しさがわかるほど",        ko: [{ text: "산만나 시카이데모 우츠쿠시사가 와카루호도"}],         tr: "산만한 시야에도 아름다움을 알 정도로" },
+        { time: 107, jp: "焼き付ける光を背に受ける 「赤」に気を取られている",        ko: [{ text: "야키츠케루 히카리오 세니 우케루 아카니 키오 토라레테 이루"}],         tr: "낙인을 찍듯한 빛을 등으로 받아 「빨강」에 정신을 빼았기고 있어​" },
+        { time: 114.5, jp: "もつれてしまった心は 解っている今でも",        ko: [{ text: "모츠레테시맛타 코코로와 와캇테이루 이마데모"}],         tr: "뒤엉켜져 버린 마음은 이해하고 있어 지금도​" },
+        { time: 121, jp: "ほつれてしまった。 言葉が焦っている。",        ko: [{ text: "호츠레테 시맛타 코토바가 아셋테이루"}],         tr: "흐트러져 버렸어.말이 조급해 지고 있어​" },
+        { time: 126, jp: "怒りよ今悪党ぶっ飛ばしてそりゃあ愛ある罰だ",        ko: [{ text: "이카리요 이마 아크토- 붓토바시테 소랴- 아이아루바츠다"}],         tr: "분노야 지금, 악당 끝장내 버리고 그거야 사랑이 있는 벌이야​" },
+        { time: 132.5, jp: "もう眠くはないやないやないや",        ko: [{ text: "모-네무쿠와"},{ text: " 나이야 나이야 나이야", tag: "chant"}],         tr: "이젠 졸리지는 않네 않네 않네​" },
+        { time: 136, jp: "もう悲しくないさないさ",        ko: [{ text: "모-카나시쿠"}, { text: " 나이사 나이사", tag: "chant"}],         tr: "이젠 슬프지 않아 않아​" },
+        { time: 139, jp: "そう 怒りよ今 悪党蹴り飛ばして そりゃあ愛への罰だ",        ko: [{ text: "소- 이카리요 이마 아크토- 케리토바시테 소랴- 아이에노 바츠다"}],         tr: "그래 분노야 지금, 악당 걷어차 버리고 그거야 사랑에게 벌이야​" },
+        { time: 146, jp: "もう眠くはないやないやないや",        ko: [{ text: "모-네무쿠와"},{ text: " 나이야 나이야 나이야", tag: "chant"}],         tr: "이젠 졸리지는 않네 않네 않네​" },
+        { time: 149.5, jp: "もう悲しくないさないさ 逆光よ",        ko: [{ text: "모-카나시쿠"}, { text: " 나이사 나이사 갹코-요", tag: "chant"}],         tr: "이젠 슬프지 않아 않아 역광이여​​" },
+        { time: 166.5, jp: "もう、怒り願った言葉は 崩れ、へたってしまったが",        ko: [{ text: "모- 이카리네갓타 코토바와 쿠즈레 헤탓테 시맛타가"}],         tr: "이제는, 성내며 바랐던 말은 무너져, 주저앉아 버렸지만​" },
+        { time: 173, jp: "今でも未練たらしくしている。あぁ、何度も放った言葉が",        ko: [{ text: "이마데모 미렌타라시쿠 시테이루 아아- 난도모 하낫타 코토바가"}],         tr: "지금도 연연하고 있어. 아아 몇번이고 내던진 말이​" },
+        { time: 183.5, jp: "届き、解っているのなら なんて、夢見が苦しいから",        ko: [{ text: "토도키 와캇테 이루노나라 난테 유메미가 쿠루시이카라"}],         tr: "전해져, 알고 있는 거라면 이라니, 꿈꾸기도 괴로우니까​​" },
+        { time: 193.5, jp: "もう怒りよ今悪党ぶっ飛ばしてそりゃあ愛ある罰だ",        ko: [{ text: "모- 이카리요 이마 아크토- 붓토바시테 소랴- 아이아루바츠다"}],         tr: "이제 분노야 지금, 악당 끝장내 버리고 그거야 사랑이 있는 벌이야​" },
+        { time: 200.5, jp: "もう眠くはないやないやないや",        ko: [{ text: "모-네무쿠와"},{ text: " 나이야 나이야 나이야", tag: "chant"}],         tr: "이젠 졸리지는 않네 않네 않네​" },
+        { time: 204, jp: "もう悲しくないさないさ",        ko: [{ text: "모-카나시쿠"}, { text: " 나이사 나이사", tag: "chant"}],         tr: "이젠 슬프지 않아 않아​" },
+        { time: 207, jp: "そう 怒りよ今 悪党蹴り飛ばして そりゃあ愛への罰だ",        ko: [{ text: "소- 이카리요 이마 아크토- 케리토바시테 소랴- 아이에노 바츠다"}],         tr: "그래 분노야 지금, 악당 걷어차 버리고 그거야 사랑에게 벌이야​" },
+        { time: 214, jp: "もう眠くはないやないやないや",        ko: [{ text: "모-네무쿠와"},{ text: " 나이야 나이야 나이야", tag: "chant"}],         tr: "이젠 졸리지는 않네 않네 않네​" },
+        { time: 217, jp: "もう悲しくないさないさ 逆光よ",        ko: [{ text: "모-카나시쿠"}, { text: " 나이사 나이사 갹코-요", tag: "chant"}],         tr: "이젠 슬프지 않아 않아 역광이여​​" },
+      ],
+    },
+    {
+      id: "NEOJAPAN",
+      title: "NEO JAPAN",
+      youtubeId: "QC6gd_b1nz8",
+      lyrics: [
+        { time: 30, jp: "ある日気づいた、根付いた 岸辺の球根 根回し手回し",        ko: [{ text: "아루히 키즈이타 네즈이타 키시베노 큐우콘 네마와시테마와시"}],         tr: "어느날 깨달았어, 뿌리내린 물가의 알뿌리 사전논의 사전준비" },
+        { time: 34.5, jp: "足りぬと、税の倍増 を総称は心の保証と",        ko: [{ text: "타리누토 미츠기노바이조오 오 소오쇼오와 코코로노호쇼오토"}],         tr: "부족하면, 세금 두배 늘리기의 총칭은 마음의보증 으로" },
+        { time: 39, jp: "干渉と化した暴行 その日気づいた、ありゃ代打",        ko: [{ text: "칸쇼오토카시타 보오코오 소노히 키즈이타 아랴다이다"}],         tr: "간섭으로 변화한 폭행 그날 깨달았어, 그건 대타" },
+        { time: 43.5, jp: "そりゃないなぁ 口回りのいい、いいラッパー",        ko: [{ text: "소랴 나이나 쿠치마와리노이이 이이 랏파"}],         tr: "가 아니지 입을 잘 놀리는 래퍼" },
+        { time: 47, jp: "その角のないリリックに踊らされ",        ko: [{ text: "소노 카도노나이 리릿쿠니 오도라사레"}],         tr: "그 부드러운 가사에 놀아난" },
+        { time: 49.5, jp: "後はポップなアッパーで煽るだけ",        ko: [{ text: "아토와 폿프나 앗파데아오루다케"}],         tr: "뒤엔 팝 한 신나는 노래로 부추길 뿐" },
+        { time: 52, jp: "彼の拝んだ未来は 霧がかってないか",        ko: [{ text: "카레노 오간다 미라이와 키리가 캇테나이카"}],         tr: "그가 바라던 미래는 키리가 캇테나이카" },
+        { time: 59.5, jp: "ちりも積もらないな 気持ちよくなって",        ko: [{ text: "치리모 츠모라나이나 키모치요쿠 낫테"}],         tr: "조금도 그렇질 않네 기분이 좋아져서" },
+        { time: 65, jp: "前が見えてないな 世紀末までのらりくらり",        ko: [{ text: "마에가 미에테 나이나 세이키마츠마데 노라리 쿠라리"}],         tr: "앞이 보이질 않네 세기말까지 빈둥 빈둥" },
+        { time: 71, jp: "きっと彼はアキラが好きなだけ",        ko: [{ text: "킷토 카레와 아키라가 스키나다케", tag: "chant"}],         tr: "분명 그는 아키라를 좋아하는 것일 뿐​​" },
+        { time: 74.5, jp: "僕らは向かうNEO JAPAN 霧がかりの 薔薇でも大丈夫さ",        ko: [{ text: "보쿠라와무카우 NEO JAPAN 키리가카리노 바라데모 다이조부사"}],         tr: "우리는 향해 새로운 일본 안개 낀 장미라도 괜찮아" },
+        { time: 83.5, jp: "Ohふらりふらり 僕らは集うNEO JAPAN",        ko: [{ text: "Oh 후라리후라리 보쿠라와 츠도우 NEO JAPAN"}],         tr: "휘청 휘청 우리는 모여들어 새로운 일본" },
+        { time: 89.5, jp: "言いがかりも ここなら大丈夫さ",        ko: [{ text: "이이가카리모 코코나라 다이조부사"}],         tr: "트집쟁이도 여기라면 괜찮아" },
+        { time: 95.5, jp: " ディストピア x 6",        ko: [{ text: "디스토피아 x 6", tag: "chant"}],         tr: "디스토피아 x 6" },
+        { time: 107, jp: "否 気づかぬが仏、みな身につけるわ",        ko: [{ text: "이나 키즈카누가호토케 미나미니츠게루와"}],         tr: "부정 눈치채지 못하지만 부처, 모두 몸에 붙여" },
+        { time: 110, jp: "自動で 手掴み、刷り込み、他動作動、Flow",        ko: [{ text: "지도우데 테즈카미 스리코미 타도오사도오 Flow"}],         tr: "자동으로 손 잡기 각인, 타동작동, Flow" },
+        { time: 114, jp: "気にせず無能へイカ クセェのが個性で",        ko: [{ text: "키니세즈 무노오에 이카 쿠세노가 코세에데"}],         tr: "신경쓰지말고 무능에 오징어 냄새 나는게 개성이고" },
+        { time: 118, jp: "今 妄想厨から逃走中 にでたヴァンパイア",        ko: [{ text: "이마 모오소오 추우 카라 토오소오추우 니데타 반파이아"}],         tr: "지금 망상충 으로부터 도주 중에 나온 뱀파이어" },
+        { time: 123, jp: "もう漫才や 皆Ang Pang Men もう散々だ",        ko: [{ text: "모오 만자이야 미나 Ang Pang Men 모오산잔다"}],         tr: "이젠 코미디야 모두 호빵맨 이젠 엉망이야" },
+        { time: 128.5, jp: "まだ足らない そこに財源 おつり合わんね",        ko: [{ text: "마다타리나이 소코니 자이겐 오츠리아완네"}],         tr: "아직부족해 그곳의 재원돈이 맞질 않네" },
+        { time: 132.5, jp: "「あぁ、まだ検討中」目立たんね けつ拭き命令",        ko: [{ text: "아- 마다 켄토오추우 메다탄네 케츠후키 메이레이"}],         tr: "「아-, 아직 검토중」 눈에 띄질 않네 뒤처리 명령" },
+        { time: 136.5, jp: "「おしりグロいね 「ああ！まだ清掃中」",        ko: [{ text: "오시리구로이네 아- 마다 세에소오추우"}],         tr: "엉덩이 징그럽네 「아아! 아직 청소중」" },
+        { time: 139.5, jp: "見当たらない 底の最低 数が合わんね 「ああ」",        ko: [{ text: "미아타라나이 소코노 사이테 카즈가 아완네 아- 아-"}],         tr: "보이지 않네 밑바닥 지하 갯수가 안맞네 아아" },
+        { time: 145, jp: "間に合わんね 民衆のサイレン その合図で",        ko: [{ text: "마니아완네 민슈우노 사이렌 소노아이즈데"}],         tr: "늦어버렸네 민중의 사이렌 그 소리에" },
+        { time: 150.5, jp: "僕らは向かうNEO JAPAN 霧がかりの 薔薇でも大丈夫さ",        ko: [{ text: "보쿠라와무카우 NEO JAPAN 키리가카리노 바라데모 다이조부사"}],         tr: "우리는 향해 새로운 일본 안개 낀 장미라도 괜찮아" },
+        { time: 160, jp: "Ohふらりふらり 僕らは集うNEO JAPAN",        ko: [{ text: "Oh 후라리후라리 보쿠라와 츠도우 NEO JAPAN"}],         tr: "휘청 휘청 우리는 모여들어 새로운 일본" },
+        { time: 166, jp: "言いがかりも ここなら大丈夫さ",        ko: [{ text: "이이가카리모 코코나라 다이조부사"}],         tr: "트집쟁이도 여기라면 괜찮아" },
+        { time: 172.5, jp: "彼の拝んだ未来は 霧がかってないか",        ko: [{ text: "카레노 오간다 미라이와 키리가 캇테나이카"}],         tr: "그가 바라던 미래는 키리가 캇테나이카" },
+        { time: 179, jp: "ちりも積もらないな 気持ちよくなって",        ko: [{ text: "치리모 츠모라나이나 키모치요쿠 낫테"}],         tr: "조금도 그렇질 않네 기분이 좋아져서" },
+        { time: 185, jp: "前が見えてないな 世紀末までのらりくらり",        ko: [{ text: "마에가 미에테 나이나 세이키마츠마데 노라리 쿠라리"}],         tr: "앞이 보이질 않네 세기말까지 빈둥 빈둥" },
+        { time: 191.5, jp: "きっと彼はアキラが好きなだけ",        ko: [{ text: "킷토 카레와 아키라가 스키나다케", tag: "chant"}],         tr: "분명 그는 아키라를 좋아하는 것일 뿐​​" },
+        { time: 194.5, jp: "僕らは向かうNEO JAPAN 霧がかりの 薔薇でも大丈夫さ",        ko: [{ text: "보쿠라와무카우 NEO JAPAN 키리가카리노 바라데모 다이조부사"}],         tr: "우리는 향해 새로운 일본 안개 낀 장미라도 괜찮아" },
+        { time: 204, jp: "Ohふらりふらり 僕らは集うNEO JAPAN",        ko: [{ text: "Oh 후라리후라리 보쿠라와 츠도우 NEO JAPAN"}],         tr: "휘청 휘청 우리는 모여들어 새로운 일본" },
+        { time: 209.5, jp: "言いがかりも ここなら大丈夫さ",        ko: [{ text: "이이가카리모 코코나라 다이조부사"}],         tr: "트집쟁이도 여기라면 괜찮아" },
+        { time: 216, jp: "ディストピア x 6",        ko: [{ text: "디스토피아 x 6", tag: "chant"}],         tr: "디스토피아 x 6" },
+
+
+      ],
+    },
+    {
+      id: "ZuttoLoveSong",
+      title: "계속 러브송 (ずっとラブソング)",
+      youtubeId: "wriTi0J_-1A",
+      lyrics: [
+        { time: 14, jp: "いつかこの街ごと 消えてなくなること",        ko: [{ text: "이츠카 코노 마치고토 키에테 나쿠나루 코토"}],         tr: "언젠가 이 마을째로 사라져 없어질 거란걸" },
+        { time: 20.5, jp: "知ってても 最後まで待てるよ oh...",        ko: [{ text: "싯테테모 사이고마데 마테루요 oh"}],         tr: "알면서도 끝까지 기다릴게 oh" },
+        { time: 27.5, jp: "だけど時折その 凍る心を溶かす口実を",        ko: [{ text: "다케도 토키오리 소노 코오루 코코로오 토카스 코오지츠오"}],         tr: "하지만 때때로 그 얼어붙는 마음을 녹일 구실을" },
+        { time: 36, jp: "考えてみてるよ 「ずっとラブソング」",        ko: [{ text: "캉가에테 미테루요 즛토 라부송구"}],         tr: "생각해 보고 있어 「줄곧 러브송」" },
+        { time: 42, jp: "あの日から消えない思い出のメロディと",        ko: [{ text: "아노히카라 키에나이 오모이데노 메로디토"}],         tr: "그날부터 사라지지 않는 추억의 멜로디와" },
+        { time: 47, jp: "このバラバラに散る言葉を集めて",        ko: [{ text: "코노 바라바라니 치루 코토바오 아츠메테"}],         tr: "이 뿔뿔이 흩어져 내리는 말들을 모아서" },
+        { time: 51, jp: "やっと飛ばせそうだ",        ko: [{ text: "얏토 토바세소오다"}],         tr: "드디어 날려보낼 수 있을것 같아" },
+        { time: 53, jp: "だから今夜 キャトルミューティレイション",        ko: [{ text: "다카라 콘야", tag: "clap"}, { text: " 캬토루 뮤티 레이숀", tag: "chant"}],         tr: "그러니까 오늘밤 캐틀 뮤틸레이션" },
+        { time: 56.5, jp: "あなたの心奪う 超Nice",        ko: [{ text: "아나타노 코코로 우바우", tag: "clap"}, { text: " 초-나이스", tag: "chant"}],         tr: "네 마음을 빼앗는 초 Nice" },
+        { time: 60, jp: "な言葉で紡がれた 希望を",        ko: [{ text: "나 코토바데 츠무가레타 키보오오", tag: "clap"}],         tr: " 한 말로 이루어진 희망을 " },
+        { time: 63.5, jp: "隠さないラブソングがBGMさ",        ko: [{ text: "카쿠사나이 라부송구가", tag: "clap"}, { text: " 비지에무사", tag: "chant"}],         tr: "숨기지 않는 러브송이 BGM 이야" },
+        { time: 67.5, jp: "キャトルミューティレイション",        ko: [{ text: "캬토루 뮤티 레이숀", tag: "chant"}],         tr: "캐틀 뮤틸레이션" },
+        { time: 70, jp: "あなたの心奪う 超Nice",        ko: [{ text: "아나타노 코코로 우바우", tag: "clap"}, { text: " 초-나이스", tag: "chant"}],         tr: "네 마음을 빼앗는 초 Nice" },
+        { time: 73, jp: "な笑顔で紡がれた 希望を",        ko: [{ text: "나 에가오데 츠무가레타 키보오오", tag: "clap"}],         tr: " 한 미소로 이루어진 희망을 " },
+        { time: 76.5, jp: "隠さないラブソングを 僕に歌ってくれ",        ko: [{ text: "카쿠사나이 라부송구오 보쿠니 우탓테쿠레", tag: "clap"}],         tr: "숨기지 않는 러브송을 내게 노래해줘" },
+        { time: 87, jp: "もしもDopeでFunkyな 隕石が",        ko: [{ text: "모시모 도-푸 데 펑키 나 인세키가"}],         tr: "만약 Dope 하고 Funky 한 운석이" },
+        { time: 91, jp: "この街に落ちて来るっていう事 君に教えたなら Oh...",        ko: [{ text: "코노 마치니 오치테쿠룻테 유우 코토 키미니 오시에타라"}],         tr: "이 마을에 떨어진다는 걸 네게 알려줬다면" },
+        { time: 100, jp: "それに導入はもうすでに出来ていて",        ko: [{ text: "소레니 도오뉴우와 모오 스데니 데키테이테"}],         tr: "거기에 투입은 이미 되어 버렸으니" },
+        { time: 104, jp: "あとは、あなたの心の鼓動に",        ko: [{ text: "아토와 아나타노 코코로노 코도오니"}],         tr: "이제는 그저, 네 마음의 고동에" },
+        { time: 109, jp: "合わせていくだけだよ 「ずっとラブソング」",        ko: [{ text: "아와세테 이쿠 다케다요 즛토 라부송구"}],         tr: "맞춰 나아갈 뿐이야 「줄곧 러브송」" },
+        { time: 115, jp: "あの日から消えない 思い出のサンプルと",        ko: [{ text: "아노히카라 키에나이 오모이데노 산푸루토"}],         tr: "그 날부터 사라지지 않는 추억의 샘플과" },
+        { time: 120, jp: "このバラバラに散る愛を集めて",        ko: [{ text: "코노 바라바라니 치루 아이오 아츠메테"}],         tr: "이 뿔뿔이 흩어져 내리는 사랑을 모아서" },
+        { time: 124, jp: "やっと飛ばせそうだ",        ko: [{ text: "얏토 토바세소오다"}],         tr: "드디어 날려보낼 수 있을것 같아" },
+        { time: 127, jp: "怒るのは後にしてくれよBaby",        ko: [{ text: "오코루노와 아토니 시테쿠레요 베이비"}],         tr: "화내는건 나중에 해줘 Baby" },
+        { time: 133, jp: "今日は僕の人生で1番の転機なのさ",        ko: [{ text: "쿄오와 보쿠노 진세이데 이치반노 텐키나노사"}],         tr: "오늘은 내 인생 최대의 전환기 인거야" },
+        { time: 140.5, jp: "ここまでの悲しみや苦しみ全部",        ko: [{ text: "코코마데노 카나시미야 쿠루시미 젠부"}],         tr: "지금까지의 슬픔과 괴로움 전부" },
+        { time: 146.5, jp: "Oh この瞬間のため 抱きしめるための",        ko: [{ text: "Oh 코노 슌칸노"}, { text: " 타메", tag: "chant"}, { text: " 다키시메루"}, { text: " 타메노", tag: "chant"}],         tr: "이 순간을 위해 끌어안기 위한" },
+        { time: 150, jp: "「ずっとラブソング」さ",        ko: [{ text: "즛토 라부송구 사", tag: "chant"}],         tr: "「줄곧 러브송」 이야" },
+        { time: 152, jp: "だから今夜 キャトルミューティレイション",        ko: [{ text: "다카라 콘야", tag: "clap"}, { text: " 캬토루 뮤티 레이숀", tag: "chant"}],         tr: "그러니까 오늘밤 캐틀 뮤틸레이션" },
+        { time: 156, jp: "あなたの心奪う 超Nice",        ko: [{ text: "아나타노 코코로 우바우", tag: "clap"}, { text: " 초-나이스", tag: "chant"}],         tr: "네 마음을 빼앗는 초 Nice" },
+        { time: 160, jp: "な言葉で紡がれた 希望を",        ko: [{ text: "나 코토바데 츠무가레타 키보오오", tag: "clap"}],         tr: " 한 말로 이루어진 희망을 " },
+        { time: 162.5, jp: "隠さないラブソングがBGMさ",        ko: [{ text: "카쿠사나이 라부송구가", tag: "clap"}, { text: " 비지에무사", tag: "chant"}],         tr: "숨기지 않는 러브송이 BGM 이야" },
+        { time: 167, jp: "キャトルミューティレイション",        ko: [{ text: "캬토루 뮤티 레이숀", tag: "chant"}],         tr: "캐틀 뮤틸레이션" },
+        { time: 169, jp: "あなたの心奪う 超Nice",        ko: [{ text: "아나타노 코코로 우바우", tag: "clap"}, { text: " 초-나이스", tag: "chant"}],         tr: "네 마음을 빼앗는 초 Nice" },
+        { time: 172.5, jp: "な笑顔で紡がれた 希望を",        ko: [{ text: "나 에가오데 츠무가레타 키보오오", tag: "clap"}],         tr: " 한 미소로 이루어진 희망을 " },
+        { time: 176, jp: "隠さないラブソングを 僕に歌ってくれ",        ko: [{ text: "카쿠사나이 라부송구오 보쿠니 우탓테쿠레", tag: "clap"}],         tr: "숨기지 않는 러브송을 내게 노래해줘" },
+        { time: 183, jp: "oh yeah~ 「ずっとラブソング」~",        ko: [{ text: "oh yeah~ 즛토 라부송구"}],         tr: "oh yeah~ 「줄곧 러브송」" },
+
+      ],
+    },
+    {
+      id: "Iseijin'",
+      title: "위생인 (偉生人)",
+      youtubeId: "aDaWuvpB_Kw",
+      lyrics: [
+        { time: 2, jp: "理想郷探した 誰より早く",        ko: [{ text: "리소오쿄오 사가시타 다레요리 하야쿠"}],         tr: "이상향을 찾아 헤맸어 누구보다 빨리" },
+        { time: 8.5, jp: "間違いなく辿り着くために",        ko: [{ text: "마치가이나쿠 타도리츠쿠 타메니"}],         tr: "틀림없이 닿기 위해" },
+        { time: 14, ko: [{ text: "Wha wha wha yeah yeah x 4", tag: "chant"}]},
+        { time: 25, jp: "僕ら昔は灯台の下を探す子供のまま生きてた",        ko: [{ text: "보쿠라 무카시와 토오다이노 모토오 사가스 코도모노 마마 이키테타"}],         tr: "우린 어릴 적 등대 아래를 찾는 아이처럼 살았지" },
+        { time: 30.5, jp: "今もそんなに変わってないみたいだ ふふふ",        ko: [{ text: "이마모 손나니 카왓테나이 미타이다"}, { text: " 후후후", tag: "chant"}],         tr: "지금도 그렇게 달라지진 않은 것 같아 후후후" },
+        { time: 36, jp: "そんな僕らは何千と違う心に穴を開けて生きてた",        ko: [{ text: "손나 보쿠라와 난젠토 타가우 코코로니 아나오 아케테 이키테타"}],         tr: "그런 우리들은 수천번이고 어긋난 마음에 구멍을 내며 살아왔어" },
+        { time: 42, jp: "実はそんなに変わってないんだって ああそうだ",        ko: [{ text: "지츠와 손나니 카왓테나인다앗테 아아 소오다"}],         tr: "사실은 그다지 변하지 않았단걸 그래, 그렇지" },
+        { time: 47, jp: "先生ここにあるものじゃ",        ko: [{ text: "센세이", tag: "chant"}, { text: " 코코니 아루 모노쟈", tag: "clap"}],         tr: "선생님, 여기 있는 것만으로는" },
+        { time: 50.5, jp: "全然足りなかったような 悲しみが未来を",        ko: [{ text: "젠젠", tag: "chant"}, { text: " 타리나캇타 요오나 카나시미가 미라이오", tag: "clap"}],         tr: "전혀 충분하지 않은 듯한 슬픔이 미래를 " },
+        { time: 56.5, jp: "そう、作っているって",        ko: [{ text: "소오 츠쿳테이룻테", tag: "chant"}],         tr: "맞아, 만들어 가고 있다고" },
+        { time: 59, jp: "先生ここにあるものじゃ",        ko: [{ text: "센세이", tag: "chant"}, { text: " 코코니 아루 모노쟈", tag: "clap"}],         tr: "선생님, 여기 있는 것만으로는" },
+        { time: 61.5, jp: "全然足りなかったような 愛しさと未来を",        ko: [{ text: "젠젠", tag: "chant"}, { text: " 타리나캇타 요오나 이토시사토 미라이오", tag: "clap"}],         tr: "전혀 충분하지 않은 듯한 사랑스러움과 미래를" },
+        { time: 67.5, jp: "もう、笑っていこうぜ",        ko: [{ text: "모오 와랏테이코오제", tag: "chant"}],         tr: "이제, 웃으며 나아가자" },
+        { time: 70.5, jp: "子供の頃は世界を守って精一杯 ただ、めいっぱいだった",        ko: [{ text: "코도모노 코로와 세카이오 마못테 세잇파이 타다 메잇파이 닷타"}],         tr: "어릴 적엔 세상을 지키려 애썼고 그저 있는 힘껏이었어" },
+        { time: 82, jp: "でっかくなったが変わることが苦しいなら やめてたのに",        ko: [{ text: "뎃카쿠 낫타가 카와루 코토가 쿠루시이나라 야메테타노니"}],         tr: "컸지만 변하는 게 괴롭다면 진작 포기했을 텐데" },
+        { time: 92.5, jp: "「胸にいっぱいの葛藤と愛しさでまだ",        ko: [{ text: "무네니 잇파이노 캇토오토 이토시사데 마다", tag: "both"}],         tr: "가슴 가득한 갈등과 그리움 속에서도 아직은" },
+        { time: 96.5, jp: "変わることができてた」",        ko: [{ text: "카와루 코토가 데키테타", tag: "both"}],         tr: "변할 수 있었어" },
+        { time: 98.5, jp: "ずっとそんなに苦しまなくたって もういいよ",        ko: [{ text: "즛토 손나니 쿠루시마나쿠탓테 모오 이이요 "}],         tr: "계속 그렇게 아파하지 않아도 돼 이젠 됐어요" },
+        { time: 104, jp: "先生ここにあるものじゃ",        ko: [{ text: "센세이", tag: "chant"}, { text: " 코코니 아루 모노쟈", tag: "clap"}],         tr: "선생님, 여기 있는 것만으로는" },
+        { time: 106.5, jp: "全然足りなかったような 愛しさと未来を",        ko: [{ text: "젠젠", tag: "chant"}, { text: " 타리나캇타 요오나 이토시사토 미라이오", tag: "clap"}],         tr: "전혀 충분하지 않은 듯한 사랑스러움과 미래를" },
+        { time: 113, jp: "もう、笑っていこうぜ",        ko: [{ text: "모오 와랏테이코오제", tag: "chant"}],         tr: "이제, 웃으며 나아가자" },
+        { time: 115.5, ko: [{ text: "Wha wha wha yeah yeah x 3 True True True", tag: "chant"}]},
+        { time: 127, ko: [{ text: "Wha wha wha yeah yeah x 4", tag: "chant"}]},
+        { time: 138, jp: "理想郷目指した 誰より早く",        ko: [{ text: "리소오쿄오 메자시타 다레요리 하야쿠"}],         tr: "이상향을 목표했어 누구보다 빨리" },
+        { time: 144, jp: "間違いなく 自分のために",        ko: [{ text: "마치가이나쿠 지분노 타메니"}],         tr: "틀림없이 나 자신을 위해" },
+        { time: 149.5, jp: "そこから根差した 誰より高く",        ko: [{ text: "소코카라 네자시타 다레요리 타카쿠"}],         tr: "그곳에서 뿌리내렸어 누구보다 높이" },
+        { time: 155, jp: "幸せ目指した だからさ",        ko: [{ text: "시아와세 메자시타 다카라사"}],         tr: "행복을 향해 달려왔어 그러니까 말이야" },
+        { time: 159.5, jp: "ねぇどうだい 先生ここにあるものじゃ",        ko: [{ text: "네 도오다이 센세이", tag: "chant"}, { text: " 코코니 아루 모노쟈", tag: "clap"}],         tr: "있잖아, 어때? 선생님, 여기 있는 것만으로는" },
+        { time: 163, jp: "全然足りなかったような 悲しみが未来を",        ko: [{ text: "젠젠", tag: "chant"}, { text: " 타리나캇타 요오나 카나시미가 미라이오", tag: "clap"}],         tr: "전혀 충분하지 않은 듯한 슬픔이 미래를 " },
+        { time: 169.5, jp: "そう、作っているって",        ko: [{ text: "소오 츠쿳테이룻테", tag: "chant"}],         tr: "맞아, 만들어 가고 있다고" },
+        { time: 171.5, jp: "先生ここにあるものじゃ",        ko: [{ text: "센세이", tag: "chant"}, { text: " 코코니 아루 모노쟈", tag: "clap"}],         tr: "선생님, 여기 있는 것만으로는" },
+        { time: 174.5, jp: "全然足りなかったような 愛しさと未来を",        ko: [{ text: "젠젠", tag: "chant"}, { text: " 타리나캇타 요오나 이토시사토 미라이오", tag: "clap"}],         tr: "전혀 충분하지 않은 듯한 사랑스러움과 미래를" },
+        { time: 180.5, jp: "もう、笑っていこうぜ",        ko: [{ text: "모오 와랏테이코오제", tag: "chant"}],         tr: "이제, 웃으며 나아가자" },
+        { time: 183, jp: "Wha wha wha yeah yeah x 3 もう、笑っていこうぜ",        ko: [{ text: "Wha wha wha yeah yeah x 3 모오 와랏테이코오제", tag: "chant"}],         tr: "이제, 웃으며 나아가자"},
+        { time: 192, jp: "ああもうつかれちまったろ",        ko: [{ text: "아아 모오 츠카레치맛타로"}],         tr: "아아, 이제 지쳐버렸지" },
+        { time: 194.5, jp: "Wha wha wha yeah yeah x 3 もう、笑っていこうぜ",        ko: [{ text: "Wha wha wha yeah yeah x 3 모오 와랏테이코오제", tag: "chant"}],         tr: "이제, 웃으며 나아가자"},
+
+
+      ],
+    },
+    {
+      id: "ZERO",
+      title: "ZERO",
+      youtubeId: "Fs7MW0rx9Cw",
+      lyrics: [
+        { time: 24,  ko: [{ text: "Hate His fire picks are hailing down"}],         tr: "증오 그의 불꽃이 쏟아져내리고 있어" },
+        { time: 31,  ko: [{ text: "Ain't been caught in night"}],         tr: "밤이 되어도 잡을 수 없어" },
+        { time: 35.5,  ko: [{ text: "But when we caught, then blow them down"}],         tr: "하지만 우리가 잡힌다면 녀석들을 날려버릴 거야" },
+        { time: 39,  ko: [{ text: "Oh, yeah You're ready now"}],         tr: "준비됐어?" },
+        { time: 41.5,  ko: [{ text: "It's gonna rot in the cells"}],         tr: "세포 속에서 썩어갈 준비" },
+        { time: 44.5,  ko: [{ text: "It's gonna rot in your brain now"}],         tr: "지금 너의 뇌도 썩어가고 있어" },
+        { time: 48, ko: [{ text: "Na Na Na Na Na Na Na", tag: "chant"}]},
+        { time: 51,  ko: [{ text: "Saw them talking about"}],         tr: "그들이 이야기하는 것을 봤어" },
+        { time: 53.5,  ko: [{ text: "It's gonna rock and then rain down"}],         tr: "흔들리다 비가 내릴 거야" },
+        { time: 57, ko: [{ text: "Na Na Na Na Na Na Na Hey, Now", tag: "chant"}]},
+        { time: 62.5,  ko: [{ text: "Put out a hand to dance now? Who want?"}],         tr: "손 내밀고 춤 춰보지 않을래? 어때?" },
+        { time: 68, ko: [{ text: "Na Na Na Hey, Now", tag: "chant"}]},
+        { time: 71.5,  ko: [{ text: "Put out a hand to dance now?"}],         tr: "손 내밀고 춤 춰보지 않을래??" },
+        { time: 76,  ko: [{ text: "The world drags you down"}],         tr: "세상은 널 끌어내릴 거야" },
+        { time: 97,  ko: [{ text: "Hate I've drawn him about a thousand times"}],         tr: "증오 그걸 1000번 정도 그려봤어" },
+        { time: 104,  ko: [{ text: "Let me call them Mana"}],         tr: "그걸 '마나'라고 부를게" },
+        { time: 108,  ko: [{ text: "I'm broken and they don't fall down"}],         tr: "난 끝났지만 그들은 쓰러지지 않았어" },
+        { time: 112,  ko: [{ text: "Oh, you'll tell me inside"}],         tr: "오, 넌 마음속으로 알려주었겠지" },
+        { time: 114.5,  ko: [{ text: "You got it rocking around"}],         tr: "넌 그걸 이리저리 흔들고 있어" },
+        { time: 117.5,  ko: [{ text: "It's gonna rot in your brain now"}],         tr: "지금 너의 뇌도 썩어가고 있어" },
+        { time: 121, ko: [{ text: "Na Na Na Na Na Na Na", tag: "chant"}]},
+        { time: 124.5,  ko: [{ text: "Saw them walking around"}],         tr: "그들이 돌아다니는 것을 봤어" },
+        { time: 126.5,  ko: [{ text: "It's gonna rock and then rain down"}],         tr: "흔들리다 비가 내릴 거야" },
+        { time: 130, ko: [{ text: "Na Na Na Na Na Na Na Hey, Now", tag: "chant"}]},
+        { time: 135.5,  ko: [{ text: "Put out a hand to dance now? Who want"}],         tr: "손 내밀고 춤 춰보지 않을래? 어때?" },
+        { time: 141, ko: [{ text: "Na Na Na Hey, Now", tag: "chant"}]},
+        { time: 145,  ko: [{ text: "Put out a hand to dance now?"}],         tr: "손 내밀고 춤 춰보지 않을래?" },
+        { time: 149,  ko: [{ text: "The world drags you down"}],         tr: "세상은 널 끌어내릴 거야" },
+        { time: 152,  ko: [{ text: "Oh, baby There's so many around"}],         tr: "주위에 많은 사람들이 있어" },
+        { time: 156,  ko: [{ text: "So it's been taxing"}],         tr: "그러니 지치게 되는 거야" },
+        { time: 158,  ko: [{ text: "You loving something new"}],         tr: "넌 새로운 무언갈 사랑하고 있어" },
+        { time: 161,  ko: [{ text: "Hold me badly to be buddy"}],         tr: "친구가 되려면 날 세게 안아줘" },
+        { time: 165,  ko: [{ text: "You want me? Hey, rock with me You, give"}],         tr: "날 원해? 나와 함께 록을 하자 넌, 나에게" },
+        { time: 168, ko: [{ text: "Na Na Na Hey, Now", tag: "chant"}]},
+        { time: 172,  ko: [{ text: "Put out a hand to dance now? Who want"}],         tr: "손 내밀고 춤 춰보지 않을래? 어때?" },
+        { time: 178, ko: [{ text: "Na Na Na Hey, Now", tag: "chant"}]},
+        { time: 181,  ko: [{ text: "Put out a hand to dance now?"}],         tr: "손 내밀고 춤 춰보지 않을래?" },
+        { time: 185.5,  ko: [{ text: "The world drags"}],         tr: "세상은 널 끌어내릴 거야" },
+        { time: 187, ko: [{ text: "Na Na Na Hey, Now", tag: "chant"}]},
+        { time: 190.5,  ko: [{ text: "Put out a hand to dance now? Who want"}],         tr: "손 내밀고 춤 춰보지 않을래? 어때?" },
+        { time: 196, ko: [{ text: "Na Na Na Hey, Now", tag: "chant"}]},
+        { time: 200,  ko: [{ text: "Put out a hand to dance now?"}],         tr: "손 내밀고 춤 춰보지 않을래?" },
+        { time: 204,  ko: [{ text: "The world drags you down"}],         tr: "세상은 널 끌어내릴 거야" },
+
+      ],
+    },
+    {
+      id: "SonnaBitternaHanashi)",
+      title: "그런 bitter한 이야기 (そんなbitterな話)",
+      youtubeId: "V-gxqhWEbxI",
+      lyrics: [
+        { time: 19.5, jp: "思い出すようなmidnight",        ko: [{ text: "오모이 다스요오나 midnight"}],         tr: "생각이 날거같아 midnight" },
+        { time: 22, jp: "苦い思い出もblueも",        ko: [{ text: "니가이 오모이데모 blue모"}],         tr: "씁쓸한 생각도 blue도" },
+        { time: 25, jp: "僕ら離れても案外",        ko: [{ text: "보쿠라 하나레테모 안가이"}],         tr: "우리는 멀어져도 의외로" },
+        { time: 27, jp: "隠し持ってる 言い合ったよね good night",        ko: [{ text: "카쿠시못테루​ 이이앗타요네 good night"}],         tr: "간직하고 있었지 서로 이야기했지 good night" },
+        { time: 33, jp: "そんな退屈なflowも",        ko: [{ text: "손나 타이쿠츠나 flow모"}],         tr: "그런 따분한 flow도" },
+        { time: 36, jp: "僕らここまで案外 うまくやってたよね",        ko: [{ text: "보쿠라 코코마데 안가이 우마쿠 얏테타요네"}],         tr: "우리는 여기까지 의외로 잘 지내온거 같은데" },
+        { time: 40.5, jp: "こんなことじゃあ 出会わなきゃよかったな",        ko: [{ text: "콘나 코토쟈아", tag: "chant"}, {text: " 데아와나캬 요캇타나"}],         tr: "이런 일이라면 만나지 않은게 좋았으려나" },
+        { time: 46, jp: "そんなことじゃあ ラブコメみたいなくだりで",        ko: [{ text: "손나 코토쟈아", tag: "chant"}, {text: " 라부코메미타이나 쿠다리데"}],         tr: "그런 일이라면​ 러브코미디 같은 구절로" },
+        { time: 51.5, jp: "間違えて運命の誰かに会って",        ko: [{ text: "마치가에테 운메에노 다레카니 앗테"}],         tr: "실수로 운명의 누군가를 만나" },
+        { time: 57.5, jp: "恋しちゃうような甘みだが",        ko: [{ text: "코이시차우요오나 아마미다가"}],         tr: "사랑하게 될거 같은 단맛이지만" },
+        { time: 62.5, jp: "ほろ苦い、そう苦い 僕たちの望む愛やらの出口は",        ko: [{ text: "호로 니가이 소오 니가이 보쿠타치노 노조무 아이야라노 데구치와"}],         tr: "씁쓰레한, 정말 씁쓸한 우리들이 원하던 사랑같은 출구는" },
+        { time: 73.5, jp: "消えることも 見えることも",        ko: [{ text: "키에루"}, { text:  " 코토모", tag: "chant"}, { text: " 미에루"}, { text:  " 코토모", tag: "chant"}],         tr: "사라지는 것도 보이는 것도" },
+        { time: 79, jp: "忘れることもできぬように",        ko: [{ text: "와스레루 코토모 데키누요오니"}],         tr: "잊는 것마저도 못 할 것 같아서" },
+        { time: 84, jp: "ほろ苦い、そう苦い 僕たちの思う愛やらの未来は",        ko: [{ text: "호로 니가이 소오 니가이 보쿠타치노 노조무 아이야라노 미라이와"}],         tr: "씁쓰레한, 정말 씁쓸한​ 우리들이 원하던 사랑같은 미래는" },
+        { time: 95, jp: "消えることも 見えることも",        ko: [{ text: "키에루"}, { text:  " 코토모", tag: "chant"}, { text: " 미에루"}, { text:  " 코토모", tag: "chant"}],         tr: "사라지는 것도 보이는 것도" },
+        { time: 100.5, jp: "忘れることもできぬように",        ko: [{ text: "와스레루 코토모 데키누요오니"}],         tr: "잊는 것마저도 못 할 것 같아서​" },
+        { time: 106, jp: "愛おしいのさ",        ko: [{ text: "이토오시이노사​"}],         tr: "애처로운거야​" },
+        { time: 118, jp: "それはもちろんhot and black",        ko: [{ text: "소레와 모치론 hot and black"}],         tr: "그것은 당연히 hot and black" },
+        { time: 120, jp: "颯爽と火傷しな でも会話はまだ続けるぜ",        ko: [{ text: "삿소오토 야케도시나 데모 카이와와 마다 츠즈케루제"}],         tr: "뚜렷한 화상을 입었지만 그래도 대화는 아직 계속될거야" },
+        { time: 127.5, jp: "思い出してるそのgood time",        ko: [{ text: "오모이다시테루 소노 good time"}],         tr: "생각해냈을 그 good time" },
+        { time: 130.5, jp: "酔っ払ってたよ、そのflowは",        ko: [{ text: "욧파랏테타요 소노 flow와"}],         tr: "취해있었지, 그 flow는" },
+        { time: 133, jp: "僕ら近くても案外 隠し持ってたよね",        ko: [{ text: "보쿠라 치카쿠테모 안가이 카쿠시못테타요네​"}],         tr: "우리는 가까웠지만 의외로 간직하고 있었었지" },
+        { time: 138, jp: "こんなことじゃあ 出会わなきゃよかったな",        ko: [{ text: "콘나 코토쟈아", tag: "chant"}, {text: " 데아와나캬 요캇타나​"}],         tr: "이런 일이라면 만나지 않은게 좋았으려나" },
+        { time: 143, jp: "そんなことじゃあ ラブコメみたいな2人を",        ko: [{ text: "손나 코토쟈아", tag: "chant"}, {text: " 라부코메미타이나 후타리오​​"}],         tr: "러브코미디 같은 두 사람은" },
+        { time: 148.5, jp: "間違えて運命の何かが繋いで",        ko: [{ text: "마치가에테 운메에노 나니카가 츠나이데​"}],         tr: "실수로 운명의 무언가와 연결되어​" },
+        { time: 154.5, jp: "恋しちゃうような甘みだが",        ko: [{ text: "코이시차우요오나 아마미다가"}],         tr: "사랑하게 될거 같은 단맛이지만" },
+        { time: 159.5, jp: "ほろ苦い、そう苦い 僕たちの望む愛やらの入口は",        ko: [{ text: "호로니가이 소오 니가이 보쿠타치노 노조무 아이야라노 이리구치와"}],         tr: "씁쓰레한, 정말 씁쓸한 우리들이 원하던 사랑같은 입구는" },
+        { time: 170.5, jp: "消えることも 見えることも",        ko: [{ text: "키에루"}, { text:  " 코토모", tag: "chant"}, { text: " 미에루"}, { text:  " 코토모", tag: "chant"}],         tr: "사라지는 것도 보이는 것도" },
+        { time: 176, jp: "忘れることもできぬほどに​",        ko: [{ text: "와스레루 코토모 데키누호도니"}],         tr: "잊는 것마저도 못 할 정도로" },
+        { time: 181, jp: "苦すぎるから​",        ko: [{ text: "니가 스기루카라"}],         tr: "너무 씁슬하니까" },
+        { time: 205, jp: "癖になった、その苦味は​",        ko: [{ text: "쿠세니 낫타 소노 니가미와"}],         tr: "습관이 됐지, 그 씁쓸함이" },
+        { time: 209, jp: "甘さなど「いいから」と置いてきたよ​",        ko: [{ text: "아마사나도 이이카라 토오이테키타요"}],         tr: "단맛은 말야 『 괜찮으니까 』라며 두고왔었어" },
+        { time: 216, jp: "濃い刺激食らった その味蕾が​",        ko: [{ text: "코이 시게키 쿠랏타 소노 미라이가"}],         tr: "진한 자극을 받은 그 미뢰(맛봉오리)가" },
+        { time: 220, jp: "いうんだよ これはそう​",        ko: [{ text: "이운다요"}, { text:  " 코레와 소오", tag: "chant"}],         tr: "​이야기해 그건 말야" },
+        { time: 224, jp: "ほろ苦い、あぁ苦い 僕たちの望む愛やらの出口は",        ko: [{ text: "호로 니가이 아아 니가이 보쿠타치노 노조무 아이야라노 데구치와"}],         tr: "씁쓰레한, 아아 씁쓸한 우리들이 원하던 사랑같은 출구는" },
+        { time: 235.5, jp: "消えることも 見えることも",        ko: [{ text: "키에루"}, { text:  " 코토모", tag: "chant"}, { text: " 미에루"}, { text:  " 코토모", tag: "chant"}],         tr: "사라지는 것도 보이는 것도" },
+        { time: 240.5, jp: "忘れることもできぬように",        ko: [{ text: "와스레루 코토모 데키누요오니"}],         tr: "잊는 것마저도 못 할 것같이​" },
+        { time: 246, jp: "ほろ苦い、もう苦い 僕たちの思う愛やらの未来は",        ko: [{ text: "호로 니가이 모오 니가이 보쿠타치노 오모우 아이야라노 미라이와 "}],         tr: "씁쓰레한, 더욱 씁쓸한​ 우리가 생각한 사랑같은 미래는" },
+        { time: 257, jp: "消えることも 見えることも",        ko: [{ text: "키에루"}, { text:  " 코토모", tag: "chant"}, { text: " 미에루"}, { text:  " 코토모", tag: "chant"}],         tr: "사라지는 것도 보이는 것도" },
+        { time: 262, jp: "忘れることもできぬゆえに​",        ko: [{ text: "와스레루 코토모 데키누 유에니"}],         tr: "잊는 것마저도 못하기 때문에​​" },
+        { time: 267, jp: "愛おしいのさ​",        ko: [{ text: "이토오시이노사​"}],         tr: "애처로운거야​​ " },
+
+      ],
+    },
+    {
+      id: "Fujin",
+      title: "풍신 (風神)",
+      youtubeId: "yiU0I0tvt6s",
+      lyrics: [
+        { time: 13, jp: "誰よりも 「救いたい」 と悲劇を気取ってた",        ko: [{ text: "다레 요리모 스쿠이타이 토 히게키오 키돗테타"}],         tr: "누구보다도 「구하고 싶다」 며 비극을 연기했어" },
+        { time: 23, jp: "面倒よりも それが砕いても、煮込んでも",        ko: [{ text: "멘도오 요리모 소레가 쿠다이테모 니콘데모"}],         tr: "번거롭다기 보단 그것이 부숴도, 끓여도" },
+        { time: 30, jp: "大脳の意思では 静観がキメの一手なんだって",        ko: [{ text: "타베레나이 유에니"}, { text:  " 다이노오노 이시데와 하", tag: "chant"}],         tr: "먹을 수 없었기 때문에 대뇌의 생각엔" },
+        { time: 36, jp: "静観がキメの一手なんだって",        ko: [{ text: "세이칸가 키메노잇테 난닷테"}],         tr: "가만히 지켜보는게 좋은 판단이라네" },
+        { time: 41.5, jp: "だが、心臓が言うには",        ko: [{ text:  "다가 신조오가 유우니와 하", tag: "chant"}],         tr: "하지만 심장이 말하길" },
+        { time: 46, jp: "芽吹けば栄養さ",        ko: [{ text: "메부케바 에이요오사"}],         tr: "싹이 났다면, 양분이라-네" },
+        { time: 50.5, jp: "この先も誰かを想うたび",        ko: [{ text: "코노사키모"}, { text:  " 다레카오 오모우타비", tag: "chant"}],         tr: "앞으로 누군가를 생각할 때 마다" },
+        { time: 55.5, jp: "風纏い擦り傷が絶えないだろう",        ko: [{ text: "카제마토이"}, { text:  " 스리 키즈가 타에 나이다로오", tag: "chant"}],         tr: "바람에 휘감겨 생채기가 끊이질 않겟지" },
+        { time: 60.5, jp: "だがやがてこの風、受けるたびに",        ko: [{ text: "다가 야가테"}, { text:  " 코노카제 우케루 타비니", tag: "chant"}],         tr: "하지만 머지않아 이 바람, 맞을 때마다" },
+        { time: 65.5, jp: "その、変え難い ぬくい痛みに",        ko: [{ text: "소노 카에가타이 누쿠이 이타미니"}],         tr: "그 변치않을 따스한 아픔에" },
+        { time: 70, jp: "報われていたい はず...",        ko: [{ text: "무쿠와레 테이타이"}, { text:  " 하즈 x 3", tag: "chant"}],         tr: "보답 받고 싶었을 거야 " },
+        { time: 91.5, jp: "ジリジリ 頬つたって痛いよ",        ko: [{ text: "지리 지리 호오 츠탓테 이타이요"}],         tr: "찌릿 찌릿 뺨을 따라 아파" },
+        { time: 95.5, jp: "芽吹いた ヒラヒラ 喉元つたって",        ko: [{ text: "메부이타 히라 히라 노도 모토 츠탓테"}],         tr: "싹이 텄어 나풀 나풀 목구멍을 따라" },
+        { time: 101.5, jp: "吸い込み 肺が痛いよ",        ko: [{ text: "스이 코미 하이가 이타이요"}],         tr: "들이마셔 폐가 아파" },
+        { time: 106, jp: "でもね トクトク あたたかいね",        ko: [{ text: "데모네 토쿠 토쿠 아타타카이네"}],         tr: "하지만 두근 두근 따뜻하네" },
+        { time: 110.5, jp: "それが 大脳の意思では",        ko: [{ text: "소레가"}, { text:  " 다이노오노 이시데와 하", tag: "chant"}],         tr: "그것이 대뇌의 생각엔" },
+        { time: 115, jp: "食わず嫌いがキメの一手だったって",        ko: [{ text: "쿠와즈 키라이가 키메노 잇테닷탓테"}],         tr: "선입견을 가지는게 좋은 수 라네" },
+        { time: 121, jp: "また、心臓が言うには",        ko: [{ text:  "마타 신조오가 유우니와 하", tag: "chant"}],         tr: "그에, 심장이 말하길" },
+        { time: 125, jp: "君もそう、風神さ",        ko: [{ text: "키미모 소오 후우진사"}],         tr: "너도 그래, 풍신 이야" },
+        { time: 129.5, jp: "この先も誰かを想うたび",        ko: [{ text: "코노사키모"}, { text:  " 다레카오 오모우타비", tag: "chant"}],         tr: "앞으로 누군가를 생각할 때 마다" },
+        { time: 134.5, jp: "風纏い擦り傷が絶えないだろう",        ko: [{ text: "카제마토이"}, { text:  " 스리 키즈가 타에 나이다로오", tag: "chant"}],         tr: "바람에 휘감겨 생채기가 끊이질 않겟지" },
+        { time: 139.5, jp: "だがやがてこの風、受けるたびに",        ko: [{ text: "다가 야가테"}, { text:  " 코노카제 우케루 타비니", tag: "chant"}],         tr: "하지만 머지않아 이 바람, 맞을 때마다" },
+        { time: 144.5, jp: "その、変え難い ぬくい痛みに",        ko: [{ text: "소노 카에가타이 누쿠이 이타미니"}],         tr: "그 변치않을 따스한 아픔에" },
+        { time: 149.5, jp: "報われていたい はず...",        ko: [{ text: "무쿠와레 테이타이"}, { text:  " 하즈 x 3", tag: "chant"}],         tr: "보답 받고 싶었을 거야 " },
+        { time: 160, jp: "もしもこの世の隙間に",        ko: [{ text: "모시모코노 요노 스키마니"}],         tr: "만약 이 세상의 틈새에" },
+        { time: 165, jp: "愛を少し分けられたなら",        ko: [{ text: "아이오 스코시 와케 라레타나라"}],         tr: "사랑을 조금 나누어줄 수 있었다면" },
+        { time: 170, jp: "それでこのぬくもりに",        ko: [{ text: "소레데코노 누쿠모리니"}],         tr: "그랬다면 이 온기에" },
+        { time: 175, jp: "隙間風も 凪ぐだろうか",        ko: [{ text: "스키마카제모 나구 다로오카"}],         tr: "틈새로 불어오는 바람도 잠잠해질 수 있을까" },
+        { time: 179.5, jp: "僕が、誰かを想うたび",        ko: [{ text: "보쿠가"}, { text:  " 다레카오 오모우타비", tag: "chant"}],         tr: "내가 누군가를 생각할 때 마다" },
+        { time: 184, jp: "風纏い擦り傷が絶えないだろう",        ko: [{ text: "카제마토이"}, { text:  " 스리 키즈가 타에 나이다로오", tag: "chant"}],         tr: "바람에 휘감겨 생채기가 끊이질 않겟지" },
+        { time: 189, jp: "だがやがてこの風、受けるたびに",        ko: [{ text: "다가 야가테"}, { text:  " 코노카제 우케루 타비니", tag: "chant"}],         tr: "하지만 머지않아 이 바람, 맞을 때마다" },
+        { time: 194, jp: "その、変え難い ぬくい痛みに",        ko: [{ text: "소노 카에가타이 누쿠이 이타미니"}],         tr: "그 변치않을 따스한 아픔에" },
+        { time: 198.5, jp: "拭われて あなたを想うたびに",        ko: [{ text: "누구와레테"}, { text:  " 아나타오 오모우 타비니", tag: "chant"}],         tr: "상처가 지워져 당신을 생각할 때마다" },
+        { time: 203.5, jp: "風纏い擦り傷が絶えないだろう",        ko: [{ text: "카제마토이"}, { text:  " 스리 키즈가 타에 나이다로오", tag: "chant"}],         tr: "바람에 휘감겨 생채기가 끊이질 않겟지" },
+        { time: 208.5, jp: "だがやがてこの風、受けるたびに",        ko: [{ text: "다가 야가테"}, { text:  " 코노카제 우케루 타비니", tag: "chant"}],         tr: "하지만 머지않아 이 바람, 맞을 때마다" },
+        { time: 214, jp: "その、変え難い ぬくい痛みに",        ko: [{ text: "소노 카에가타이 누쿠이 이타미니"}],         tr: "그 변치않을 따스한 아픔에" },
+        { time: 218.5, jp: "救われていた はず だから",        ko: [{ text: "스쿠와레테이타"}, { text:  " 하즈 x 2", tag: "chant"}, { text: " 다카라"}],         tr: "구원받고 있었을 거야 그러니까" },
+      ],
+    },
+    {
+      id: "Jonetsu",
+      title: "상열 (常熱)",
+      youtubeId: "fxtQ4Dsmqo0",
+      lyrics: [
+        { time: 0,         ko: [{ text: "비트에 맞춰 박수", tag: "clap" }],                                                    },
+        { time: 29, jp: "太陽系をちょうど抜けたあたりで",        ko: [{ text: "타이요-케-오 쵸-도 누케타 아타리데"}],         tr: "태양계를 막 벗어난 즈음에" },
+        { time: 36.5, jp: "思い出した",        ko: [{ text: "오모이다시타"}, { text:  " (다시타)", tag: "chant"}],         tr: "떠올렸어" },
+        { time: 42, jp: "何億年もループを抜けない旅を",        ko: [{ text: "난오쿠넨모 루-푸오 누케나이 타비오"}],         tr: "수억 년을 돌고 돌아도 벗어나지 못하는 여행을" },
+        { time: 49, jp: "思い出した",        ko: [{ text: "시테타 요-나"}, { text:  " (요-나)", tag: "chant"}],         tr: "하고 있었던 것만 같은" },
+        { time: 53, jp: "動悸に気づき出した。",        ko: [{ text: "도-키니 키즈키다시타"}],         tr: "두근거림을 깨닫기 시작했어." },
+        { time: 56.5, jp: "そのころには、視界にはもう靄がかかっていく",        ko: [{ text: "소노 코로니와, 시카이니와 모- 모야가 카캇테이쿠"}],         tr: "그 무렵엔, 시야엔 이미 안개가 끼기 시작해" },
+        { time: 64, jp: "正気を取り戻した。",        ko: [{ text: "(oh oh)", tag: "chant"}, { text:  " 쇼-키오 토리모도시타"}],         tr: "제정신을 되찾았어" },
+        { time: 69, jp: "そのころには、その機体はすでに止まっている。",        ko: [{ text: "소노 코로니와 소노 키타이와 스데니 토맛테이루"}],         tr: "그때쯤엔, 그 기체는 이미 멈춰 있어." },
+        { time: 77.5, jp: "いつだって君のことは",        ko: [{ text: "이츠닷테", tag: "chant"}, { text:  " 키미노 코토와"}],         tr: "언제나 너란 존재는" },
+        { time: 80.5, jp: "いつだって君のことは",        ko: [{ text: "소코나시데", tag: "chant"}, { text:  " 후레테타이나"}],         tr: "바닥 없이 닿고 싶어" },
+        { time: 83.5, jp: "平熱も上がるような毎日をあげるから",        ko: [{ text: "헤-네츠모 아가루 요-나"}, { text:  " 마이니치오 아게루카라", tag: "chant"}],         tr: "평소 체온마저 오를 듯한 매일을 줄 테니까" },
+        { time: 89.5, jp: "もうどうしたって君の心が",        ko: [{ text: "모-도-시탓테", tag: "chant"}, { text:  " 키미노 코코로가"}],         tr: "이제는 어떻게 해도 네 마음이" },
+        { time: 93, jp: "溶け出して、焦るほどの",        ko: [{ text: "토케다시테", tag: "chant"}, { text:  " 아세루 호도노"}],         tr: "녹아 흘러, 다급해질 만큼의" },
+        { time: 96, jp: "常熱を その鼓動に毎日あげるから」",        ko: [{ text: "조-네츠오 소노 코도-니"}, { text:  " 마이니치 아게루카라", tag: "chant"}],         tr: "항상 뜨거운 열기를 그 고동에 매일 줄 테니까" },
+        { time: 103.5, jp: "海底圏がちょうど見えたあたりで",        ko: [{ text: "카이테-켄가 쵸-도 미에타 아타리데"}],         tr: "해저권이 막 보이기 시작한 즈음에" },
+        { time: 111, jp: "思い出した",        ko: [{ text: "오모이다시타"}, { text:  " (다시타)", tag: "chant"}],         tr: "떠올렸어" },
+        { time: 116, jp: "何重圧も肌に溶ける",        ko: [{ text: "난주-아츠모 하다니 토케루"}],         tr: "몇 겹의 압력도 살갗에 녹아" },
+        { time: 120.5, jp: "血圧が上がるような",        ko: [{ text: "케츠아츠가 아가루 요-나"}, { text:  " (요-나)", tag: "chant"}],         tr: "혈압이 오르는 듯한" },
+        { time: 127, jp: "ぁ～あ 言葉が溶け出していくぅ",        ko: [{ text: "아~아 코토바가 토케다시테이쿠-"}],         tr: "아~아 말들이 녹아 흘러내려가" },
+        { time: 132, jp: "血圧乱して またもう指先痺れだし",        ko: [{ text: "케츠아츠 미다시테 마타 모- 유비사키 시비레다시"}],         tr: "혈압을 흐트러뜨리고 또다시 벌써 손끝이 저리기 시작해" },
+        { time: 139, jp: "この動悸に気づき出した。",        ko: [{ text: "코노 도-키니 키즈키다시타"}],         tr: "이 두근거림을 깨닫기 시작했어." },
+        { time: 143, jp: "そのころには、視界にはもう靄がかかっていく",        ko: [{ text: "소노 코로니와 시카이니와 모- 모야가 카캇테이쿠"}],         tr: "그 무렵엔, 시야엔 이미 안개가 자욱해서" },
+        { time: 151, jp: "正気を取り戻した。",        ko: [{ text: "(oh oh)", tag: "chant"}, { text:  " 쇼-키오 토리모도시타"}],         tr: "제정신을 되찾았어" },
+        { time: 155.5, jp: "そのころには、その液体はすでに上がっている。",        ko: [{ text: "소노 코로니와 소노 에키타이와 스데니 아갓테이루"}],         tr: "그때쯤엔, 그 액체는 이미 치솟아 있어." },
+        { time: 164, jp: "いつだって君のことは",        ko: [{ text: "이츠닷테", tag: "chant"}, { text:  " 키미노 코토와"}],         tr: "언제나 너란 존재는" },
+        { time: 167, jp: "いつだって君のことは",        ko: [{ text: "소코나시데", tag: "chant"}, { text:  " 후레테타이나"}],         tr: "바닥 없이 닿고 싶어" },
+        { time: 170, jp: "平熱も上がるような毎日をあげるから",        ko: [{ text: "헤-네츠모 아가루 요-나"}, { text:  " 마이니치오 아게루카라", tag: "chant"}],         tr: "평소 체온마저 오를 듯한 매일을 줄 테니까" },
+        { time: 176, jp: "もうどうしたって君の心が",        ko: [{ text: "모-도-시탓테", tag: "chant"}, { text:  " 키미노 코코로가"}],         tr: "이제는 어떻게 해도 네 마음이" },
+        { time: 179.5, jp: "溶け出して、焦るほどの",        ko: [{ text: "토케다시테", tag: "chant"}, { text:  " 아세루 호도노"}],         tr: "녹아 흘러, 다급해질 만큼의" },
+        { time: 182.5, jp: "常熱を その鼓動に毎日あげるから」",        ko: [{ text: "조-네츠오 소노 코도-니"}, { text:  " 마이니치 아게루카라", tag: "chant"}],         tr: "항상 뜨거운 열기를 그 고동에 매일 줄 테니까" },
+        { time: 189, jp: "ぁ～あ 言葉が溶け出していくぅ",        ko: [{ text: "아~아 코토바가 토케다시테이쿠-"}],         tr: "아~아 말들이 녹아 흘러내려가" },
+        { time: 194, jp: "脳圧満たして またもう夢見心地さ",        ko: [{ text: "노-아츠 미타시테 마타 모- 유메미고코치사"}],         tr: "뇌압을 가득 채우고 또다시 꿈꾸는 듯한 기분이야" },
+        { time: 201.5, jp: "いつだって君のことは",        ko: [{ text: "이츠닷테", tag: "chant"}, { text:  " 키미노 코토와"}],         tr: "언제나 너란 존재는" },
+        { time: 204.5, jp: "いつだって君のことは",        ko: [{ text: "소코나시데", tag: "chant"}, { text:  " 후레테타이나"}],         tr: "바닥 없이 닿고 싶어" },
+        { time: 207.5, jp: "平熱も上がるような毎日をあげるから",        ko: [{ text: "헤-네츠모 아가루 요-나"}, { text:  " 마이니치오 아게루카라", tag: "chant"}],         tr: "평소 체온마저 오를 듯한 매일을 줄 테니까" },
+        { time: 213.5, jp: "もうどうしたって君の心が",        ko: [{ text: "모-도-시탓테", tag: "chant"}, { text:  " 키미노 코코로가"}],         tr: "이제는 어떻게 해도 네 마음이" },
+        { time: 217, jp: "溶け出して、焦るほどの",        ko: [{ text: "토케다시테", tag: "chant"}, { text:  " 아세루 호도노"}],         tr: "녹아 흘러, 다급해질 만큼의" },
+        { time: 220, jp: "常熱を その鼓動に毎日あげるから」",        ko: [{ text: "조-네츠오 소노 코도-니"}, { text:  " 마이니치 아게루카라", tag: "chant"}],         tr: "항상 뜨거운 열기를 그 고동에 매일 줄 테니까" },
+        { time: 226,         ko: [{ text: "비트에 맞춰 박수", tag: "clap" }],                                                    },
+
+      ],
+    },
+    {
+      id: "Kagero",
+      title: "아지랑이 (かげろう)",
+      youtubeId: "gY-7i-T76o0",
+      lyrics: [
+        { time: 10, jp: "焼かれて逃げ水追いかけては 追いつけない。",        ko: [{ text: "야카레테 니게미즈 오 오이카케테와 오이츠케나이"}],         tr: "타오르는 아지랑이를 쫓아가 봐도 끝내 닿을 수 없어" },
+        { time: 17, jp: "おどけた魂が俺に魅せる幻。",        ko: [{ text: "오도케타 타마시이가 오레니 미세루 마보로시"}],         tr: "익살스러운 영혼이 내게 보여주는 환상" },
+        { time: 32, jp: "肩透かしで避けてた矢尻じゃ 突き抜けない。",        ko: [{ text: "카타스카시데 오케테타 야지리쟈 츠키누케나이"}],         tr: "허탕 치듯 피해왔던 화살촉으로는 꿰뚫을 수 없어" },
+        { time: 39, jp: "おどけた魂が どれも",        ko: [{ text: "오도케타 타마시이가 도레모"}],         tr: "익살스러운 영혼은 어느 것이든" },
+        { time: 42.5, jp: "揺れる言葉 揺れる影や 揺れる心を",        ko: [{ text: "유레루 코토바 유레루 카게야 유레루 코코로오"}],         tr: "흔들리는 말과 흔들리는 그림자, 흔들리는 마음을" },
+        { time: 50, jp: "許すのならば",        ko: [{ text: "유루스노"}, { text:  " 나라바", tag: "chant"}],         tr: "그것들을 용서할 수 있다면" },
+        { time: 53.5, jp: "この涙誰のために流せばいい",        ko: [{ text:  "코노 나미다 다레노 타메니 나가세바 이이", tag: "chant"}],         tr: "이 눈물은 누구를 위해 흘리면 되는 걸까" },
+        { time: 61, jp: "ベランダに落ちた鳥か 芽吹いた花か",        ko: [{ text:  " 베란다니 오치타 토리카 메부이타 하나카"}],         tr: "베란다에 떨어진 새를 위해서일까 새롭게 싹튼 꽃을 위해서일까", bg: "Oh Ah Ah Ah"},
+        { time: 67, jp: "忘れてたあの日憧れた僕か",        ko: [{ text: "와스레테타"}, { text:  " 아노 히 아코가레타 보쿠카", tag: "chant"}],         tr: "잊고 있었던, 그날 동경했던 나를 위해서일까" },
+        { time: 72.5, jp: "この涙何のために流せばいい",        ko: [{ text:  "코노 나미다 다레노 타메니 나가세바 이이", tag: "chant"}],         tr: "이 눈물은 무엇을 위해 흘리면 되는 걸까" },
+        { time: 80, jp: "目にかかる砂煙が 魅せてった熱か",        ko: [{ text:  " 메니 카카루 스나케무리가 미세텟타 네츠카"}],         tr: "눈앞을 뒤덮는 모래먼지가 내게 보여준 그 열기일까", bg: "Oh Ah Ah Ah" },
+        { time: 86, jp: "今こそ啸いてくれ かげろう",        ko: [{ text: "이마 코소 우소부이테 쿠레"}, { text:  " 카게로우", tag: "chant"}],         tr: "지금이야말로 포효해 줘 아지랑이" },
+        { time: 94, jp: "焚き付け織火光る童は 追いつけない。",        ko: [{ text: "타키츠케 오리비 히카루 와라베와 오이츠케나이"}],         tr: "타오르는 불꽃에 비치는 아이는 끝내 따라잡을 수 없어" },
+        { time: 101, jp: "おどけた魂が俺を帰せる幻。",        ko: [{ text: "오도케타 타마시이가 오레오 카에세루 마보로시"}],         tr: "익살스러운 영혼이 나를 되돌려 보내는 환상" },
+        { time: 116, jp: "膨張し、呼吸止まる肩から 鳴り止まない。",        ko: [{ text: "보우초우시 코큐우 토마루 카타카라 나리야마나이"}],         tr: "부풀어 올라 숨이 멎을 듯한 어깨에서 그 소리는 멈추지 않아" },
+        { time: 123, jp: "おどけた魂の 声が",        ko: [{ text: "오도케타 타마시이노 코에가"}],         tr: "익살스러운 영혼의 목소리가" },
+        { time: 126.5, jp: "揺れる言葉 揺れる影や 揺れる心が",        ko: [{ text: "유레루 코토바 유레루 카게야 유레루 코코로가"}],         tr: "흔들리는 말과 흔들리는 그림자, 흔들리는 마음이" },
+        { time: 134, jp: "呼び声ならば",        ko: [{ text: "요비고에"}, { text:  " 나라바", tag: "chant"}],         tr: "그것이 나를 부르는 목소리라면" },
+        { time: 137.5, jp: "この涙誰のために流せばいい",        ko: [{ text:  "코노 나미다 다레노 타메니 나가세바 이이", tag: "chant"}],         tr: "이 눈물은 누구를 위해 흘리면 되는 걸까" },
+        { time: 145, jp: "ベランダに落ちた鳥か 芽吹いた花か",        ko: [{ text:  " 베란다니 오치타 토리카 메부이타 하나카"}],         tr: "베란다에 떨어진 새를 위해서일까 새롭게 싹튼 꽃을 위해서일까", bg: "Oh Ah Ah Ah" },
+        { time: 151, jp: "忘れてたあの日憧れた僕か",        ko: [{ text: "와스레테타"}, { text:  " 아노 히 아코가레타 보쿠카", tag: "chant"}],         tr: "잊고 있었던, 그날 동경했던 나를 위해서일까" },
+        { time: 156.5, jp: "この涙何のために流せばいい",        ko: [{ text:  "코노 나미다 다레노 타메니 나가세바 이이", tag: "chant"}],         tr: "이 눈물은 무엇을 위해 흘리면 되는 걸까" },
+        { time: 164, jp: "目にかかる砂煙が 魅せてった熱か",        ko: [{ text:  " 메니 카카루 스나케무리가 미세텟타 네츠카"}],         tr: "눈앞을 뒤덮는 모래먼지가 내게 보여준 그 열기일까", bg: "Oh Ah Ah Ah" },
+        { time: 170, jp: "今こそ啸いてくれ かげろう",        ko: [{ text: "이마 코소 우소부이테 쿠레"}, { text:  " 카게로우", tag: "chant"}],         tr: "지금이야말로 포효해 줘 아지랑이" },
+        { time: 184.5, jp: "進めばいつか この先でまた",        ko: [{ text: "스스메바 이츠카 코노 사키데 마타"}],         tr: "앞으로 나아가다 보면 언젠가 이 길 끝에서 다시" },
+        { time: 189, jp: "奇跡を待つのだろう",        ko: [{ text: "키세키오 마츠노다로우"}],         tr: "기적을 기다리게 되겠지" },
+        { time: 193, jp: "ただ この熱がまた",        ko: [{ text: "타다 코노 네츠가 마타"}],         tr: "그저 이 뜨거움이 다시" },
+        { time: 196.5, jp: "向かい風を抜けて",        ko: [{ text: "무카이카제오 누케테"}],         tr: "맞바람을 뚫고 나아가" },
+        { time: 200.5, jp: "笑う魂ならば",        ko: [{ text:  "와라우 타마시이나라바", tag: "chant"}],         tr: "웃는 영혼이라면" },
+        { time: 204.5, jp: "この涙誰のために流せばいい",        ko: [{ text:  "코노 나미다 다레노 타메니 나가세바 이이", tag: "chant"}],         tr: "이 눈물은 누구를 위해 흘리면 되는 걸까" },
+        { time: 212, jp: "ベランダに落ちた烏が 咲かせた花か",        ko: [{ text:  " 베란다니 오치타 카라스가 咲かせた花か"}],         tr: "베란다에 떨어진 새를 위해서일까 새롭게 싹튼 꽃을 위해서일까", bg: "Oh Ah Ah Ah" },
+        { time: 218, jp: "湧き上がるこれまでの僕達か",        ko: [{ text: "와키아가루 코레마데노"}, { text:  " 보쿠타치카", tag: "chant"}],         tr: "지금껏 쌓여 온 우리 자신을 위해서일까" },
+        { time: 224, jp: "この涙何のために流せばいい",        ko: [{ text:  "코노 나미다 난노 타메니 나가세바 이이", tag: "chant"}],         tr: "이 눈물은 무엇을 위해 흘리면 되는 걸까" },
+        { time: 231, jp: "目にかかる砂煙が 魅せてった熱よ",        ko: [{ text:  " 메니 카카루 스나케무리가 미세텟타 네츠카"}],         tr: "눈앞을 뒤덮는 모래먼지가 내게 보여준 이 뜨거움이여", bg: "Oh Ah Ah Ah" },
+        { time: 237, jp: "今こそ啸いてくれ かげろう",        ko: [{ text: "이마 코소 우소부이테 쿠레"}, { text:  " 카게로우", tag: "chant"}],         tr: "지금이야말로 포효해 줘 아지랑이" },
+
+      ],
+    },
+    {
+      id: "IdeagaAfureteNemurenai",
+      title: "이데아가 넘쳐서 잠들 수 없어 (イデアが溢れて眠れない)",
+      youtubeId: "0u_zA8BJG6A",
+      lyrics: [
+        { time: 20.5, jp: "そこはかとなく 嫌いが勝つようになったね",        ko: [{ text: "소코와카토나쿠 키라이가 카츠요오니 낫타네"}],         tr: "왠지 모르게 싫은 감정이 앞서게 됐네" },
+        { time: 25, jp: "でも僕だけが いる世界が少し好きになった",        ko: [{ text: "데모 보쿠다케가 이루 세카이가 스코시 스키니 낫타"}],         tr: "하지만 나만이 있는 세계를 조금 좋아하게 됐어" },
+        { time: 29.5, jp: "言葉が 瞳閉じた僕の脳、宙を舞い",        ko: [{ text: "코토바가 히토미 토지타 보쿠노 노오, 추우오 마이"}],         tr: "말이 눈을 감은 내 뇌 속에서, 허공을 떠돌고" },
+        { time: 34, jp: "ととのえない 僕の脳になんか聞こえてきた",        ko: [{ text: "토토노에나이 보쿠노 노오니 난카 키코에테키타"}],         tr: "정리되지 않아 내 머릿속에 뭔가 들려왔어" },
+        { time: 40, jp: "「全てを失ったその後で",        ko: [{ text: "스베테오 우시낫타 소노 아토데"}],         tr: "모든 것을 잃은 그 뒤에" },
+        { time: 49, jp: "この先は終わらない旅をしよう」",        ko: [{ text: "코노 사키와 오와라나이 타비오 시요오"}],         tr: "앞으로는 끝나지 않는 여행을 하자" },
+        { time: 54, jp: "君がそう言うから",        ko: [{ text: "키미가 소오 이우카라"}],         tr: "네가 그렇게 말하니까" },
+        { time: 61, jp: "胸が ドキドキしだしたよ！",        ko: [{ text:  "무네가 도키도키 시다시타요!", tag: "chant"}],         tr: "가슴이 두근거리기 시작했어!" },
+        { time: 66.5, jp: "この 偶然の先、必然の先、言葉は光すらも超えて",        ko: [{ text:  "코노 구우젠노 사키, 히츠젠노 사키, 코토바와 히카리스라모 코에테", tag: "chant"}],         tr: "이 우연 너머, 필연 너머, 말은 빛마저도 넘어" },
+        { time: 75.5, jp: "この 天井の先、星々の先、宇宙の先、銀河を超えて",        ko: [{ text:  "코노 텐조오노 사키, 호시보시노 사키, 우추우노 사키, 긴가오 코에테", tag: "chant"}],         tr: "이 천장 너머, 별들 너머, 우주 너머, 은하를 넘어" },
+        { time: 84.5, jp: "間違いなく残るでしょう",        ko: [{ text: "마치가이나쿠 노코루데쇼오"}],         tr: "분명히 남게 되겠지", bg: "이데아가 아후레테 네무레나이" },
+        { time: 87, jp: "袖伸ばして未来を待とう",        ko: [{ text: "소데 노바시테 미라이오 마토오"}],         tr: "소매를 늘어뜨린 채 미래를 기다리자", bg: "이데아가 아후레테 네무레나이" },
+        { time: 89, jp: "僕の瞼流る 軌道はいつも同じ",        ko: [{ text: "보쿠노 마부타 나가루 키도오와 이츠모 오나지"}],         tr: "내 눈꺼풀에 흐르고 궤도는 언제나 같아", bg: "이데아가 아후레테 네무레나이" },
+        { time: 93.5, jp: "このイデアが描くでしょう",        ko: [{ text: "코노 이데아가 에가쿠데쇼오"}],         tr: "이 이데아가 그려내겠지", bg: "이데아가 아후레테 네무레나이" },
+        { time: 96, jp: "靴を履いて未来を待とう",        ko: [{ text: "쿠츠오 하이테 미라이오 마토오"}],         tr: "신발을 신고 미래를 기다리자", bg: "이데아가 아후레테 네무레나이" },
+        { time: 98, jp: "まだ、イデアが溢れて眠れない",        ko: [{ text: "마다, 이데아가 아후레테 네무레나이"}],         tr: "아직, 이데아가 넘쳐 잠들 수 없어", bg: "이데아가 아후레테 네무레나이" },
+        { time: 103, jp: "そこはかとなく 愛が何かわかる気がして",        ko: [{ text: "소코와카토나쿠 아이가 나니카 와카루 키가 시테"}],         tr: "왠지 모르게 사랑이 무엇인지 알 것 같아서" },
+        { time: 107, jp: "でも僕だけが わかることなんだってわかったんだ",        ko: [{ text: "데모 보쿠다케가 와카루 코토난닷테 와캇탄다"}],         tr: "하지만 나만이 알 수 있는 건 결국 나뿐이라는 걸 알게 됐어" },
+        { time: 112, jp: "言葉が 聞き取れぬほどの閃光に",        ko: [{ text: "코토바가 키키토레누 호도노 센코오니"}],         tr: "말이 들리지도 않을 만큼의 섬광 속에서" },
+        { time: 116.5, jp: "今僕だけが 見える速度まで加速していた",        ko: [{ text: "이마 보쿠다케가 미에루 소쿠도마데 카소쿠시테이타"}],         tr: "지금 나만이 보일 수 있는 속도까지 가속하고 있었어" },
+        { time: 122, jp: "「あとはそう、この旅の中で」",        ko: [{ text: "아토와 소오, 코노 타비노 나카데"}],         tr: "「그리고 말이야, 이 여행 속에서」" },
+        { time: 127.5, jp: "君がそう言うから",        ko: [{ text: "키미가 소오 이우카라"}],         tr: "네가 그렇게 말하니까" },
+        { time: 134, jp: "胸が ドキドキしだしたよ！",        ko: [{ text:  "무네가 도키도키 시다시타요!", tag: "chant"}],         tr: "가슴이 두근거리기 시작했어!" },
+        { time: 139.5, jp: "この 偶然の先、必然の先、言葉は光すらも超えて",        ko: [{ text:  "코노 구우젠노 사키, 히츠젠노 사키, 코토바와 히카리스라모 코에테", tag: "chant"}],         tr: "이 우연 너머, 필연 너머, 말은 빛마저도 넘어" },
+        { time: 148.5, jp: "この 天井の先、星々の先、宇宙の先、銀河を超えて",        ko: [{ text:  "코노 텐조오노 사키, 호시보시노 사키, 우추우노 사키, 긴가오 코에테", tag: "chant"}],         tr: "이 천장 너머, 별들 너머, 우주 너머, 은하를 넘어" },
+        { time: 158, ko: [{ text: "이데아가 아후레테 네무레나이 x 4 ", tag: "chant" }],                                                    },
+        { time: 176, jp: "忘れないでおこう",        ko: [{ text: "와스레나이데 오코오"}],         tr: "잊지 않고 있자" },
+        { time: 177.5, jp: "晴天と、この校舎に流れたあの曲を",        ko: [{ text: "세이텐토 코노 코오샤니 나가레타 아노 쿄쿠오"}],         tr: "맑게 갠 하늘과, 이 교사에 울려 퍼졌던 그 곡을" },
+        { time: 180.5, jp: "「時は、光をとらえた情景の",        ko: [{ text: "토키와 히카리오 토라에타 조오케이노"}],         tr: "시간은, 빛을 붙잡은 정경의" },
+        { time: 183, jp: "掴みあぐねた、淡い一瞬と",        ko: [{ text: "츠카미아구네타 아와이 잇슌토"}],         tr: "붙잡지 못한, 희미한 한순간과" },
+        { time: 185.5, jp: "忘れないでおこう",        ko: [{ text: "와스레나이데 오코오"}],         tr: "잊지 않고 있자" },
+        { time: 187, jp: "公転と、僕の軌跡が生み出す人生を",        ko: [{ text: "코오텐토 보쿠노 키세키가 우미다스 진세이오"}],         tr: "공전과, 나의 궤적이 만들어내는 삶을" },
+        { time: 189.5, jp: "忘れないでおこう",        ko: [{ text: "와스레나이데 오코오"}],         tr: "잊지 않고 있자" },
+        { time: 194, jp: "この 偶然の先、必然の先、言葉は光すらも超えて",        ko: [{ text:  "코노 구우젠노 사키 히츠젠노 사키 코토바와 히카리스라모 코에테", tag: "chant"}],         tr: "이 우연 너머, 필연 너머, 말은 빛마저도 넘어" },
+        { time: 203, jp: "この 天井の先、星々の先、宇宙の先、銀河を超えて",        ko: [{ text:  "코노 텐조오노 사키 호시보시노 사키 우추우노 사키 긴가오 코에테", tag: "chant"}],         tr: "이 천장 너머, 별들 너머, 우주 너머, 은하를 넘어" },
+        { time: 212, jp: "この 偶然の光、必然の光、運命は秩序を超えて",        ko: [{ text:  "코노 구우젠노 히카리 히츠젠노 히카리 운메이와 치츠조오 코에테", tag: "chant"}],         tr: "우연의 빛, 필연의 빛, 운명은 질서를 넘어" },
+        { time: 221.5, jp: "この 天井の光、星々の光、宇宙の光、銀河を超えて",        ko: [{ text:  "코노 텐조오노 히카리 호시보시노 히카리 우추우노 히카리 긴가오 코에테", tag: "chant"}],         tr: "천장의 빛, 별들의 빛, 우주의 빛, 은하를 넘어" },
+        { time: 231, jp: "間違いなく残るでしょう",        ko: [{ text: "마치가이나쿠 노코루데쇼오"}],         tr: "분명히 남게 되겠지", bg: "이데아가 아후레테 네무레나이" },
+        { time: 233, jp: "袖伸ばして未来を待とう",        ko: [{ text: "소데 노바시테 미라이오 마토오"}],         tr: "소매를 늘어뜨린 채 미래를 기다리자", bg: "이데아가 아후레테 네무레나이" },
+        { time: 235, jp: "僕の瞼流る 軌道はいつも同じ",        ko: [{ text: "보쿠노 마부타 나가루 키도오와 이츠모 오나지"}],         tr: "내 눈꺼풀에 흐르고 궤도는 언제나 같아", bg: "이데아가 아후레테 네무레나이" },
+        { time: 239.5, jp: "このイデアが描くでしょう",        ko: [{ text: "코노 이데아가 에가쿠데쇼오"}],         tr: "이 이데아가 그려내겠지", bg: "이데아가 아후레테 네무레나이" },
+        { time: 242.5, jp: "靴を履いて未来を待とう",        ko: [{ text: "쿠츠오 하이테 미라이오 마토오"}],         tr: "신발을 신고 미래를 기다리자", bg: "이데아가 아후레테 네무레나이" },
+        { time: 244.5, jp: "まだ、イデアが溢れて眠れない",        ko: [{ text: "마다 이데아가 아후레테 네무레나이"}],         tr: "아직, 이데아가 넘쳐 잠들 수 없어", bg: "이데아가 아후레테 네무레나이" },
+        { time: 250, ko: [{ text: "이데아가 아후레테 네무레나이 x 4 ", tag: "chant" }],                                                    },
+
       ],
     },
   ];
 
-
-  /* ------------------------------------------------------------------ */
-
   const app = document.getElementById("app");
   let countdownTimer = null;
-  let localPollTimer = null;
-  let localPlayStartWall = null;
-  let localPlayStartVideoTime = 0;
-  let localPollActive = false;
+  let player = null;
+  let syncTimer = null;
+  let autoScrollEnabled = true;
+  let currentSong = null;
 
   function pad(n){ return String(n).padStart(2,"0"); }
 
   function router(){
     stopCountdown();
-    stopLocalPoll();
+    destroyPlayer();
     const hash = location.hash.replace(/^#\/?/, "");
     if (hash.startsWith("song/")) {
       const id = hash.slice(5);
@@ -578,8 +1738,7 @@
 
           <nav class="main-menu">
             <button class="menu-btn" id="guide-btn">
-              <span class="menu-btn-label">떼창가이드</span>
-              <span class="menu-btn-sub">CHANT GUIDE</span>
+              <span class="menu-btn-label">Call Guide</span>
             </button>
           </nav>
         </div>
@@ -589,7 +1748,6 @@
     `;
 
     document.getElementById("guide-btn").addEventListener("click", ()=>{ location.hash = "#/guide"; });
-
     startCountdown();
   }
 
@@ -604,7 +1762,6 @@
 
         <section class="songs-section">
           <div class="songs-head">
-            <div class="eyebrow">CHANT GUIDE</div>
             <h2>떼창 가이드</h2>
             <p>곡을 선택하면 영상에 맞춰 가사 · 떼창 포인트를 확인할 수 있어요</p>
           </div>
@@ -659,14 +1816,10 @@
   const MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>';
   const CLAP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V7a2 2 0 0 1 4 0"/><path d="M12 13V5a2 2 0 0 1 4 0v8"/><path d="M16 13V7a2 2 0 0 1 4 0v6a7 7 0 0 1-7 7h-1a7 7 0 0 1-6.3-4"/><path d="M4 12l1-1"/><path d="M3 9l1.5-.5"/><path d="M4 6l1 1"/></svg>';
 
-  let autoScrollEnabled = true;
-  let currentSong = null;
-
   function renderSong(song){
     currentSong = song;
-    localPollActive = false;
     app.innerHTML = `
-      <div class="song-page">
+      <div class="song-page"${song.cover ? ` style="--song-cover:url('${song.cover}')"` : ""}>
         <div class="song-fixed-top">
           <div class="song-topbar">
             <button class="back-btn" id="back-btn">← 목록</button>
@@ -674,15 +1827,18 @@
           </div>
 
           <div class="video-wrap">
-            <div class="video-frame" id="video-frame">${videoIframeHtml(song.youtubeId)}</div>
+            <div class="video-frame">
+              <div id="yt-player"></div>
+            </div>
             <a class="watch-on-yt" href="https://www.youtube.com/watch?v=${encodeURIComponent(song.youtubeId)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>
           </div>
 
-          <div class="lyrics-note"><span class="dot">●</span> 가사를 탭하면 해당 위치로 영상이 이동해요(자동재생). 그 지점부터 재생 중인 소절이 자동으로 하이라이트됩니다.</div>
+          <div class="lyrics-note"><span class="dot">●</span> 가사를 탭하면 해당 위치로 영상이 이동해요. 영상 재생 상태에 따라 가사 하이라이트가 동기화됩니다.</div>
 
           <div class="lyrics-legend">
             <span class="legend-item"><span class="legend-icon chant">${MIC_SVG}</span>떼창</span>
             <span class="legend-item"><span class="legend-icon clap">${CLAP_SVG}</span>박수</span>
+            <span class="legend-item"><span class="legend-icon chant">${MIC_SVG}</span><span class="legend-icon clap">${CLAP_SVG}</span>떼창+박수</span>
           </div>
         </div>
 
@@ -692,10 +1848,12 @@
               return `
               <li>
                 <button class="lyric-line" data-time="${l.time}" data-idx="${i}">
+                  <span class="lyric-icons">${lyricIconsHtml(l.ko, l.bg)}</span>
                   <span class="lyric-body">
                     <span class="lyric-jp">${escapeHtml(l.jp || "")}</span>
                     <span class="lyric-ko">${renderKo(l.ko)}</span>
                     <span class="lyric-tr">${escapeHtml(l.tr || "")}</span>
+                    ${l.bg ? `<span class="lyric-bg">${renderKo(l.bg)}</span>` : ""}
                   </span>
                 </button>
               </li>`;
@@ -725,75 +1883,129 @@
       autoScrollEnabled = !autoScrollEnabled;
       e.currentTarget.classList.toggle("active", autoScrollEnabled);
     });
+
+    initYoutubePlayer(song.youtubeId);
   }
 
-  function formatTime(sec){
-    const m = Math.floor(sec/60), s = Math.floor(sec%60);
-    return `${m}:${pad(s)}`;
-  }
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   }
 
-  // ko가 문자열이면 그대로, 배열이면 조각별로 떼창(chant)/박수(clap) 색을 입혀 이어붙입니다.
   function renderKo(ko){
     if (!ko) return "";
     if (typeof ko === "string") return escapeHtml(ko);
     return ko.map(seg => {
-      const cls = seg.tag === "chant" ? "seg-chant" : seg.tag === "clap" ? "seg-clap" : "";
+      const cls = seg.tag === "chant" ? "seg-chant"
+                : seg.tag === "clap"  ? "seg-clap"
+                : seg.tag === "both"  ? "seg-both"
+                : "";
       return `<span class="${cls}">${escapeHtml(seg.text || "")}</span>`;
     }).join("");
   }
 
-  /* ---------------- YouTube 재생 (일반 iframe 임베드 방식) ----------------
-     유튜브 IFrame JS API(postMessage 통신)는 file://로 직접 열었을 때나
-     네트워크/보안 설정에 따라 아예 로드되지 않는 경우가 있어, 그런 환경에서도
-     최소한 영상 자체는 항상 뜨도록 순수 <iframe> 임베드 방식으로 구현했습니다.
-     대신 실제 재생 위치를 API로 읽어올 수 없어서, 가사 하이라이트는 "가사를
-     탭한 시점부터 1배속으로 재생된다"고 가정한 자체 시계로 추정합니다. */
-  function videoIframeHtml(videoId){
-    const src = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?rel=0&playsinline=1&modestbranding=1`;
-    return `<iframe id="yt-iframe" src="${src}" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
-  }
-
-  function seekTo(seconds){
-    const iframe = document.getElementById("yt-iframe");
-    const song = currentSong;
-    if (!iframe || !song) return;
-    const src = `https://www.youtube.com/embed/${encodeURIComponent(song.youtubeId)}?rel=0&playsinline=1&modestbranding=1&autoplay=1&start=${Math.max(0, Math.floor(seconds))}`;
-    iframe.src = src;
-    localPlayStartVideoTime = seconds;
-    localPlayStartWall = Date.now();
-    localPollActive = true;
-    startLocalPoll();
-  }
-
-  function startLocalPoll(){
-    stopLocalPollTimerOnly();
-    localPollTimer = setInterval(()=>{
-      if (!localPollActive || localPlayStartWall == null) return;
-      const list = document.getElementById("lyrics-list");
-      if (!list) { stopLocalPoll(); return; }
-      const cur = localPlayStartVideoTime + (Date.now() - localPlayStartWall) / 1000;
-      const lines = Array.from(list.querySelectorAll(".lyric-line"));
-      let activeIdx = -1;
-      lines.forEach((el,i)=>{
-        const t = Number(el.dataset.time);
-        if (cur >= t) activeIdx = i;
+  // 한 줄의 ko / bg 조각들을 훑어서 그 줄에 떼창/박수가 포함돼 있는지 판단하고,
+  // 해당하는 아이콘을 만들어 줍니다. ("both"는 떼창·박수 둘 다로 취급)
+  // bg(코러스처럼 뒤에 깔리는 떼창)가 있으면 그 자체로 떼창으로 취급합니다.
+  function lyricIconsHtml(ko, bg){
+    let hasChant = false, hasClap = false;
+    const scan = (arr) => {
+      if (!Array.isArray(arr)) return;
+      arr.forEach(seg => {
+        if (seg.tag === "chant") hasChant = true;
+        else if (seg.tag === "clap") hasClap = true;
+        else if (seg.tag === "both"){ hasChant = true; hasClap = true; }
       });
-      lines.forEach((el,i)=> el.classList.toggle("active", i===activeIdx));
-      if (activeIdx >= 0 && autoScrollEnabled){
-        lines[activeIdx].scrollIntoView({ block:"center", behavior:"smooth" });
+    };
+    scan(ko);
+    if (bg){
+      hasChant = true;      // 코러스 떼창도 떼창
+      scan(bg);
+    }
+    let html = "";
+    if (hasChant) html += `<span class="lyric-type-icon chant" title="떼창">${MIC_SVG}</span>`;
+    if (hasClap)  html += `<span class="lyric-type-icon clap" title="박수">${CLAP_SVG}</span>`;
+    return html;
+  }
+
+  /* ---------------- YouTube Player API 연동 ---------------- */
+  function initYoutubePlayer(videoId) {
+    if (window.YT && window.YT.Player) {
+      createPlayer(videoId);
+    } else {
+      window.onYouTubeIframeAPIReady = () => createPlayer(videoId);
+    }
+  }
+
+  function createPlayer(videoId) {
+    player = new YT.Player('yt-player', {
+      videoId: videoId,
+      playerVars: {
+        'rel': 0,
+        'playsinline': 1,
+        'modestbranding': 1
+      },
+      events: {
+        'onStateChange': onPlayerStateChange
       }
-    }, 300);
+    });
   }
-  function stopLocalPollTimerOnly(){
-    if (localPollTimer){ clearInterval(localPollTimer); localPollTimer=null; }
+
+  function onPlayerStateChange(event) {
+    // 재생 중(PLAYING = 1)일 때만 동기화 타이머 가동
+    if (event.data === YT.PlayerState.PLAYING) {
+      startSyncTimer();
+    } else {
+      stopSyncTimer();
+      // 일시정지/탐색 시에도 위치에 맞춰 현재 가사 하이라이트 1회 갱신
+      updateLyricsSync();
+    }
   }
-  function stopLocalPoll(){
-    stopLocalPollTimerOnly();
-    localPollActive = false;
-    localPlayStartWall = null;
+
+  function startSyncTimer() {
+    stopSyncTimer();
+    syncTimer = setInterval(updateLyricsSync, 200);
+  }
+
+  function stopSyncTimer() {
+    if (syncTimer) {
+      clearInterval(syncTimer);
+      syncTimer = null;
+    }
+  }
+
+  function updateLyricsSync() {
+    if (!player || typeof player.getCurrentTime !== 'function') return;
+    const cur = player.getCurrentTime();
+    const list = document.getElementById("lyrics-list");
+    if (!list) return;
+
+    const lines = Array.from(list.querySelectorAll(".lyric-line"));
+    let activeIdx = -1;
+    lines.forEach((el, i) => {
+      const t = Number(el.dataset.time);
+      if (cur >= t) activeIdx = i;
+    });
+
+    lines.forEach((el, i) => el.classList.toggle("active", i === activeIdx));
+
+    if (activeIdx >= 0 && autoScrollEnabled && player.getPlayerState() === YT.PlayerState.PLAYING) {
+      lines[activeIdx].scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+  }
+
+  function seekTo(seconds) {
+    if (player && typeof player.seekTo === 'function') {
+      player.seekTo(seconds, true);
+      player.playVideo();
+    }
+  }
+
+  function destroyPlayer() {
+    stopSyncTimer();
+    if (player && typeof player.destroy === 'function') {
+      player.destroy();
+      player = null;
+    }
   }
 
   window.addEventListener("hashchange", router);
