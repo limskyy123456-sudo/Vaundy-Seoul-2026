@@ -282,9 +282,10 @@
   .song-topbar{
     display:flex;align-items:center;gap:14px;
     padding:16px 18px;
-    background:rgba(23,5,4,0.86);
-    backdrop-filter:blur(10px);
+    background:#1c0705;
     border-bottom:1px solid var(--line);
+    position:relative;
+    z-index:2;
   }
   .back-btn{
     background:none;border:1px solid var(--line);color:var(--cream);
@@ -351,9 +352,12 @@
     flex:1;
     min-height:0;
     overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
     overscroll-behavior:contain;
     border-top:1px solid var(--line);
+    /* -webkit-overflow-scrolling:touch 는 iOS에서 잔상/깜빡임을 일으켜 제거함
+       (iOS 13+ 는 기본으로 관성 스크롤이 동작) */
+    transform:translateZ(0);
+    isolation:isolate;
   }
   .lyrics-list{
     max-width:720px;margin:10px auto 0;padding:8px 10px 140px;
@@ -369,7 +373,7 @@
     border-radius:10px;
     text-align:left;
     cursor:pointer;
-    transition:background .18s ease, transform .18s ease;
+    transition:background-color .18s ease;
   }
   .lyric-line:hover{background:rgba(246,239,217,0.06);}
   /* 각 가사 줄에 포함된 파트 종류를 아이콘으로 표시 (떼창/박수/둘 다) */
@@ -431,7 +435,7 @@
 
   .lyric-line.active{
     background:linear-gradient(90deg, rgba(94,205,196,0.14), rgba(63,143,214,0.08));
-    transform:translateX(2px);
+    box-shadow:inset 3px 0 0 var(--teal);
   }
 
   .player-controls{
@@ -1764,7 +1768,7 @@
         { time: 114, jp: "脳幹を突破して 忘れた頃、到達 瞳に",        ko: [{ text: "노오칸오 톳파시테 와스레타 코로 토오타츠 히토미니"}],         tr: "뇌간을 뚫고 잊을 즈음, 도달해 눈동자에" },
         { time: 125.5, jp: "されどイメージしたのは",        ko: [{ text: "사레도 이메에지시타노와"}],         tr: "하지만 떠올린 것은" },
         { time: 129, jp: "光飛び散った最中",        ko: [{ text: "히카리 토비칫타 사나카"}],         tr: "빛이 흩어지던 한가운데" },
-        { time: 132.5, jp: "当てはないことを 許してくれ",        ko: [{ text: "아테와 나이 코토오 유루시테 쿠레"}],         tr: "오갈 데 없는 것을 용서해줘" },
+        { time: 133, jp: "当てはないことを 許してくれ",        ko: [{ text: "아테와 나이 코토오 유루시테 쿠레"}],         tr: "오갈 데 없는 것을 용서해줘" },
         { time: 139, jp: "この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" },
         { time: 142.5, jp: "僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" },
         { time: 146, jp: "向かい風受けた羽だって",        ko: [{ text: "무카이카제 우케타 하네닷테"}],         tr: "맞바람을 받은 날개라도" },
