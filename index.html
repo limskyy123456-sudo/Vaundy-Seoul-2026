@@ -1803,6 +1803,17 @@
   let syncTimer = null;
   let autoScrollEnabled = true;
   let lastActiveIdx = -1;
+
+  /* ── 가사 넘어가는 속도 조절값 (이 세 값만 바꾸면 됨) ──────────────
+     SYNC_INTERVAL_MS : 재생 위치를 확인하는 주기(ms). 작을수록 빨리 반응.
+     LYRIC_LEAD_SEC   : 가사를 실제 타이밍보다 몇 초 먼저 넘길지.
+                        떼창은 미리 보여야 따라 부르기 쉬우므로 살짝 앞당김.
+     SCROLL_DURATION_MS : 스크롤 애니메이션 길이(ms). 작을수록 빠르게 이동. */
+  const SYNC_INTERVAL_MS   = 100;
+  const LYRIC_LEAD_SEC     = 0.35;
+  const SCROLL_DURATION_MS = 260;
+
+  let scrollRafId = null;
   let currentSong = null;
 
   function pad(n){ return String(n).padStart(2,"0"); }
@@ -1927,6 +1938,7 @@
   function renderSong(song){
     currentSong = song;
     lastActiveIdx = -1;
+    if (scrollRafId !== null) { cancelAnimationFrame(scrollRafId); scrollRafId = null; }
     app.innerHTML = `
       <div class="song-page"${song.cover ? ` style="--song-cover:url('${song.cover}')"` : ""}>
         <div class="song-topbar">
@@ -2075,7 +2087,7 @@
 
   function startSyncTimer() {
     stopSyncTimer();
-    syncTimer = setInterval(updateLyricsSync, 200);
+    syncTimer = setInterval(updateLyricsSync, SYNC_INTERVAL_MS);
   }
 
   function stopSyncTimer() {
@@ -2090,7 +2102,8 @@
     const list = document.getElementById("lyrics-list");
     if (!list) return;
 
-    const cur = player.getCurrentTime();
+    // 실제 재생 위치보다 조금 앞선 시점을 기준으로 판단해 가사를 먼저 넘김
+    const cur = player.getCurrentTime() + LYRIC_LEAD_SEC;
     const lines = list.querySelectorAll(".lyric-line");
 
     let activeIdx = -1;
@@ -2100,7 +2113,7 @@
     }
 
     // 활성 소절이 그대로면 DOM을 건드리지 않는다.
-    // (매 200ms마다 전체 줄을 갱신하고 smooth 스크롤을 다시 시작하던 것이 버벅임의 원인)
+    // (매 틱마다 전체 줄을 갱신하고 smooth 스크롤을 다시 시작하던 것이 버벅임의 원인)
     if (activeIdx === lastActiveIdx && !force) return;
 
     if (lastActiveIdx >= 0 && lines[lastActiveIdx]) lines[lastActiveIdx].classList.remove("active");
@@ -2120,10 +2133,33 @@
     const cRect = container.getBoundingClientRect();
     const eRect = el.getBoundingClientRect();
     const delta = (eRect.top - cRect.top) - (container.clientHeight / 2 - eRect.height / 2);
-    const top = Math.max(0, container.scrollTop + delta);
+    const maxTop = container.scrollHeight - container.clientHeight;
+    const top = Math.max(0, Math.min(maxTop, container.scrollTop + delta));
     // 이미 거의 제자리면 스크롤을 다시 걸지 않음
     if (Math.abs(top - container.scrollTop) < 4) return;
-    container.scrollTo({ top, behavior: "smooth" });
+    animateScrollTo(container, top, SCROLL_DURATION_MS);
+  }
+
+  // behavior:"smooth" 는 속도를 조절할 수 없어(브라우저 고정, 보통 400~600ms)
+  // 직접 애니메이션해서 SCROLL_DURATION_MS 만큼만 걸리도록 함
+  function animateScrollTo(container, to, duration) {
+    if (scrollRafId !== null) cancelAnimationFrame(scrollRafId);
+    const from = container.scrollTop;
+    const diff = to - from;
+    if (duration <= 0) { container.scrollTop = to; return; }
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / duration);
+      // easeOutCubic — 처음에 빠르게 움직이고 부드럽게 멈춤
+      const eased = 1 - Math.pow(1 - p, 3);
+      container.scrollTop = from + diff * eased;
+      if (p < 1) {
+        scrollRafId = requestAnimationFrame(step);
+      } else {
+        scrollRafId = null;
+      }
+    };
+    scrollRafId = requestAnimationFrame(step);
   }
 
   function seekTo(seconds) {
