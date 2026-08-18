@@ -482,6 +482,191 @@
     padding-right:64px; /* balance back button */
   }
 
+  /* ---------- 곡 이동 (이전/다음 + 제목 탭 → 곡 목록) ---------- */
+  .song-topbar.has-nav{ gap:8px; padding:12px 12px; }
+  .song-topbar.has-nav .back-btn{ flex:none; padding:8px 11px; }
+  .song-nav{
+    flex:1;
+    min-width:0;
+    display:flex;align-items:center;gap:6px;
+  }
+  .song-nav-btn{
+    flex:none;
+    width:34px;height:34px;
+    display:flex;align-items:center;justify-content:center;
+    background:none;
+    border:1px solid var(--line);
+    border-radius:50%;
+    color:var(--cream);
+    cursor:pointer;
+    transition:border-color .18s ease, color .18s ease, background .18s ease;
+  }
+  .song-nav-btn svg{width:18px;height:18px;}
+  .song-nav-btn:hover, .song-nav-btn:focus-visible{
+    border-color:var(--teal);color:var(--teal);
+    background:rgba(94,205,196,0.10);
+    outline:none;
+  }
+  .song-nav-btn:active{transform:scale(0.94);}
+
+  /* 현재 곡 제목 = 목록 열기 버튼 */
+  /* .song-topbar h1 의 padding-right(뒤로가기 버튼 균형용)를 여기서는 해제 */
+  .song-topbar .song-picker-h{
+    flex:1; min-width:0; margin:0; padding:0;
+  }
+  .song-picker-btn{
+    width:100%;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    background:rgba(246,239,217,0.05);
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:var(--cream);
+    padding:7px 12px;
+    cursor:pointer;
+    transition:border-color .18s ease, background .18s ease;
+  }
+  .song-picker-btn:hover, .song-picker-btn:focus-visible{
+    border-color:var(--teal);
+    background:linear-gradient(90deg, rgba(94,205,196,0.12), rgba(63,143,214,0.08));
+    outline:none;
+  }
+  .song-picker-title{
+    min-width:0;
+    font-family:'Black Han Sans',sans-serif;
+    font-size:clamp(13px,3.9vw,17px);
+    line-height:1.3;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .song-picker-caret{
+    flex:none;width:15px;height:15px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--gold-soft);
+    transition:transform .25s ease;
+  }
+  .song-picker-caret svg{width:15px;height:15px;}
+  .song-picker-btn[aria-expanded="true"] .song-picker-caret{transform:rotate(180deg);}
+
+  /* 곡 목록 시트 */
+  .song-sheet{
+    position:fixed;inset:0;z-index:60;
+    display:flex;flex-direction:column;justify-content:flex-end;
+    opacity:0;pointer-events:none;
+    transition:opacity .22s ease;
+  }
+  .song-sheet.open{opacity:1;pointer-events:auto;}
+  .song-sheet-backdrop{
+    position:absolute;inset:0;
+    background:rgba(8,2,2,0.68);
+    backdrop-filter:blur(2px);
+  }
+  .song-sheet-panel{
+    position:relative;
+    margin:0 auto;
+    width:100%;max-width:560px;
+    max-height:76svh;
+    display:flex;flex-direction:column;
+    background:linear-gradient(180deg,#28100b 0%, #1a0705 100%);
+    border:1px solid var(--line);
+    border-bottom:none;
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -12px 40px rgba(0,0,0,0.6);
+    transform:translateY(14px);
+    transition:transform .26s cubic-bezier(.4,0,.2,1);
+  }
+  .song-sheet.open .song-sheet-panel{transform:translateY(0);}
+  .song-sheet-head{
+    flex:none;
+    display:flex;align-items:center;gap:12px;
+    padding:16px 18px 12px;
+    border-bottom:1px solid var(--line);
+  }
+  .song-sheet-grip{
+    position:absolute;top:7px;left:50%;transform:translateX(-50%);
+    width:38px;height:4px;border-radius:999px;
+    background:rgba(233,217,163,0.25);
+  }
+  .song-sheet-title{
+    flex:1;
+    font-family:'Anton',sans-serif;
+    letter-spacing:.18em;
+    font-size:12px;
+    color:var(--gold);
+    text-transform:uppercase;
+  }
+  .song-sheet-count{
+    font-size:11px;color:#8d7d62;letter-spacing:.06em;
+  }
+  .song-sheet-close{
+    flex:none;
+    width:30px;height:30px;
+    display:flex;align-items:center;justify-content:center;
+    background:none;border:1px solid var(--line);border-radius:50%;
+    color:var(--cream);cursor:pointer;
+  }
+  .song-sheet-close svg{width:14px;height:14px;}
+  .song-sheet-close:hover{border-color:var(--teal);color:var(--teal);}
+  .song-sheet-list{
+    flex:1;min-height:0;
+    overflow-y:auto;overscroll-behavior:contain;
+    list-style:none;margin:0;
+    padding:8px 10px calc(18px + env(safe-area-inset-bottom,0px));
+  }
+  .song-sheet-item{
+    width:100%;
+    display:flex;align-items:center;gap:12px;
+    background:none;border:none;
+    color:var(--cream);
+    text-align:left;
+    padding:13px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:background .16s ease;
+  }
+  .song-sheet-item:hover, .song-sheet-item:focus-visible{
+    background:rgba(246,239,217,0.07);outline:none;
+  }
+  .song-sheet-num{
+    flex:none;width:24px;
+    font-family:'Anton',sans-serif;
+    font-size:12px;
+    color:#8d7d62;
+    font-variant-numeric:tabular-nums;
+  }
+  .song-sheet-name{
+    flex:1;min-width:0;
+    font-size:clamp(14px,3.9vw,15.5px);
+    font-weight:500;line-height:1.45;
+  }
+  .song-sheet-item.current{
+    background:linear-gradient(90deg, rgba(94,205,196,0.16), rgba(63,143,214,0.06));
+    box-shadow:inset 3px 0 0 var(--teal);
+  }
+  .song-sheet-item.current .song-sheet-num{color:var(--teal);}
+  .song-sheet-item.current .song-sheet-name{font-weight:800;}
+  .song-sheet-now{
+    flex:none;
+    font-family:'Anton',sans-serif;
+    font-size:9px;letter-spacing:.14em;
+    color:var(--teal);
+    border:1px solid rgba(94,205,196,0.5);
+    border-radius:999px;
+    padding:3px 7px;
+  }
+
+  /* 아주 좁은 기기에서는 버튼·여백을 줄여 곡 제목이 최대한 길게 보이도록 */
+  @media (max-width:360px){
+    .song-topbar.has-nav{ padding:10px 8px; gap:6px; }
+    .song-topbar.has-nav .back-btn{ padding:7px 9px; }
+    .song-nav{ gap:4px; }
+    .song-nav-btn{ width:30px;height:30px; }
+    .song-nav-btn svg{ width:16px;height:16px; }
+    .song-picker-btn{ padding:6px 9px; gap:5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .song-sheet, .song-sheet-panel, .song-picker-caret{transition:none;}
+  }
+
   .video-wrap{
     max-width:720px;margin:22px auto 0;padding:0 16px;
   }
@@ -2022,16 +2207,22 @@
 
   let scrollRafId = null;
   let currentSong = null;
+  let songKeyHandler = null;   // 곡 화면 키보드 단축키(← → Esc) 핸들러
 
   function pad(n){ return String(n).padStart(2,"0"); }
 
   function router(){
     stopCountdown();
     destroyPlayer();
+    // 곡 화면을 벗어날 때 키보드 단축키 해제 (곡 화면이면 renderSong이 다시 등록)
+    if (songKeyHandler){ document.removeEventListener("keydown", songKeyHandler); songKeyHandler = null; }
     const hash = location.hash.replace(/^#\/?/, "");
     if (hash.startsWith("song/")) {
-      const id = hash.slice(5);
-      const song = SONGS.find(s => s.id === id);
+      const raw = hash.slice(5);
+      // 곡 id에 따옴표 등이 들어가면 브라우저가 %27 처럼 인코딩할 수 있으므로 되돌려서 비교
+      let id = raw;
+      try { id = decodeURIComponent(raw); } catch(e) { /* 잘못된 인코딩이면 원문 그대로 */ }
+      const song = SONGS.find(s => s.id === id) || SONGS.find(s => s.id === raw);
       song ? renderSong(song) : renderHome();
     } else if (hash === "guide") {
       renderGuide();
@@ -2273,15 +2464,84 @@
   const MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>';
   const CLAP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V7a2 2 0 0 1 4 0"/><path d="M12 13V5a2 2 0 0 1 4 0v8"/><path d="M16 13V7a2 2 0 0 1 4 0v6a7 7 0 0 1-7 7h-1a7 7 0 0 1-6.3-4"/><path d="M4 12l1-1"/><path d="M3 9l1.5-.5"/><path d="M4 6l1 1"/></svg>';
 
+  const CHEV_LEFT_SVG  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
+  const CHEV_RIGHT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+  const CLOSE_SVG      = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+  /* 곡 목록 시트 — 상단 제목을 누르면 열리고, 곡을 고르면 바로 이동 */
+  function setupSongSheet(song){
+    const sheet = document.getElementById("song-sheet");
+    const btn   = document.getElementById("song-picker-btn");
+    const list  = document.getElementById("song-sheet-list");
+    if (!sheet || !btn || !list) return;
+
+    const open = ()=>{
+      sheet.classList.add("open");
+      sheet.setAttribute("aria-hidden", "false");
+      btn.setAttribute("aria-expanded", "true");
+      // 현재 곡이 목록 가운데에 오도록 (시트 안에서만 스크롤)
+      const cur = list.querySelector(".song-sheet-item.current");
+      if (cur) list.scrollTop = Math.max(0, cur.offsetTop - list.clientHeight / 2 + cur.offsetHeight / 2);
+    };
+    const close = ()=>{
+      sheet.classList.remove("open");
+      sheet.setAttribute("aria-hidden", "true");
+      btn.setAttribute("aria-expanded", "false");
+    };
+
+    btn.addEventListener("click", ()=>{
+      sheet.classList.contains("open") ? close() : open();
+    });
+    sheet.querySelectorAll("[data-close-sheet]").forEach(el=>{
+      el.addEventListener("click", close);
+    });
+    list.querySelectorAll(".song-sheet-item").forEach(item=>{
+      item.addEventListener("click", ()=>{
+        const id = item.dataset.id;
+        close();
+        if (id === song.id) return;              // 현재 곡이면 닫기만
+        location.hash = `#/song/${id}`;
+      });
+    });
+
+    // ESC 로 닫기 / ← → 로 이전·다음 곡 (PC 키보드)
+    if (songKeyHandler) document.removeEventListener("keydown", songKeyHandler);
+    songKeyHandler = (e)=>{
+      if (!document.getElementById("song-sheet")) return;   // 다른 화면이면 무시
+      if (e.key === "Escape"){ close(); return; }
+      if (sheet.classList.contains("open")) return;         // 목록이 열려 있으면 좌우키 무시
+      const tag = (e.target && e.target.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
+      if (e.key === "ArrowLeft")  document.getElementById("prev-song").click();
+      if (e.key === "ArrowRight") document.getElementById("next-song").click();
+    };
+    document.addEventListener("keydown", songKeyHandler);
+  }
+
   function renderSong(song){
     currentSong = song;
     lastActiveIdx = -1;
     if (scrollRafId !== null) { cancelAnimationFrame(scrollRafId); scrollRafId = null; }
+
+    // 이전/다음 곡 (마지막 곡 다음은 첫 곡으로 순환)
+    const idx      = SONGS.findIndex(s => s.id === song.id);
+    const prevSong = SONGS[(idx - 1 + SONGS.length) % SONGS.length];
+    const nextSong = SONGS[(idx + 1) % SONGS.length];
+
     app.innerHTML = `
       <div class="song-page"${song.cover ? ` style="--song-cover:url('${song.cover}')"` : ""}>
-        <div class="song-topbar">
-          <button class="back-btn" id="back-btn">← 목록</button>
-          <h1>${escapeHtml(song.title)}</h1>
+        <div class="song-topbar has-nav">
+          <button class="back-btn" id="back-btn" aria-label="곡 목록으로" title="곡 목록으로">←</button>
+          <div class="song-nav">
+            <button class="song-nav-btn" id="prev-song" aria-label="이전 곡" title="이전 곡: ${escapeHtml(prevSong.title)}">${CHEV_LEFT_SVG}</button>
+            <h1 class="song-picker-h">
+              <button class="song-picker-btn" id="song-picker-btn" aria-expanded="false" aria-haspopup="dialog" title="탭하면 곡 목록이 열려요">
+                <span class="song-picker-title">${escapeHtml(song.title)}</span>
+                <span class="song-picker-caret">${CHEVRON_SVG}</span>
+              </button>
+            </h1>
+            <button class="song-nav-btn" id="next-song" aria-label="다음 곡" title="다음 곡: ${escapeHtml(nextSong.title)}">${CHEV_RIGHT_SVG}</button>
+          </div>
         </div>
 
         <div class="song-body">
@@ -2328,10 +2588,35 @@
             <span class="autoscroll-switch"><span class="autoscroll-knob"></span></span>
           </button>
         </div>
+
+        <div class="song-sheet" id="song-sheet" aria-hidden="true">
+          <div class="song-sheet-backdrop" data-close-sheet></div>
+          <div class="song-sheet-panel" role="dialog" aria-label="곡 선택">
+            <span class="song-sheet-grip"></span>
+            <div class="song-sheet-head">
+              <span class="song-sheet-title">Song List</span>
+              <span class="song-sheet-count">${SONGS.length}곡</span>
+              <button class="song-sheet-close" data-close-sheet aria-label="닫기">${CLOSE_SVG}</button>
+            </div>
+            <ul class="song-sheet-list" id="song-sheet-list">
+              ${SONGS.map((s,i)=>`
+                <li>
+                  <button class="song-sheet-item${s.id === song.id ? " current" : ""}" data-id="${s.id}">
+                    <span class="song-sheet-num">${pad(i+1)}</span>
+                    <span class="song-sheet-name">${escapeHtml(s.title)}</span>
+                    ${s.id === song.id ? `<span class="song-sheet-now">NOW</span>` : ""}
+                  </button>
+                </li>`).join("")}
+            </ul>
+          </div>
+        </div>
       </div>
     `;
 
     document.getElementById("back-btn").addEventListener("click", ()=>{ location.hash = "#/guide"; });
+    document.getElementById("prev-song").addEventListener("click", ()=>{ location.hash = `#/song/${prevSong.id}`; });
+    document.getElementById("next-song").addEventListener("click", ()=>{ location.hash = `#/song/${nextSong.id}`; });
+    setupSongSheet(song);
 
     document.querySelectorAll(".lyric-line").forEach(btn=>{
       btn.addEventListener("click", ()=>{
