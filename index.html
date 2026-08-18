@@ -361,30 +361,33 @@
     border-radius:10px;
     border:1px solid var(--line);
   }
+  /* 모바일에서도 PC와 똑같은 4열 표로 보이도록 글자·여백이 화면 폭에 맞춰 함께 줄어듦 */
   .info-table{
     width:100%;
-    min-width:460px;
+    min-width:0;
+    table-layout:fixed;
     border-collapse:collapse;
-    font-size:12.5px;
+    font-size:clamp(9.5px,2.7vw,12.5px);
   }
   .info-table thead th{
     background:linear-gradient(180deg, rgba(233,217,163,0.16), rgba(233,217,163,0.05));
     color:var(--gold);
     font-family:'Anton',sans-serif;
-    letter-spacing:.04em;
-    font-size:11.5px;
+    letter-spacing:.02em;
+    font-size:clamp(9px,2.5vw,11.5px);
     text-transform:uppercase;
-    padding:12px 10px;
+    padding:clamp(8px,2.4vw,12px) clamp(2px,1vw,10px);
     text-align:center;
     border-bottom:1px solid var(--line);
     white-space:nowrap;
   }
   .info-table td{
-    padding:13px 10px;
+    padding:clamp(9px,2.6vw,13px) clamp(2px,1vw,10px);
     text-align:center;
     color:var(--cream);
     border-bottom:1px solid var(--line);
     white-space:nowrap;
+    vertical-align:middle;
   }
   .info-table tbody tr:last-child td{ border-bottom:none; }
   .info-table tbody tr:nth-child(even){ background:rgba(246,239,217,0.03); }
@@ -392,14 +395,23 @@
     text-align:left;
     font-weight:700;
     color:#fff;
+    white-space:normal;
+    word-break:keep-all;      /* 한글은 단어 단위로 줄바꿈 */
+    line-height:1.4;
   }
   .info-table td.note{
     text-align:left;
-    font-size:11.5px;
+    font-size:clamp(9px,2.5vw,11.5px);
     color:#b9a98a;
     white-space:normal;
-    min-width:200px;
+    word-break:keep-all;
+    overflow-wrap:anywhere;
+    line-height:1.45;
   }
+  /* 열 너비 비율 — PC·모바일 동일 (합 100%) */
+  .info-col-label{ width:26%; }
+  .info-col-day{   width:23%; }
+  .info-col-note{  width:28%; }
   .info-footnote{
     margin:14px 2px 0;
     font-size:11.5px;
@@ -407,41 +419,21 @@
     line-height:1.6;
   }
 
-  /* 좁은 화면에서는 표를 가로 스크롤 대신 항목별 카드 형태로 쌓아 보여줌 */
+  /* 좁은 화면에서는 카드 안쪽 여백을 줄여 표가 쓸 수 있는 폭을 최대한 확보 */
   @media (max-width:480px){
-    .info-table-wrap{ overflow-x:visible; }
-    .info-table{ min-width:0; }
-    .info-table thead{ display:none; }
-    .info-table, .info-table tbody, .info-table tr, .info-table td{ display:block; width:100%; }
-    .info-table tr{ padding:14px 12px; border-bottom:1px solid var(--line); }
-    .info-table tbody tr:last-child{ border-bottom:none; }
-    .info-table td{
-      border-bottom:none;
-      padding:3px 0;
-      text-align:left;
-      white-space:normal;
-      display:flex;
-      gap:10px;
-      min-width:0;
-    }
-    .info-table td::before{
-      content:attr(data-label);
-      flex:none;
-      width:78px;
-      font-family:'Anton',sans-serif;
-      font-size:10px;
-      letter-spacing:.02em;
-      color:var(--gold);
-      padding-top:2px;
-    }
-    .info-table td.label{
-      font-family:'Black Han Sans',sans-serif;
-      font-size:14.5px;
-      color:#fff;
-      padding-bottom:6px;
-    }
-    .info-table td.label::before{ content:""; width:0; }
-    .info-table td.note{ color:#b9a98a; font-size:11.5px; }
+    .info-panel-inner{ padding:4px 10px 20px; }
+    .info-toggle{ padding:18px 14px; }
+  }
+  /* 아주 좁은 기기(320px 등) — 시간 열이 겹치지 않도록 비율과 글자를 한 단계 더 조임 */
+  @media (max-width:359px){
+    .info-panel-inner{ padding:4px 6px 18px; }
+    .info-col-label{ width:24%; }
+    .info-col-day{   width:25%; }
+    .info-col-note{  width:26%; }
+    .info-table{ font-size:8.8px; }
+    .info-table thead th{ font-size:8.5px; padding:8px 1px; }
+    .info-table td{ padding:9px 1px; }
+    .info-table td.note{ font-size:8.5px; }
   }
 
   /* ---------- SONG DETAIL PAGE ---------- */
@@ -2076,6 +2068,12 @@
               <div class="info-panel-title"><span class="bar">|</span> 관객 입장안내 <span class="bar">|</span></div>
               <div class="info-table-wrap">
                 <table class="info-table">
+                  <colgroup>
+                    <col class="info-col-label">
+                    <col class="info-col-day">
+                    <col class="info-col-day">
+                    <col class="info-col-note">
+                  </colgroup>
                   <thead>
                     <tr>
                       <th>일정</th>
@@ -2189,26 +2187,13 @@
         btn.setAttribute("aria-expanded", "true");
         panel.style.maxHeight = panel.scrollHeight + "px";
         // 이후 내부 콘텐츠 크기 변화(폰트 로딩 등)에도 대응해 살짝 여유를 둠
+        // (스크롤은 건드리지 않음 — 화면은 사용자가 직접 내리도록 둠)
         setTimeout(()=>{
           if (!card.classList.contains("open")) return;
           panel.style.maxHeight = panel.scrollHeight + "px";
-          revealInfoPanel(card);
         }, 300);
       }
     });
-  }
-
-  /* 펼친 내용이 화면 아래로 잘려 있으면 딱 필요한 만큼만 부드럽게 스크롤해서 보여줌 */
-  function revealInfoPanel(card){
-    const rect = card.getBoundingClientRect();
-    const overflow = rect.bottom - window.innerHeight + 16;
-    if (overflow <= 0) return;
-    // 카드 상단(공연 정보 버튼)은 항상 화면에 남도록 스크롤 양을 제한
-    const maxShift = Math.max(0, rect.top - 12);
-    const top = Math.min(overflow, maxShift);
-    if (top < 8) return;
-    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollBy({ top, behavior: reduce ? "auto" : "smooth" });
   }
 
   /* ---------------- CHANT GUIDE (song list) ---------------- */
