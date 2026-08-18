@@ -687,6 +687,22 @@
   }
   .watch-on-yt:hover{color:var(--teal);}
 
+  /* 브라우저 자동재생 정책으로 소리가 막혔을 때 뜨는 "소리 켜기" 버튼 */
+  .unmute-btn{
+    position:absolute; left:50%; bottom:12px; transform:translateX(-50%);
+    z-index:5;
+    display:none; align-items:center; gap:7px;
+    padding:9px 16px; border-radius:999px;
+    border:1px solid rgba(255,255,255,0.28);
+    background:rgba(12,12,12,0.82);
+    color:#fff; font-size:12px; font-weight:600; letter-spacing:0.02em;
+    cursor:pointer; backdrop-filter:blur(6px);
+    box-shadow:0 6px 20px rgba(0,0,0,0.45);
+  }
+  .unmute-btn.show{display:flex;}
+  .unmute-btn:hover{border-color:var(--teal); color:var(--teal);}
+  .unmute-btn svg{width:15px;height:15px;position:static;inset:auto;}
+
   .lyrics-note{
     max-width:720px;margin:16px auto 0;padding:0 16px;
     font-size:12px;color:#b9a98a;
@@ -1344,7 +1360,7 @@
         { time: 175, jp: "「この夢が覚めたら」", ko: [{ text: " 코노 유메가 사메타라 ", tag: "chant" },],               tr: "「이 꿈에서 깨면」" },
         { time: 178.5, jp: "呼び声はもう覚えた 今 チェンジ x 4", ko: [, { text: " 토나에루와"}, { text: " 이마 첸지 x 4 ", tag: "chant" }],               tr: "외칠게 지금 체인지 x 4" },
         { time: 184, jp: "どんな夜も輝いて",        ko: [{ text: "돈나 요루모 카가야이테", tag: "both"}],         tr: "어떤 밤이라도 빛나서" },
-        { time: 188, jp: "消えないものに手を伸ばして",        ko: [{ text: "키에나이 모노니 테오 노바시테", tag: "both"}],         tr: "사라지지 않는 것에 손을 뻗어" , bg : "Ah~"},
+        { time: 188, jp: "消えないものに手を伸ばして",        ko: [{ text: "키에나이 모노니 테오 노바시테", tag: "both"}],         tr: "사라지지 않는 것에 손을 뻗어" },
         { time: 192, jp: "僕ら今確かに、見上げているはず",        ko: [{ text: "보쿠라 이마 타시카니 미아게테이루하즈", tag: "clap"}],         tr: "우린 지금 분명히 올려다보고 있을거야" },
         { time: 197, jp: "今 チェンジどんな時も輝いて",        ko: [{ text: "이마 첸지 돈나 토키모 카가야이테", tag: "chant"}],         tr: "지금 체인지 어떤 때에도 빛나서" },
         { time: 202.5, jp: "消えないものに手を",        ko: [{ text: "키에나이 모노니 테오"},{ text: " 노바시테", tag: "chant"}],         tr: "사라지지 않는 것에 손을 뻗어", bg: "Ah~" },
@@ -2190,8 +2206,11 @@
   const app = document.getElementById("app");
   const INFO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
   const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  const SOUND_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
   let countdownTimer = null;
   let player = null;
+  let playerToken = 0;          // 플레이어 세대 번호(이전 곡의 이벤트 무시용)
+  let autoplayCheckTimer = null;
   let syncTimer = null;
   let autoScrollEnabled = true;
   let lastActiveIdx = -1;
@@ -2549,6 +2568,7 @@
             <div class="video-wrap">
               <div class="video-frame">
                 <div id="yt-player"></div>
+                <button class="unmute-btn" id="unmute-btn" type="button">${SOUND_SVG}소리 켜기</button>
               </div>
               <a class="watch-on-yt" href="https://www.youtube.com/watch?v=${encodeURIComponent(song.youtubeId)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>
             </div>
@@ -2631,6 +2651,18 @@
       if (autoScrollEnabled) updateLyricsSync(true);   // 켜는 즉시 현재 위치로 이동
     });
 
+    const unmuteBtn = document.getElementById("unmute-btn");
+    if (unmuteBtn) {
+      unmuteBtn.addEventListener("click", ()=>{
+        if (player && typeof player.unMute === 'function') {
+          player.unMute();
+          player.setVolume(100);
+          player.playVideo();
+        }
+        showUnmuteBtn(false);
+      });
+    }
+
     initYoutubePlayer(song.youtubeId);
   }
 
@@ -2684,28 +2716,87 @@
   }
 
   function createPlayer(videoId) {
+    const myToken = ++playerToken;
     player = new YT.Player('yt-player', {
       videoId: videoId,
       playerVars: {
         'rel': 0,
         'playsinline': 1,
-        'modestbranding': 1
+        'modestbranding': 1,
+        'autoplay': 1              // 곡을 고르면 바로 재생
       },
       events: {
-        'onStateChange': onPlayerStateChange
+        'onReady': (e) => onPlayerReady(e, myToken),
+        'onStateChange': (e) => onPlayerStateChange(e, myToken)
       }
     });
   }
 
-  function onPlayerStateChange(event) {
+  /* 플레이어 준비되면 바로 재생 시도.
+     모바일/사파리처럼 소리 있는 자동재생이 막히는 환경에서는
+     음소거로 재생을 이어가고 "소리 켜기" 버튼을 띄운다. */
+  function onPlayerReady(event, token) {
+    if (token !== playerToken) return;
+    const p = event.target;
+    try { p.playVideo(); } catch(e){}
+
+    clearTimeout(autoplayCheckTimer);
+    autoplayCheckTimer = setTimeout(()=>{
+      if (token !== playerToken || !player || typeof player.getPlayerState !== 'function') return;
+      const st = player.getPlayerState();
+      if (st !== YT.PlayerState.PLAYING && st !== YT.PlayerState.BUFFERING) {
+        try {
+          player.mute();
+          player.playVideo();
+          showUnmuteBtn(true);
+        } catch(e){}
+      }
+    }, 1200);
+  }
+
+  function onPlayerStateChange(event, token) {
+    if (token !== playerToken) return;
+
+    // 영상이 끝나면 다음 곡으로 (마지막 곡이면 첫 곡으로 되돌아감)
+    if (event.data === YT.PlayerState.ENDED) {
+      stopSyncTimer();
+      goToNextSong();
+      return;
+    }
+
     // 재생 중(PLAYING = 1)일 때만 동기화 타이머 가동
     if (event.data === YT.PlayerState.PLAYING) {
+      // 소리가 정상적으로 나오고 있으면 "소리 켜기" 버튼은 숨김
+      if (player && typeof player.isMuted === 'function' && !player.isMuted()) showUnmuteBtn(false);
       startSyncTimer();
     } else {
       stopSyncTimer();
       // 일시정지/탐색 시에도 위치에 맞춰 현재 가사 하이라이트 1회 갱신
       updateLyricsSync();
     }
+  }
+
+  /* 다음 곡으로 이동. 마지막 곡이면 첫 곡으로 순환한다. */
+  function goToNextSong() {
+    if (!currentSong) return;
+    const idx = SONGS.findIndex(s => s.id === currentSong.id);
+    if (idx === -1) return;
+    const next = SONGS[(idx + 1) % SONGS.length];
+
+    // 곡이 하나뿐이면 해시가 그대로라 hashchange가 안 뜨므로 직접 처음부터 재생
+    if (next.id === currentSong.id) {
+      if (player && typeof player.seekTo === 'function') {
+        player.seekTo(0, true);
+        player.playVideo();
+      }
+      return;
+    }
+    location.hash = `#/song/${next.id}`;
+  }
+
+  function showUnmuteBtn(show) {
+    const btn = document.getElementById("unmute-btn");
+    if (btn) btn.classList.toggle("show", !!show);
   }
 
   function startSyncTimer() {
@@ -2794,6 +2885,9 @@
 
   function destroyPlayer() {
     stopSyncTimer();
+    playerToken++;                      // 이전 플레이어의 콜백은 모두 무시
+    clearTimeout(autoplayCheckTimer);
+    autoplayCheckTimer = null;
     if (player && typeof player.destroy === 'function') {
       player.destroy();
       player = null;
