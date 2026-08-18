@@ -687,21 +687,6 @@
   }
   .watch-on-yt:hover{color:var(--teal);}
 
-  /* 브라우저 자동재생 정책으로 소리가 막혔을 때 뜨는 "소리 켜기" 버튼 */
-  .unmute-btn{
-    position:absolute; left:50%; bottom:12px; transform:translateX(-50%);
-    z-index:5;
-    display:none; align-items:center; gap:7px;
-    padding:9px 16px; border-radius:999px;
-    border:1px solid rgba(255,255,255,0.28);
-    background:rgba(12,12,12,0.82);
-    color:#fff; font-size:12px; font-weight:600; letter-spacing:0.02em;
-    cursor:pointer; backdrop-filter:blur(6px);
-    box-shadow:0 6px 20px rgba(0,0,0,0.45);
-  }
-  .unmute-btn.show{display:flex;}
-  .unmute-btn:hover{border-color:var(--teal); color:var(--teal);}
-  .unmute-btn svg{width:15px;height:15px;position:static;inset:auto;}
 
   .lyrics-note{
     max-width:720px;margin:16px auto 0;padding:0 16px;
@@ -865,6 +850,18 @@
   }
 
   #app{min-height:100svh;}
+
+  /* 곡 화면은 DOM 에서 지우지 않고 화면 밖으로 치워 둔다.
+     (display:none 이나 iframe 이동은 유튜브 플레이어를 리셋시켜
+      모바일에서 소리 권한이 풀리기 때문) */
+  .song-view.offstage{
+    position:fixed;
+    top:0; left:0;
+    width:100vw; height:100svh;
+    transform:translateX(-200vw);
+    pointer-events:none;
+    overflow:hidden;
+  }
   @media (min-width:720px){
     .hero{padding-top:72px;}
   }
@@ -920,6 +917,8 @@
 
 <body>
 <div id="app"></div>
+<!-- 곡 화면 — 유튜브 iframe 을 다시 만들지 않으려고 화면 밖에 계속 살려 둔다 -->
+<div id="song-view" class="song-view offstage"></div>
 
 <script>
   const SHOW_DATETIME = "2026-09-19T17:00:00+09:00";
@@ -2204,13 +2203,11 @@
   ];
 
   const app = document.getElementById("app");
+  const songView = document.getElementById("song-view");
   const INFO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
   const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-  const SOUND_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
   let countdownTimer = null;
   let player = null;
-  let playerToken = 0;          // 플레이어 세대 번호(이전 곡의 이벤트 무시용)
-  let autoplayCheckTimer = null;
   let syncTimer = null;
   let autoScrollEnabled = true;
   let lastActiveIdx = -1;
@@ -2232,20 +2229,23 @@
 
   function router(){
     stopCountdown();
-    destroyPlayer();
-    // 곡 화면을 벗어날 때 키보드 단축키 해제 (곡 화면이면 renderSong이 다시 등록)
-    if (songKeyHandler){ document.removeEventListener("keydown", songKeyHandler); songKeyHandler = null; }
     const hash = location.hash.replace(/^#\/?/, "");
+    let song = null;
     if (hash.startsWith("song/")) {
       const raw = hash.slice(5);
       // 곡 id에 따옴표 등이 들어가면 브라우저가 %27 처럼 인코딩할 수 있으므로 되돌려서 비교
       let id = raw;
       try { id = decodeURIComponent(raw); } catch(e) { /* 잘못된 인코딩이면 원문 그대로 */ }
-      const song = SONGS.find(s => s.id === id) || SONGS.find(s => s.id === raw);
-      song ? renderSong(song) : renderHome();
+      song = SONGS.find(s => s.id === id) || SONGS.find(s => s.id === raw) || null;
+    }
+
+    if (song) {
+      renderSong(song);
     } else if (hash === "guide") {
+      leaveSongView();
       renderGuide();
     } else {
+      leaveSongView();
       renderHome();
     }
     window.scrollTo(0,0);
@@ -2449,8 +2449,12 @@
 
     document.getElementById("back-btn").addEventListener("click", ()=>{ location.hash = "#/"; });
 
+    // 곡을 탭한 그 순간 바로 재생을 시작시킨다 (모바일 소리 허용을 위해)
     app.querySelectorAll(".song-row").forEach(btn=>{
-      btn.addEventListener("click", ()=>{ location.hash = `#/song/${btn.dataset.id}`; });
+      btn.addEventListener("click", ()=>{
+        const target = SONGS.find(s => s.id === btn.dataset.id);
+        if (target) gotoSong(target);
+      });
     });
   }
 
@@ -2487,79 +2491,59 @@
   const CHEV_RIGHT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
   const CLOSE_SVG      = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
-  /* 곡 목록 시트 — 상단 제목을 누르면 열리고, 곡을 고르면 바로 이동 */
-  function setupSongSheet(song){
+  /* 곡 목록 시트 열기/닫기 (셸을 만들 때 한 번만 연결) */
+  function openSongSheet(){
     const sheet = document.getElementById("song-sheet");
     const btn   = document.getElementById("song-picker-btn");
     const list  = document.getElementById("song-sheet-list");
-    if (!sheet || !btn || !list) return;
-
-    const open = ()=>{
-      sheet.classList.add("open");
-      sheet.setAttribute("aria-hidden", "false");
-      btn.setAttribute("aria-expanded", "true");
-      // 현재 곡이 목록 가운데에 오도록 (시트 안에서만 스크롤)
-      const cur = list.querySelector(".song-sheet-item.current");
-      if (cur) list.scrollTop = Math.max(0, cur.offsetTop - list.clientHeight / 2 + cur.offsetHeight / 2);
-    };
-    const close = ()=>{
-      sheet.classList.remove("open");
-      sheet.setAttribute("aria-hidden", "true");
-      btn.setAttribute("aria-expanded", "false");
-    };
-
-    btn.addEventListener("click", ()=>{
-      sheet.classList.contains("open") ? close() : open();
-    });
-    sheet.querySelectorAll("[data-close-sheet]").forEach(el=>{
-      el.addEventListener("click", close);
-    });
-    list.querySelectorAll(".song-sheet-item").forEach(item=>{
-      item.addEventListener("click", ()=>{
-        const id = item.dataset.id;
-        close();
-        if (id === song.id) return;              // 현재 곡이면 닫기만
-        location.hash = `#/song/${id}`;
-      });
-    });
-
-    // ESC 로 닫기 / ← → 로 이전·다음 곡 (PC 키보드)
-    if (songKeyHandler) document.removeEventListener("keydown", songKeyHandler);
-    songKeyHandler = (e)=>{
-      if (!document.getElementById("song-sheet")) return;   // 다른 화면이면 무시
-      if (e.key === "Escape"){ close(); return; }
-      if (sheet.classList.contains("open")) return;         // 목록이 열려 있으면 좌우키 무시
-      const tag = (e.target && e.target.tagName || "").toLowerCase();
-      if (tag === "input" || tag === "textarea") return;
-      if (e.key === "ArrowLeft")  document.getElementById("prev-song").click();
-      if (e.key === "ArrowRight") document.getElementById("next-song").click();
-    };
-    document.addEventListener("keydown", songKeyHandler);
+    if (!sheet) return;
+    sheet.classList.add("open");
+    sheet.setAttribute("aria-hidden", "false");
+    if (btn) btn.setAttribute("aria-expanded", "true");
+    const cur = list && list.querySelector(".song-sheet-item.current");
+    if (cur) list.scrollTop = Math.max(0, cur.offsetTop - list.clientHeight / 2 + cur.offsetHeight / 2);
+  }
+  function closeSongSheet(){
+    const sheet = document.getElementById("song-sheet");
+    const btn   = document.getElementById("song-picker-btn");
+    if (!sheet) return;
+    sheet.classList.remove("open");
+    sheet.setAttribute("aria-hidden", "true");
+    if (btn) btn.setAttribute("aria-expanded", "false");
   }
 
-  function renderSong(song){
-    currentSong = song;
-    lastActiveIdx = -1;
-    if (scrollRafId !== null) { cancelAnimationFrame(scrollRafId); scrollRafId = null; }
+  /* ── 곡 화면 셸 ───────────────────────────────────────────────
+     유튜브 플레이어(iframe)를 곡마다 새로 만들면 모바일에서 "사용자가 직접 누른
+     재생"으로 인정받지 못해 소리가 막힌다. 그래서 곡 화면(과 그 안의 iframe)은
+     페이지에 딱 한 번만 만들어 두고, 곡이 바뀌면 내용만 갈아끼운다. */
+  let songShellBuilt = false;
 
-    // 이전/다음 곡 (마지막 곡 다음은 첫 곡으로 순환)
-    const idx      = SONGS.findIndex(s => s.id === song.id);
-    const prevSong = SONGS[(idx - 1 + SONGS.length) % SONGS.length];
-    const nextSong = SONGS[(idx + 1) % SONGS.length];
+  function songNeighbors(song){
+    const idx = SONGS.findIndex(s => s.id === song.id);
+    return {
+      idx,
+      prev: SONGS[(idx - 1 + SONGS.length) % SONGS.length],
+      next: SONGS[(idx + 1) % SONGS.length]
+    };
+  }
 
-    app.innerHTML = `
-      <div class="song-page"${song.cover ? ` style="--song-cover:url('${song.cover}')"` : ""}>
+  function buildSongShell(){
+    if (songShellBuilt) return;
+    songShellBuilt = true;
+
+    songView.innerHTML = `
+      <div class="song-page" id="song-page">
         <div class="song-topbar has-nav">
-          <button class="back-btn" id="back-btn" aria-label="곡 목록으로" title="곡 목록으로">←</button>
+          <button class="back-btn" id="song-back-btn" aria-label="곡 목록으로" title="곡 목록으로">←</button>
           <div class="song-nav">
-            <button class="song-nav-btn" id="prev-song" aria-label="이전 곡" title="이전 곡: ${escapeHtml(prevSong.title)}">${CHEV_LEFT_SVG}</button>
+            <button class="song-nav-btn" id="prev-song" aria-label="이전 곡">${CHEV_LEFT_SVG}</button>
             <h1 class="song-picker-h">
               <button class="song-picker-btn" id="song-picker-btn" aria-expanded="false" aria-haspopup="dialog" title="탭하면 곡 목록이 열려요">
-                <span class="song-picker-title">${escapeHtml(song.title)}</span>
+                <span class="song-picker-title" id="song-picker-title"></span>
                 <span class="song-picker-caret">${CHEVRON_SVG}</span>
               </button>
             </h1>
-            <button class="song-nav-btn" id="next-song" aria-label="다음 곡" title="다음 곡: ${escapeHtml(nextSong.title)}">${CHEV_RIGHT_SVG}</button>
+            <button class="song-nav-btn" id="next-song" aria-label="다음 곡">${CHEV_RIGHT_SVG}</button>
           </div>
         </div>
 
@@ -2568,9 +2552,8 @@
             <div class="video-wrap">
               <div class="video-frame">
                 <div id="yt-player"></div>
-                <button class="unmute-btn" id="unmute-btn" type="button">${SOUND_SVG}소리 켜기</button>
               </div>
-              <a class="watch-on-yt" href="https://www.youtube.com/watch?v=${encodeURIComponent(song.youtubeId)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>
+              <a class="watch-on-yt" id="watch-on-yt" href="#" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>
             </div>
 
             <div class="lyrics-note"><span class="dot">●</span> 가사를 탭하면 해당 위치로 영상이 이동해요. 영상 재생 상태에 따라 가사 하이라이트가 동기화됩니다.</div>
@@ -2583,22 +2566,7 @@
           </div>
 
           <div class="lyrics-scroll">
-          <ul class="lyrics-list" id="lyrics-list">
-            ${song.lyrics.map((l,i)=>{
-              return `
-              <li>
-                <button class="lyric-line" data-time="${l.time}" data-idx="${i}">
-                  <span class="lyric-icons">${lyricIconsHtml(l.ko, l.bg)}</span>
-                  <span class="lyric-body">
-                    <span class="lyric-jp">${escapeHtml(l.jp || "")}</span>
-                    <span class="lyric-ko">${renderKo(l.ko)}</span>
-                    <span class="lyric-tr">${escapeHtml(l.tr || "")}</span>
-                    ${l.bg ? `<span class="lyric-bg">${renderKo(l.bg)}</span>` : ""}
-                  </span>
-                </button>
-              </li>`;
-            }).join("")}
-          </ul>
+            <ul class="lyrics-list" id="lyrics-list"></ul>
           </div>
         </div>
 
@@ -2618,31 +2586,46 @@
               <span class="song-sheet-count">${SONGS.length}곡</span>
               <button class="song-sheet-close" data-close-sheet aria-label="닫기">${CLOSE_SVG}</button>
             </div>
-            <ul class="song-sheet-list" id="song-sheet-list">
-              ${SONGS.map((s,i)=>`
-                <li>
-                  <button class="song-sheet-item${s.id === song.id ? " current" : ""}" data-id="${s.id}">
-                    <span class="song-sheet-num">${pad(i+1)}</span>
-                    <span class="song-sheet-name">${escapeHtml(s.title)}</span>
-                    ${s.id === song.id ? `<span class="song-sheet-now">NOW</span>` : ""}
-                  </button>
-                </li>`).join("")}
-            </ul>
+            <ul class="song-sheet-list" id="song-sheet-list"></ul>
           </div>
         </div>
       </div>
     `;
 
-    document.getElementById("back-btn").addEventListener("click", ()=>{ location.hash = "#/guide"; });
-    document.getElementById("prev-song").addEventListener("click", ()=>{ location.hash = `#/song/${prevSong.id}`; });
-    document.getElementById("next-song").addEventListener("click", ()=>{ location.hash = `#/song/${nextSong.id}`; });
-    setupSongSheet(song);
+    document.getElementById("song-back-btn").addEventListener("click", ()=>{ location.hash = "#/guide"; });
 
-    document.querySelectorAll(".lyric-line").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const t = Number(btn.dataset.time);
-        seekTo(t);
-      });
+    // 이전/다음 곡 — 탭한 그 순간(사용자 제스처 안에서) 바로 재생을 시작시킨다
+    document.getElementById("prev-song").addEventListener("click", ()=>{
+      if (!currentSong) return;
+      gotoSong(songNeighbors(currentSong).prev);
+    });
+    document.getElementById("next-song").addEventListener("click", ()=>{
+      if (!currentSong) return;
+      gotoSong(songNeighbors(currentSong).next);
+    });
+
+    // 곡 목록 시트
+    document.getElementById("song-picker-btn").addEventListener("click", ()=>{
+      const sheet = document.getElementById("song-sheet");
+      sheet.classList.contains("open") ? closeSongSheet() : openSongSheet();
+    });
+    document.getElementById("song-sheet").querySelectorAll("[data-close-sheet]").forEach(el=>{
+      el.addEventListener("click", closeSongSheet);
+    });
+    document.getElementById("song-sheet-list").addEventListener("click", (e)=>{
+      const item = e.target.closest(".song-sheet-item");
+      if (!item) return;
+      const target = SONGS.find(s => s.id === item.dataset.id);
+      closeSongSheet();
+      if (!target || (currentSong && target.id === currentSong.id)) return;
+      gotoSong(target);
+    });
+
+    // 가사 줄 탭 → 해당 위치로 이동 (목록이 바뀌어도 되도록 위임 방식)
+    document.getElementById("lyrics-list").addEventListener("click", (e)=>{
+      const btn = e.target.closest(".lyric-line");
+      if (!btn) return;
+      seekTo(Number(btn.dataset.time));
     });
 
     document.getElementById("autoscroll-btn").addEventListener("click", (e)=>{
@@ -2651,19 +2634,94 @@
       if (autoScrollEnabled) updateLyricsSync(true);   // 켜는 즉시 현재 위치로 이동
     });
 
-    const unmuteBtn = document.getElementById("unmute-btn");
-    if (unmuteBtn) {
-      unmuteBtn.addEventListener("click", ()=>{
-        if (player && typeof player.unMute === 'function') {
-          player.unMute();
-          player.setVolume(100);
-          player.playVideo();
-        }
-        showUnmuteBtn(false);
-      });
-    }
+    // ESC 로 시트 닫기 / ← → 로 이전·다음 곡 (PC 키보드)
+    if (songKeyHandler) document.removeEventListener("keydown", songKeyHandler);
+    songKeyHandler = (e)=>{
+      if (!isSongViewActive()) return;                      // 다른 화면이면 무시
+      const sheet = document.getElementById("song-sheet");
+      if (e.key === "Escape"){ closeSongSheet(); return; }
+      if (sheet.classList.contains("open")) return;         // 목록이 열려 있으면 좌우키 무시
+      const tag = (e.target && e.target.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
+      if (e.key === "ArrowLeft")  document.getElementById("prev-song").click();
+      if (e.key === "ArrowRight") document.getElementById("next-song").click();
+    };
+    document.addEventListener("keydown", songKeyHandler);
+  }
 
-    initYoutubePlayer(song.youtubeId);
+  /* 사용자가 곡을 고른 "그 탭" 안에서 재생을 먼저 걸고 화면을 이동한다.
+     (모바일은 사용자 제스처 안에서 시작한 재생만 소리를 허용하기 때문) */
+  function gotoSong(song){
+    if (!song) return;
+    playVideoFor(song.youtubeId);
+    location.hash = `#/song/${song.id}`;
+  }
+
+  function isSongViewActive(){
+    return !songView.classList.contains("offstage");
+  }
+
+  function renderSong(song){
+    buildSongShell();
+
+    currentSong = song;
+    lastActiveIdx = -1;
+    if (scrollRafId !== null) { cancelAnimationFrame(scrollRafId); scrollRafId = null; }
+
+    const { prev, next } = songNeighbors(song);
+    const page = document.getElementById("song-page");
+    if (song.cover) page.style.setProperty("--song-cover", `url('${song.cover}')`);
+    else            page.style.removeProperty("--song-cover");
+
+    document.getElementById("song-picker-title").textContent = song.title;
+    document.getElementById("prev-song").title = `이전 곡: ${prev.title}`;
+    document.getElementById("next-song").title = `다음 곡: ${next.title}`;
+    document.getElementById("watch-on-yt").href =
+      `https://www.youtube.com/watch?v=${encodeURIComponent(song.youtubeId)}`;
+
+    document.getElementById("lyrics-list").innerHTML = song.lyrics.map((l,i)=>`
+      <li>
+        <button class="lyric-line" data-time="${l.time}" data-idx="${i}">
+          <span class="lyric-icons">${lyricIconsHtml(l.ko, l.bg)}</span>
+          <span class="lyric-body">
+            <span class="lyric-jp">${escapeHtml(l.jp || "")}</span>
+            <span class="lyric-ko">${renderKo(l.ko)}</span>
+            <span class="lyric-tr">${escapeHtml(l.tr || "")}</span>
+            ${l.bg ? `<span class="lyric-bg">${renderKo(l.bg)}</span>` : ""}
+          </span>
+        </button>
+      </li>`).join("");
+
+    document.getElementById("song-sheet-list").innerHTML = SONGS.map((s,i)=>`
+      <li>
+        <button class="song-sheet-item${s.id === song.id ? " current" : ""}" data-id="${s.id}">
+          <span class="song-sheet-num">${pad(i+1)}</span>
+          <span class="song-sheet-name">${escapeHtml(s.title)}</span>
+          ${s.id === song.id ? `<span class="song-sheet-now">NOW</span>` : ""}
+        </button>
+      </li>`).join("");
+
+    closeSongSheet();
+    const scroller = songView.querySelector(".lyrics-scroll");
+    if (scroller) scroller.scrollTop = 0;
+
+    // 곡 화면 보이기
+    songView.classList.remove("offstage");
+    app.style.display = "none";
+
+    ensurePlaying(song.youtubeId);
+  }
+
+  /* 곡 화면을 벗어날 때 — 플레이어는 부수지 않고 일시정지만 한다
+     (iframe 을 없앴다 다시 만들면 모바일에서 소리 권한이 초기화됨) */
+  function leaveSongView(){
+    stopSyncTimer();
+    closeSongSheet();
+    if (player && typeof player.pauseVideo === 'function') {
+      try { player.pauseVideo(); } catch(e){}
+    }
+    if (songShellBuilt) songView.classList.add("offstage");
+    app.style.display = "";
   }
 
   function escapeHtml(str){
@@ -2706,57 +2764,74 @@
     return html;
   }
 
-  /* ---------------- YouTube Player API 연동 ---------------- */
-  function initYoutubePlayer(videoId) {
-    if (window.YT && window.YT.Player) {
-      createPlayer(videoId);
-    } else {
-      window.onYouTubeIframeAPIReady = () => createPlayer(videoId);
-    }
-  }
+  /* ---------------- YouTube Player API 연동 ----------------
+     플레이어는 페이지당 딱 하나. 처음 한 번만 만들고 곡이 바뀌면
+     loadVideoById 로 영상만 갈아끼운다. 이렇게 해야 사용자가 곡을 탭한
+     순간의 "재생 허가"가 유지되어 모바일에서도 소리가 바로 난다. */
+  let playerReady   = false;
+  let currentVideoId = null;    // 플레이어에 올라가 있는 영상
+  let pendingVideoId = null;    // 플레이어 준비 전에 눌린 곡
 
-  function createPlayer(videoId) {
-    const myToken = ++playerToken;
+  function ensurePlayer(){
+    if (player || !window.YT || !window.YT.Player) return;
+    buildSongShell();                       // #yt-player 자리 확보
+    if (!document.getElementById("yt-player")) return;
+    currentVideoId = (currentSong || SONGS[0]).youtubeId;
     player = new YT.Player('yt-player', {
-      videoId: videoId,
+      videoId: currentVideoId,
       playerVars: {
         'rel': 0,
-        'playsinline': 1,
+        'playsinline': 1,                   // iOS 에서 전체화면으로 튀지 않게
         'modestbranding': 1,
-        'autoplay': 1              // 곡을 고르면 바로 재생
+        'autoplay': 0                       // 홈 화면에서 멋대로 소리 나지 않도록
       },
       events: {
-        'onReady': (e) => onPlayerReady(e, myToken),
-        'onStateChange': (e) => onPlayerStateChange(e, myToken)
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
       }
     });
   }
 
-  /* 플레이어 준비되면 바로 재생 시도.
-     모바일/사파리처럼 소리 있는 자동재생이 막히는 환경에서는
-     음소거로 재생을 이어가고 "소리 켜기" 버튼을 띄운다. */
-  function onPlayerReady(event, token) {
-    if (token !== playerToken) return;
-    const p = event.target;
-    try { p.playVideo(); } catch(e){}
-
-    clearTimeout(autoplayCheckTimer);
-    autoplayCheckTimer = setTimeout(()=>{
-      if (token !== playerToken || !player || typeof player.getPlayerState !== 'function') return;
-      const st = player.getPlayerState();
-      if (st !== YT.PlayerState.PLAYING && st !== YT.PlayerState.BUFFERING) {
-        try {
-          player.mute();
-          player.playVideo();
-          showUnmuteBtn(true);
-        } catch(e){}
-      }
-    }, 1200);
+  function onPlayerReady(){
+    playerReady = true;
+    try { player.unMute(); player.setVolume(100); } catch(e){}
+    if (pendingVideoId) {                   // 준비되기 전에 고른 곡이 있으면 지금 재생
+      const id = pendingVideoId;
+      pendingVideoId = null;
+      playVideoFor(id);
+    }
   }
 
-  function onPlayerStateChange(event, token) {
-    if (token !== playerToken) return;
+  /* 지정한 영상을 즉시(소리 켜고) 재생.
+     사용자 탭 핸들러 안에서 부르면 모바일에서도 소리가 그대로 난다. */
+  function playVideoFor(videoId){
+    if (!player || !playerReady) { pendingVideoId = videoId; return; }
+    try {
+      player.unMute();
+      player.setVolume(100);
+      if (currentVideoId === videoId) {
+        player.seekTo(0, true);
+        player.playVideo();
+      } else {
+        currentVideoId = videoId;
+        player.loadVideoById(videoId);      // loadVideoById 는 바로 재생까지 함
+      }
+    } catch(e){}
+  }
 
+  /* 이미 그 곡이 재생 중이면 건드리지 않고, 아니면 재생시킨다.
+     (곡을 탭 → 이미 playVideoFor 가 돌았으므로 여기서 다시 끊기지 않게) */
+  function ensurePlaying(videoId){
+    if (!player || !playerReady) { pendingVideoId = videoId; return; }
+    if (currentVideoId === videoId) {
+      let st = -1;
+      try { st = player.getPlayerState(); } catch(e){}
+      if (st === YT.PlayerState.PLAYING || st === YT.PlayerState.BUFFERING) return;
+    }
+    playVideoFor(videoId);
+  }
+
+  function onPlayerStateChange(event) {
     // 영상이 끝나면 다음 곡으로 (마지막 곡이면 첫 곡으로 되돌아감)
     if (event.data === YT.PlayerState.ENDED) {
       stopSyncTimer();
@@ -2766,8 +2841,6 @@
 
     // 재생 중(PLAYING = 1)일 때만 동기화 타이머 가동
     if (event.data === YT.PlayerState.PLAYING) {
-      // 소리가 정상적으로 나오고 있으면 "소리 켜기" 버튼은 숨김
-      if (player && typeof player.isMuted === 'function' && !player.isMuted()) showUnmuteBtn(false);
       startSyncTimer();
     } else {
       stopSyncTimer();
@@ -2776,28 +2849,20 @@
     }
   }
 
-  /* 다음 곡으로 이동. 마지막 곡이면 첫 곡으로 순환한다. */
+  /* 다음 곡으로. 마지막 곡이면 첫 곡으로 순환한다.
+     (이미 재생 중인 iframe 을 그대로 쓰므로 소리도 이어서 난다) */
   function goToNextSong() {
-    if (!currentSong) return;
-    const idx = SONGS.findIndex(s => s.id === currentSong.id);
-    if (idx === -1) return;
-    const next = SONGS[(idx + 1) % SONGS.length];
+    if (!currentSong || !isSongViewActive()) return;
+    const next = songNeighbors(currentSong).next;
 
-    // 곡이 하나뿐이면 해시가 그대로라 hashchange가 안 뜨므로 직접 처음부터 재생
+    // 곡이 하나뿐이면 해시가 그대로라 hashchange 가 안 뜨므로 직접 처음부터 재생
     if (next.id === currentSong.id) {
-      if (player && typeof player.seekTo === 'function') {
-        player.seekTo(0, true);
-        player.playVideo();
-      }
+      playVideoFor(next.youtubeId);
       return;
     }
-    location.hash = `#/song/${next.id}`;
+    gotoSong(next);
   }
 
-  function showUnmuteBtn(show) {
-    const btn = document.getElementById("unmute-btn");
-    if (btn) btn.classList.toggle("show", !!show);
-  }
 
   function startSyncTimer() {
     stopSyncTimer();
@@ -2883,18 +2948,13 @@
     }
   }
 
-  function destroyPlayer() {
-    stopSyncTimer();
-    playerToken++;                      // 이전 플레이어의 콜백은 모두 무시
-    clearTimeout(autoplayCheckTimer);
-    autoplayCheckTimer = null;
-    if (player && typeof player.destroy === 'function') {
-      player.destroy();
-      player = null;
-    }
-  }
-
   window.addEventListener("hashchange", router);
+
+  // 유튜브 API 가 준비되는 대로 플레이어를 미리 만들어 둔다.
+  // (곡을 탭한 순간 곧바로 재생을 걸 수 있어야 모바일에서 소리가 난다)
+  if (window.YT && window.YT.Player) ensurePlayer();
+  else window.onYouTubeIframeAPIReady = ensurePlayer;
+
   router();
 </script>
 </body>
