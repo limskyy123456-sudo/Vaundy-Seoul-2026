@@ -279,14 +279,24 @@
     backdrop-filter:blur(3px);
     box-shadow:0 6px 20px rgba(0,0,0,0.45);
   }
+  /* 카드 맨 윗줄 — 왼쪽 "공연 정보"(펼침), 오른쪽 "Vaundy 공식사이트"(외부 링크) */
+  .info-head-row{
+    display:flex;
+    align-items:stretch;
+  }
+  /* 두 버튼은 항상 같은 크기(절반씩)로 좌우에 나란히 */
+  .info-toggle, .site-link{
+    flex:1 1 0;
+    min-width:0;
+    justify-content:center;
+  }
   .info-toggle{
-    width:100%;
-    display:flex;align-items:center;gap:14px;
+    display:flex;align-items:center;gap:8px;
     background:none;border:none;
     color:var(--cream);
-    padding:20px 20px;
+    padding:12px 10px;
     cursor:pointer;
-    text-align:left;
+    text-align:center;
     transition:background .2s ease;
   }
   .info-toggle:hover, .info-toggle:focus-visible{
@@ -295,30 +305,67 @@
   }
   .info-toggle-icon{
     flex:none;
-    width:34px;height:34px;
+    width:24px;height:24px;
     border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     background:linear-gradient(135deg, rgba(94,205,196,0.18), rgba(63,143,214,0.14));
     border:1px solid var(--line);
     color:var(--teal);
   }
-  .info-toggle-icon svg{width:17px;height:17px;}
+  .info-toggle-icon svg{width:14px;height:14px;}
   .info-toggle-label{
-    flex:1;
+    flex:none;
+    min-width:0;
     font-family:'Black Han Sans',sans-serif;
-    font-size:17px;
+    font-size:clamp(11px, 3.4vw, 13px);
     letter-spacing:.02em;
     color:#fff;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
     text-shadow:0 1px 6px rgba(0,0,0,0.6);
   }
   .info-toggle-chevron{
     flex:none;
-    width:20px;height:20px;
+    width:15px;height:15px;
     color:var(--gold-soft);
     display:flex;align-items:center;justify-content:center;
     transition:transform .3s ease;
   }
-  .info-toggle-chevron svg{width:18px;height:18px;}
+  .info-toggle-chevron svg{width:15px;height:15px;}
+
+  .site-link{
+    display:flex;align-items:center;gap:8px;
+    padding:12px 10px;
+    border-left:1px solid var(--line);
+    color:var(--gold-soft);
+    text-decoration:none;
+    letter-spacing:.01em;
+    white-space:nowrap;
+    transition:background .2s ease, color .2s ease;
+  }
+  .site-link:hover, .site-link:focus-visible{
+    background:linear-gradient(270deg, rgba(94,205,196,0.12), transparent 80%);
+    color:var(--teal);
+    outline:none;
+  }
+  .site-link-icon{
+    flex:none;
+    width:22px;height:22px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg, rgba(212,175,110,0.16), rgba(94,205,196,0.10));
+    border:1px solid var(--line);
+    color:inherit;
+  }
+  .site-link-icon svg{width:12px;height:12px;}
+  .site-link-label{
+    font-family:'Black Han Sans',sans-serif;
+    font-size:clamp(11px, 3.4vw, 13px);
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
   .info-card.open .info-toggle-chevron{ transform:rotate(180deg); }
 
   .info-panel{
@@ -422,7 +469,12 @@
   /* 좁은 화면에서는 카드 안쪽 여백을 줄여 표가 쓸 수 있는 폭을 최대한 확보 */
   @media (max-width:480px){
     .info-panel-inner{ padding:4px 10px 20px; }
-    .info-toggle{ padding:18px 14px; }
+    .info-toggle, .site-link{ padding:11px 8px; gap:6px; }
+  }
+  /* 아주 좁은 화면에서도 위아래로 나누지 않고, 아이콘만 접어 한 줄을 유지 */
+  @media (max-width:400px){
+    .info-toggle-icon, .site-link-icon{ display:none; }
+    .info-toggle, .site-link{ gap:5px; padding:11px 6px; }
   }
   /* 아주 좁은 기기(320px 등) — 시간 열이 겹치지 않도록 비율과 글자를 한 단계 더 조임 */
   @media (max-width:359px){
@@ -2205,6 +2257,7 @@
   const app = document.getElementById("app");
   const songView = document.getElementById("song-view");
   const INFO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+  const EXT_LINK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
   const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
   let countdownTimer = null;
   let player = null;
@@ -2280,11 +2333,17 @@
 
           <section class="info-section">
         <div class="info-card" id="info-card">
-          <button class="info-toggle" id="info-toggle" aria-expanded="false" aria-controls="info-panel">
-            <span class="info-toggle-icon">${INFO_SVG}</span>
-            <span class="info-toggle-label">공연 정보</span>
-            <span class="info-toggle-chevron">${CHEVRON_SVG}</span>
-          </button>
+          <div class="info-head-row">
+            <button class="info-toggle" id="info-toggle" aria-expanded="false" aria-controls="info-panel">
+              <span class="info-toggle-icon">${INFO_SVG}</span>
+              <span class="info-toggle-label">공연 정보</span>
+              <span class="info-toggle-chevron">${CHEVRON_SVG}</span>
+            </button>
+            <a class="site-link" href="https://vaundy.jp/?lang=ko" target="_blank" rel="noopener">
+              <span class="site-link-icon">${EXT_LINK_SVG}</span>
+              <span class="site-link-label">Vaundy 공식사이트</span>
+            </a>
+          </div>
           <div class="info-panel" id="info-panel">
             <div class="info-panel-inner">
               <div class="info-panel-title"><span class="bar">|</span> 관객 입장안내 <span class="bar">|</span></div>
