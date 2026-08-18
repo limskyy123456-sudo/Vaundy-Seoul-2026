@@ -53,8 +53,8 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:flex-start;
-    padding:56px 20px 40px;
+    justify-content:center;
+    padding:44px 20px 36px;
     background:
       radial-gradient(120% 70% at 50% 8%, rgba(200,70,42,0.55), transparent 60%),
       radial-gradient(140% 90% at 50% 100%, rgba(122,39,18,0.9), transparent 70%),
@@ -90,17 +90,18 @@
   .tour-title span{display:block;font-size:.5em;letter-spacing:.34em;color:var(--gold);margin-bottom:6px;}
 
   .countdown-label{
-    margin-top:30px;
-    font-family:'Black Han Sans',sans-serif;
-    font-size:15px;
-    letter-spacing:.18em;
+    margin-top:26px;
+    font-family:'Anton',sans-serif;
+    font-size:14px;
+    letter-spacing:.32em;
+    text-transform:uppercase;
     color:var(--gold);
     text-shadow:0 1px 6px rgba(0,0,0,0.85);
   }
   .countdown{
     display:flex;
     gap:clamp(6px,2vw,12px);
-    margin-top:16px;
+    margin-top:14px;
     width:100%;
     max-width:400px;
     justify-content:center;
@@ -141,7 +142,7 @@
   }
 
   .show-meta{
-    margin-top:64px;
+    margin-top:34px;
     font-family:'Anton',sans-serif;
     letter-spacing:.04em;
   }
@@ -160,7 +161,7 @@
 
   .main-menu{
     position:relative;z-index:1;
-    margin-top:46px;
+    margin-top:30px;
   }
   .menu-btn{
     display:flex;flex-direction:column;align-items:center;
@@ -257,6 +258,180 @@
     font-size:11px;
     color:#7a6a52;
     letter-spacing:.08em;
+  }
+
+  /* ---------- INFO ACCORDION (공연 정보 / 관객 입장안내) ---------- */
+  /* 히어로(첫 화면) 안에 들어가는 공연 정보 카드 */
+  .info-section{
+    position:relative;z-index:1;
+    width:100%;
+    max-width:560px;
+    margin:26px auto 0;
+    text-align:left;
+  }
+  .info-card{
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    background:rgba(20,6,4,0.55);
+    backdrop-filter:blur(3px);
+    box-shadow:0 6px 20px rgba(0,0,0,0.45);
+  }
+  .info-toggle{
+    width:100%;
+    display:flex;align-items:center;gap:14px;
+    background:none;border:none;
+    color:var(--cream);
+    padding:20px 20px;
+    cursor:pointer;
+    text-align:left;
+    transition:background .2s ease;
+  }
+  .info-toggle:hover, .info-toggle:focus-visible{
+    background:linear-gradient(90deg, rgba(94,205,196,0.10), transparent 70%);
+    outline:none;
+  }
+  .info-toggle-icon{
+    flex:none;
+    width:34px;height:34px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg, rgba(94,205,196,0.18), rgba(63,143,214,0.14));
+    border:1px solid var(--line);
+    color:var(--teal);
+  }
+  .info-toggle-icon svg{width:17px;height:17px;}
+  .info-toggle-label{
+    flex:1;
+    font-family:'Black Han Sans',sans-serif;
+    font-size:17px;
+    letter-spacing:.02em;
+    color:#fff;
+    text-shadow:0 1px 6px rgba(0,0,0,0.6);
+  }
+  .info-toggle-chevron{
+    flex:none;
+    width:20px;height:20px;
+    color:var(--gold-soft);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .3s ease;
+  }
+  .info-toggle-chevron svg{width:18px;height:18px;}
+  .info-card.open .info-toggle-chevron{ transform:rotate(180deg); }
+
+  .info-panel{
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:max-height .35s ease, opacity .25s ease;
+  }
+  .info-card.open .info-panel{ opacity:1; }
+
+  .info-panel-inner{
+    padding:4px 20px 24px;
+    border-top:1px solid var(--line);
+  }
+  .info-panel-title{
+    margin:20px 0 4px;
+    text-align:center;
+    font-family:'Black Han Sans',sans-serif;
+    font-size:clamp(17px,4.6vw,20px);
+    letter-spacing:.02em;
+    color:var(--gold);
+    text-shadow:0 1px 6px rgba(0,0,0,0.6);
+  }
+  .info-panel-title .bar{
+    color:var(--teal);
+    margin:0 8px;
+    font-weight:400;
+  }
+  .info-table-wrap{
+    margin-top:16px;
+    overflow-x:auto;
+    border-radius:10px;
+    border:1px solid var(--line);
+  }
+  .info-table{
+    width:100%;
+    min-width:460px;
+    border-collapse:collapse;
+    font-size:12.5px;
+  }
+  .info-table thead th{
+    background:linear-gradient(180deg, rgba(233,217,163,0.16), rgba(233,217,163,0.05));
+    color:var(--gold);
+    font-family:'Anton',sans-serif;
+    letter-spacing:.04em;
+    font-size:11.5px;
+    text-transform:uppercase;
+    padding:12px 10px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  .info-table td{
+    padding:13px 10px;
+    text-align:center;
+    color:var(--cream);
+    border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  .info-table tbody tr:last-child td{ border-bottom:none; }
+  .info-table tbody tr:nth-child(even){ background:rgba(246,239,217,0.03); }
+  .info-table td.label{
+    text-align:left;
+    font-weight:700;
+    color:#fff;
+  }
+  .info-table td.note{
+    text-align:left;
+    font-size:11.5px;
+    color:#b9a98a;
+    white-space:normal;
+    min-width:200px;
+  }
+  .info-footnote{
+    margin:14px 2px 0;
+    font-size:11.5px;
+    color:var(--gold-soft);
+    line-height:1.6;
+  }
+
+  /* 좁은 화면에서는 표를 가로 스크롤 대신 항목별 카드 형태로 쌓아 보여줌 */
+  @media (max-width:480px){
+    .info-table-wrap{ overflow-x:visible; }
+    .info-table{ min-width:0; }
+    .info-table thead{ display:none; }
+    .info-table, .info-table tbody, .info-table tr, .info-table td{ display:block; width:100%; }
+    .info-table tr{ padding:14px 12px; border-bottom:1px solid var(--line); }
+    .info-table tbody tr:last-child{ border-bottom:none; }
+    .info-table td{
+      border-bottom:none;
+      padding:3px 0;
+      text-align:left;
+      white-space:normal;
+      display:flex;
+      gap:10px;
+      min-width:0;
+    }
+    .info-table td::before{
+      content:attr(data-label);
+      flex:none;
+      width:78px;
+      font-family:'Anton',sans-serif;
+      font-size:10px;
+      letter-spacing:.02em;
+      color:var(--gold);
+      padding-top:2px;
+    }
+    .info-table td.label{
+      font-family:'Black Han Sans',sans-serif;
+      font-size:14.5px;
+      color:#fff;
+      padding-bottom:6px;
+    }
+    .info-table td.label::before{ content:""; width:0; }
+    .info-table td.note{ color:#b9a98a; font-size:11.5px; }
   }
 
   /* ---------- SONG DETAIL PAGE ---------- */
@@ -608,27 +783,40 @@
       title: "괴수의 꽃노래 (怪獣の花唄)",
       youtubeId: "UM9XNpgrqVk",
       lyrics: [
-       { time: 8, jp: "思い出すのは 君の歌 会話よりも鮮明だ",        ko: [{ text: "오모이다스노와 키미노 우타 카이와요리모 센메이다", tag: "clap" }],                                                     tr: "떠오르는 건 너의 노래 대화보다도 선명해" },
+       { time: 8, jp: "思い出すのは 君の歌 会話よりも鮮明だ",        ko: [{ text: "오모이다스노와 키미노 우타", tag: "clap" }],                                                     tr: "떠오르는 건 너의 노래" },
+       { time: 11.5, jp: "思い出すのは 君の歌 会話よりも鮮明だ",        ko: [{ text: "카이와요리모 센메이다", tag: "clap" }],                                                     tr: "대화보다도 선명해" },
        { time: 15, jp: "どこに行ってしまったの いつも探すんだよ",        ko: [{ text: "도코니 잇테시맛타노 이츠모 사가순다요", tag: "clap" }],                                                     tr: "어디로 가버린 거야 늘 찾고 있어" },
-       { time: 21.5, jp: "思い出すのは 君の歌 歌い笑う顔が鮮明だ",        ko: [{ text: "오모이다스노와 키미노 우타 우타이 와라우 카오가 센메이다", tag: "clap" }],                                                     tr: "떠오르는 건 너의 노래 노래하며 웃는 얼굴이 선명해" },
+       { time: 21.5, jp: "思い出すのは 君の歌 歌い笑う顔が鮮明だ",        ko: [{ text: "오모이다스노와 키미노 우타", tag: "clap" }],                                                     tr: "떠오르는 건 너의 노래" },
+       { time: 24.5, jp: "思い出すのは 君の歌 歌い笑う顔が鮮明だ",        ko: [{ text: "우타이 와라우 카오가 센메이다", tag: "clap" }],                                                     tr: "노래하며 웃는 얼굴이 선명해" },
        { time: 28, jp: "君に似合うんだよ ずっと見ていたいよ",        ko: [{ text: "키미니 니아운다요 즛토 미테이타이요", tag: "clap" }],                                                     tr: "너에게 어울려 계속 보고 싶어" },
-       { time: 34, jp: "でも最後に見たいのは きっともう君の夢の中",        ko: [{ text: "데모 사이고니 미타이노와 킷토 모우 키미노 유메노 나카", tag: "clap" }],                                                     tr: "하지만 마지막에 보고 싶은 건 분명 이제 너의 꿈속" },
-       { time: 40.5, jp: "もう一度 また聞かせてくれよ 聞きたいんだ もっと", ko: [{ text: "모우 이치도 마타 키카세테 쿠레요 키키타인다", tag: "clap" }, { text: " 못토", tag: "chant" }],               tr: "한 번 더 다시 들려줘 듣고 싶어 좀더" },
-       { time: 47.5, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "사와게 카이주우노 우타 마다 키에나이 유메노 우타 토나에테", tag: "chant" }],               tr: "떠들어라 괴수의 노래 아직 사라지지 않아 꿈의 노래를 불러" },
+       { time: 34, jp: "でも最後に見たいのは きっともう君の夢の中",        ko: [{ text: "데모 사이고니 미타이노와", tag: "clap" }],                                                     tr: "하지만 마지막에 보고 싶은 건" },
+       { time: 37.5, jp: "でも最後に見たいのは きっともう君の夢の中",        ko: [{ text: "킷토 모우 키미노 유메노 나카", tag: "clap" }],                                                     tr: "분명 이제 너의 꿈속" },
+       { time: 40.5, jp: "もう一度 また聞かせてくれよ 聞きたいんだ もっと", ko: [{ text: "모우 이치도 마타" }],               tr: "한 번 더 다시" },
+       { time: 42.5, jp: "もう一度 また聞かせてくれよ 聞きたいんだ もっと", ko: [{ text: "키카세테 쿠레요 키키타인다", tag: "clap" }, { text: " 못토", tag: "chant" }],               tr: "들려줘 듣고 싶어 좀더" },
+       { time: 47.5, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "사와게 카이주우노 우타", tag: "chant" }],               tr: "떠들어라 괴수의 노래" },
+       { time: 52, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "마다 키에나이 유메노 우타 토나에테", tag: "chant" }],               tr: "아직 사라지지 않아 꿈의 노래를 불러" },
        { time: 58.5, jp: "君がいつも  歌う怪獣の歌", ko: [{ text: "키미가 이츠모"}, { text: " 우타우 카이주우노 우타", tag: "chant" }],               tr: "네가 언제나 부르는 괴수의 노래" },
        { time: 64.5, jp: "まだ消えない 口ずさんでしまうよ", ko: [{ text: "마다 키에나이 쿠치즈산데 시마우요", tag: "chant" }],               tr: "직 사라지지 않아 나도 모르게 흥얼거려" },
-       { time: 72.5, jp: "思い出すのは 君がいた ギター持ってる 君がいた",        ko: [{ text: "오모이다스노와 키미가 이타 기타아 못테루 키미가 이타", tag: "clap" }],                                                     tr: "떠오르는 건 네가 있었어 기타를 들고 있는 네가 있었어" },
-       { time: 79, jp: "忘れられないんだよ だから僕が歌うよ",        ko: [{ text: "와스레라레나인다요 다카라 보쿠가 우타우요", tag: "clap" }],                                                     tr: "잊을 수가 없어 그래서 내가 노래할게", bg: "와스레라레나인다요 다카라 보쿠가 우타우요"},
-       { time: 85.5, jp: "でも最後に見たいのは きっともう君の夢の中",        ko: [{ text: "데모 사이고니 미타이노와 킷토 모우 키미노 유메노 나카", tag: "clap" }],                                                     tr: "하지만 마지막에 보고 싶은 건 분명 이제 너의 꿈속" },
-       { time: 91.5, jp: "もう一度 また聞かせてくれよ 聞きたいんだ もっと", ko: [{ text: "모우 이치도 마타 키카세테 쿠레요 키키타인다", tag: "clap" }, { text: " 못토", tag: "chant" }],               tr: "한 번 더 다시 들려줘 듣고 싶어 좀더" },
-       { time: 98.5, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "사와게 카이주우노 우타 마다 키에나이 유메노 우타 토나에테", tag: "chant" }],               tr: "떠들어라 괴수의 노래 아직 사라지지 않아 꿈의 노래를 불러" },
+       { time: 72.5, jp: "思い出すのは 君がいた ギター持ってる 君がいた",        ko: [{ text: "오모이다스노와 키미가 이타", tag: "clap" }],                                                     tr: "떠오르는 건 네가 있었어" },
+       { time: 76, jp: "思い出すのは 君がいた ギター持ってる 君がいた",        ko: [{ text: "기타아 못테루 키미가 이타", tag: "clap" }],                                                     tr: "기타를 들고 있는 네가 있었어" },
+       { time: 79, jp: "忘れられないんだよ だから僕が歌うよ",        ko: [{ text: "와스레라레나인다요", tag: "clap" }],                                                     tr: "잊을 수가 없어", bg: "와스레라레나인다요"},
+       { time: 82, jp: "忘れられないんだよ だから僕が歌うよ",        ko: [{ text: "다카라 보쿠가 우타우요", tag: "clap" }],                                                     tr: "그래서 내가 노래할게", bg: "다카라 보쿠가 우타우요"},
+       { time: 85.5, jp: "でも最後に見たいのは きっともう君の夢の中",        ko: [{ text: "데모 사이고니 미타이노와", tag: "clap" }],                                                     tr: "하지만 마지막에 보고 싶은 건" },
+       { time: 88.5, jp: "でも最後に見たいのは きっともう君の夢の中",        ko: [{ text: "킷토 모우 키미노 유메노 나카", tag: "clap" }],                                                     tr: "분명 이제 너의 꿈속" },
+       { time: 91.5, jp: "もう一度 また聞かせてくれよ 聞きたいんだ もっと", ko: [{ text: "모우 이치도 마타" }],               tr: "한 번 더 다시" },
+       { time: 93.5, jp: "もう一度 また聞かせてくれよ 聞きたいんだ もっと", ko: [{ text: "키카세테 쿠레요 키키타인다", tag: "clap" }, { text: " 못토", tag: "chant" }],               tr: "들려줘 듣고 싶어 좀더" },
+       { time: 98.5, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "사와게 카이주우노 우타", tag: "chant" }],               tr: "떠들어라 괴수의 노래" },
+       { time: 103, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "마다 키에나이 유메노 우타 토나에테", tag: "chant" }],               tr: "아직 사라지지 않아 꿈의 노래를 불러" },
        { time: 110, jp: "君がいつも  歌う怪獣の歌", ko: [{ text: "키미가 이츠모"}, { text: " 우타우 카이주우노 우타", tag: "chant" }],               tr: "네가 언제나 부르는 괴수의 노래" },
        { time: 116, jp: "まだ消えない 口ずさんでしまうよ", ko: [{ text: "마다 키에나이 쿠치즈산데 시마우요", tag: "chant" }],               tr: "직 사라지지 않아 나도 모르게 흥얼거려" },    
-       { time: 123.5, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데 미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고 보여주고 싶은 미래는 섬세하고" },
+       { time: 123.5, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고" },
+       { time: 127, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "보여주고 싶은 미래는 섬세하고" },
        { time: 130, jp: "すぎてく日々には鈍感な君へ",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게" },
-       { time: 137, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데 미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고 보여주고 싶은 미래는 섬세하고" },
+       { time: 137, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고" },
+       { time: 140, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "보여주고 싶은 미래는 섬세하고" },
        { time: 143, jp: "すぎてく日々には鈍感な君へ ねぇ、もっと",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에 네에 못토", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게 있잖아, 좀더" },
-       { time: 150, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "사와게 카이주우노 우타 마다 키에나이 유메노 우타 토나에테", tag: "chant" }],               tr: "떠들어라 괴수의 노래 아직 사라지지 않아 꿈의 노래를 불러" },
+       { time: 150, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "사와게 카이주우노 우타", tag: "chant" }],               tr: "떠들어라 괴수의 노래" },
+       { time: 154, jp: "騒げ怪獣の歌 まだ消えない 夢の歌唱えて", ko: [{ text: "마다 키에나이 유메노 우타 토나에테", tag: "chant" }],               tr: "아직 사라지지 않아 꿈의 노래를 불러" },
        { time: 161, jp: "君がいつも  歌う怪獣の歌", ko: [{ text: "키미가 이츠모"}, { text: " 우타우 카이주우노 우타", tag: "chant" }],               tr: "네가 언제나 부르는 괴수의 노래" },
        { time: 167, jp: "まだ消えない 口ずさんでしまうよ", ko: [{ text: "마다 키에나이 쿠치즈산데 시마우요 네에 보쿠라", tag: "chant" }],               tr: "직 사라지지 않아 나도 모르게 흥얼거려 우리" },    
        { time: 175.5, jp: "眠れない夜に手を伸ばして ", ko: [{ text: "네무레나이 요루니", tag: "chant" }, { text: " 테오 노바시테"}],               tr: "잠 못 드는 밤에 손을 뻗어" },
@@ -637,10 +825,13 @@
        { time: 188.5, jp: "眠れない夜に手を伸ばして ", ko: [{ text: "네무레나이 요루니", tag: "chant" }, { text: " 테오 노바시테"}],               tr: "잠 못 드는 밤에 손을 뻗어" },
        { time: 191.5, jp: "眠らない夜をまた伸ばして ", ko: [{ text: "네무라나이 요루오", tag: "chant" }, { text: " 마타 노바시테"}],               tr: "잠들지 않는 밤을 또 늘려서" },
        { time: 195, jp: "眠くないまだね そんな夜に歌う 카이주우노 우타", ko: [{ text: "네무쿠나이 마다네", tag: "chant" }, { text: " 손나 요루니 우타우 카이주우노 우타"}],               tr: "아직 안 졸려, 그런 밤에 부르는 괴수의 노래" },
-       { time: 201, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데 미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고 보여주고 싶은 미래는 섬세하고" },
-       { time: 206.5, jp: "すぎてく日々には鈍感な君へ",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게" },
-       { time: 213.5, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데 미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고 보여주고 싶은 미래는 섬세하고" },
-       { time: 219.5, jp: "すぎてく日々には鈍感な君へ",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게" },
+       { time: 201, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고" },
+       { time: 203.5, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "보여주고 싶은 미래는 섬세하고" },
+       { time: 206.5, jp: "すぎてく日々には鈍感な君へ ねぇ、もっと",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에 네에 못토", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게 있잖아, 좀더" },
+       { time: 213.5, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "오치테쿠 카코와 센메이데", tag: "chant" }],                                                     tr: "떨어져가는 과거는 선명하고" },
+       { time: 216.5, jp: "落ちてく過去は鮮明で 見せたい未来は繊細で",        ko: [{ text: "미세타이 미라이와 센사이데", tag: "chant" }],                                                     tr: "보여주고 싶은 미래는 섬세하고" },
+       { time: 219.5, jp: "すぎてく日々には鈍感な君へ ねぇ、もっと",        ko: [{ text: "스기테쿠 히비니와 돈칸나 키미에 네에 못토", tag: "chant" }],                                                     tr: "흘러가는 나날에 둔감한 너에게 있잖아, 좀더" },
+
 
       ],
     },
@@ -1798,6 +1989,8 @@
   ];
 
   const app = document.getElementById("app");
+  const INFO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+  const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
   let countdownTimer = null;
   let player = null;
   let syncTimer = null;
@@ -1842,7 +2035,7 @@
           <div class="eyebrow">ASIA ARENA TOUR 2026</div>
           <h1 class="tour-title"><span>VAUNDY</span>&ldquo;HORO&rdquo;</h1>
 
-          <div class="countdown-label">공연까지 남은 시간</div>
+          <div class="countdown-label">COUNTDOWN</div>
           <div class="countdown" id="countdown">
             <div class="cd-box"><div class="cd-num" id="cd-d">00</div><div class="cd-unit">DAYS</div></div>
             <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-unit">HRS</div></div>
@@ -1860,6 +2053,66 @@
               <span class="menu-btn-label">Call Guide</span>
             </button>
           </nav>
+
+          <section class="info-section">
+        <div class="info-card" id="info-card">
+          <button class="info-toggle" id="info-toggle" aria-expanded="false" aria-controls="info-panel">
+            <span class="info-toggle-icon">${INFO_SVG}</span>
+            <span class="info-toggle-label">공연 정보</span>
+            <span class="info-toggle-chevron">${CHEVRON_SVG}</span>
+          </button>
+          <div class="info-panel" id="info-panel">
+            <div class="info-panel-inner">
+              <div class="info-panel-title"><span class="bar">|</span> 관객 입장안내 <span class="bar">|</span></div>
+              <div class="info-table-wrap">
+                <table class="info-table">
+                  <thead>
+                    <tr>
+                      <th>일정</th>
+                      <th>9/19(토)</th>
+                      <th>9/20(일)</th>
+                      <th>비고</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="label" data-label="일정">티켓 부스, 스탠딩 부스</td>
+                      <td data-label="9/19(토)">13:00 ~ 17:30</td>
+                      <td data-label="9/20(일)">12:00 ~ 16:30</td>
+                      <td class="note" data-label="비고">공연시작 4시간 전 - 공연시작 후 30분까지</td>
+                    </tr>
+                    <tr>
+                      <td class="label" data-label="일정">아레나 로비 오픈</td>
+                      <td data-label="9/19(토)">14:00 ~</td>
+                      <td data-label="9/20(일)">13:00 ~</td>
+                      <td class="note" data-label="비고">공연시작 3시간 전</td>
+                    </tr>
+                    <tr>
+                      <td class="label" data-label="일정">스탠딩석 입장 대기</td>
+                      <td data-label="9/19(토)">14:00 ~</td>
+                      <td data-label="9/20(일)">13:00 ~</td>
+                      <td class="note" data-label="비고">공연시작 3시간 전</td>
+                    </tr>
+                    <tr>
+                      <td class="label" data-label="일정">공연장 입장</td>
+                      <td data-label="9/19(토)">15:00 ~</td>
+                      <td data-label="9/20(일)">14:00 ~</td>
+                      <td class="note" data-label="비고">공연시작 2시간 전</td>
+                    </tr>
+                    <tr>
+                      <td class="label" data-label="일정">본 공연</td>
+                      <td data-label="9/19(토)">17:00 ~</td>
+                      <td data-label="9/20(일)">16:00 ~</td>
+                      <td class="note" data-label="비고">공연시간 120분</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="info-footnote">※ 운영 시간은 당일 현장 상황에 따라 변동될 수 있습니다.</p>
+            </div>
+          </div>
+        </div>
+          </section>
         </div>
       </section>
 
@@ -1867,7 +2120,37 @@
     `;
 
     document.getElementById("guide-btn").addEventListener("click", ()=>{ location.hash = "#/guide"; });
+    setupInfoAccordion();
     startCountdown();
+  }
+
+  /* 홈 화면 하단 "공연 정보" 아코디언 — 클릭 시 관객 입장안내가 아래로 펼쳐짐 */
+  function setupInfoAccordion(){
+    const card  = document.getElementById("info-card");
+    const btn   = document.getElementById("info-toggle");
+    const panel = document.getElementById("info-panel");
+    if (!card || !btn || !panel) return;
+
+    btn.addEventListener("click", ()=>{
+      const isOpen = card.classList.contains("open");
+      if (isOpen){
+        // 닫기: 현재 높이에서 0으로 애니메이션
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        requestAnimationFrame(()=>{
+          card.classList.remove("open");
+          btn.setAttribute("aria-expanded", "false");
+          panel.style.maxHeight = "0px";
+        });
+      } else {
+        card.classList.add("open");
+        btn.setAttribute("aria-expanded", "true");
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        // 이후 내부 콘텐츠 크기 변화(폰트 로딩 등)에도 대응해 살짝 여유를 둠
+        setTimeout(()=>{
+          if (card.classList.contains("open")) panel.style.maxHeight = panel.scrollHeight + "px";
+        }, 260);
+      }
+    });
   }
 
   /* ---------------- CHANT GUIDE (song list) ---------------- */
