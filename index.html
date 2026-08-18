@@ -53,7 +53,9 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    /* 위쪽 정렬 고정 — 공연 정보를 펼쳐도 위 내용(제목·카운트다운)이 밀려 올라가지 않음.
+       닫힌 상태에서 가운데처럼 보이게 하는 여백은 JS(layoutHeroCenter)가 한 번만 계산해 고정합니다. */
+    justify-content:flex-start;
     padding:44px 20px 36px;
     background:
       radial-gradient(120% 70% at 50% 8%, rgba(200,70,42,0.55), transparent 60%),
@@ -323,13 +325,21 @@
     max-height:0;
     overflow:hidden;
     opacity:0;
-    transition:max-height .35s ease, opacity .25s ease;
+    transition:max-height .38s cubic-bezier(.4,0,.2,1), opacity .3s ease;
   }
   .info-card.open .info-panel{ opacity:1; }
 
   .info-panel-inner{
     padding:4px 20px 24px;
     border-top:1px solid var(--line);
+    /* 내용이 살짝 아래로 흘러내리듯 나타나 아코디언 움직임과 자연스럽게 이어지게 함 */
+    transform:translateY(-8px);
+    transition:transform .38s cubic-bezier(.4,0,.2,1);
+  }
+  .info-card.open .info-panel-inner{ transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    .info-panel, .info-panel-inner, .info-toggle-chevron{ transition:none; }
   }
   .info-panel-title{
     margin:20px 0 4px;
@@ -2122,9 +2132,42 @@
     document.getElementById("guide-btn").addEventListener("click", ()=>{ location.hash = "#/guide"; });
     setupInfoAccordion();
     startCountdown();
+
+    // 첫 화면 세로 가운데 여백을 계산해 고정한다.
+    layoutHeroCenter();
+    // 웹폰트가 늦게 적용되면 높이가 달라지므로 한 번 더 보정
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutHeroCenter);
   }
 
-  /* 홈 화면 하단 "공연 정보" 아코디언 — 클릭 시 관객 입장안내가 아래로 펼쳐짐 */
+  /* 히어로(첫 화면) 내용을 세로 가운데처럼 보이도록 여백을 "한 번만" 계산해 고정합니다.
+     flex의 justify-content:center를 쓰면 공연 정보를 펼칠 때 높이가 늘어나면서
+     위쪽 글자들이 같이 밀려 올라가 이질감이 생기므로, 여백을 고정값으로 잡아 둡니다. */
+  function layoutHeroCenter(){
+    const hero  = document.querySelector(".hero");
+    const inner = document.querySelector(".hero-inner");
+    const card  = document.getElementById("info-card");
+    if (!hero || !inner) return;
+    // 펼쳐진 상태에서는 다시 계산하지 않음 (계산하면 화면이 움직임)
+    if (card && card.classList.contains("open")) return;
+
+    inner.style.marginTop = "0px";
+    const cs   = getComputedStyle(hero);
+    const padT = parseFloat(cs.paddingTop)  || 0;
+    const padB = parseFloat(cs.paddingBottom) || 0;
+    const free = hero.clientHeight - padT - padB - inner.offsetHeight;
+    inner.style.marginTop = free > 0 ? Math.round(free / 2) + "px" : "0px";
+  }
+
+  /* 화면 "가로" 크기가 바뀔 때만 다시 계산.
+     모바일에서 주소창이 접히며 생기는 세로 높이 변화로는 다시 계산하지 않아 화면이 흔들리지 않음 */
+  let lastHeroWidth = window.innerWidth;
+  window.addEventListener("resize", ()=>{
+    if (window.innerWidth === lastHeroWidth) return;
+    lastHeroWidth = window.innerWidth;
+    layoutHeroCenter();
+  });
+
+  /* 홈 화면 "공연 정보" 아코디언 — 클릭 시 관객 입장안내가 아래로 펼쳐짐 */
   function setupInfoAccordion(){
     const card  = document.getElementById("info-card");
     const btn   = document.getElementById("info-toggle");
@@ -2147,10 +2190,25 @@
         panel.style.maxHeight = panel.scrollHeight + "px";
         // 이후 내부 콘텐츠 크기 변화(폰트 로딩 등)에도 대응해 살짝 여유를 둠
         setTimeout(()=>{
-          if (card.classList.contains("open")) panel.style.maxHeight = panel.scrollHeight + "px";
-        }, 260);
+          if (!card.classList.contains("open")) return;
+          panel.style.maxHeight = panel.scrollHeight + "px";
+          revealInfoPanel(card);
+        }, 300);
       }
     });
+  }
+
+  /* 펼친 내용이 화면 아래로 잘려 있으면 딱 필요한 만큼만 부드럽게 스크롤해서 보여줌 */
+  function revealInfoPanel(card){
+    const rect = card.getBoundingClientRect();
+    const overflow = rect.bottom - window.innerHeight + 16;
+    if (overflow <= 0) return;
+    // 카드 상단(공연 정보 버튼)은 항상 화면에 남도록 스크롤 양을 제한
+    const maxShift = Math.max(0, rect.top - 12);
+    const top = Math.min(overflow, maxShift);
+    if (top < 8) return;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollBy({ top, behavior: reduce ? "auto" : "smooth" });
   }
 
   /* ---------------- CHANT GUIDE (song list) ---------------- */
