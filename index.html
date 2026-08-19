@@ -896,15 +896,19 @@
   .lyric-line.active .ico-wave{ filter:drop-shadow(0 0 6px rgba(141,224,95,0.5)); }
   .lyric-line.active .ico-clap{ filter:drop-shadow(0 0 6px rgba(79,168,224,0.45)); }
 
-  .lyric-type-icon.wave svg, .legend-icon.wave svg{
-    transform-origin:60% 85%;
-    animation:handWave 1.1s ease-in-out infinite;
-  }
   .lyric-line.active .ico-mic svg{ animation-duration:.8s; }
 
+  /* 왼쪽 종류 표시(동그라미)와 범례에도 같은 움직이는 아이콘을 그대로 사용.
+     em 기준 크기라서 font-size 만 정해 주면 동그라미 안에 딱 맞게 들어간다. */
+  .lyric-type-icon .ico{ margin:0; font-size:11px; }
+  .legend-icon .ico{ margin:0; font-size:10px; }
+  .lyric-type-icon .ico svg, .legend-icon .ico svg{ width:100%; height:100%; }
+  .lyric-type-icon .ico-mic, .legend-icon .ico-mic,
+  .lyric-type-icon .ico-wave, .legend-icon .ico-wave,
+  .lyric-type-icon .ico-clap, .legend-icon .ico-clap{ color:inherit; }
+
   @media (prefers-reduced-motion: reduce){
-    .ico-wave svg, .ico-clap .hand, .ico-clap .spark, .ico-mic svg,
-    .lyric-type-icon.wave svg, .legend-icon.wave svg{ animation:none; }
+    .ico-wave svg, .ico-clap .hand, .ico-clap .spark, .ico-mic svg{ animation:none; }
     .ico-clap .hand.r{ transform:scaleX(-1); }
   }
   .lyric-body{min-width:0;display:block;flex:1;}
@@ -2793,9 +2797,9 @@
             <div class="lyrics-note"><span class="dot">●</span> 가사를 탭하면 해당 위치로 영상이 이동해요. 영상 재생 상태에 따라 가사 하이라이트가 동기화됩니다.</div>
 
             <div class="lyrics-legend">
-              <span class="legend-item"><span class="legend-icon chant">${MIC_SVG}</span>떼창</span>
-              <span class="legend-item"><span class="legend-icon clap">${CLAP_SVG}</span>박수</span>
-              <span class="legend-item"><span class="legend-icon wave">${WAVE_SVG}</span>손 흔들기</span>
+              <span class="legend-item"><span class="legend-icon chant">${INLINE_ICONS.mic}</span>떼창</span>
+              <span class="legend-item"><span class="legend-icon clap">${INLINE_ICONS.clap}</span>박수</span>
+              <span class="legend-item"><span class="legend-icon wave">${INLINE_ICONS.wave}</span>손 흔들기</span>
             </div>
           </div>
 
@@ -3018,9 +3022,9 @@
       scan(bg);
     }
     let html = "";
-    if (hasChant) html += `<span class="lyric-type-icon chant" title="떼창">${MIC_SVG}</span>`;
-    if (hasClap)  html += `<span class="lyric-type-icon clap" title="박수">${CLAP_SVG}</span>`;
-    if (wave)     html += `<span class="lyric-type-icon wave" title="손 흔들기">${WAVE_SVG}</span>`;
+    // 박수·손 흔들기는 가사 안에 넣는 [clap] / [wave] 아이콘으로만 표시하고
+    // 왼쪽 종류 표시에는 떼창만 남긴다.
+    if (hasChant) html += `<span class="lyric-type-icon chant" title="떼창">${INLINE_ICONS.mic}</span>`;
     return html;
   }
 
@@ -3031,6 +3035,9 @@
   let playerReady   = false;
   let currentVideoId = null;    // 플레이어에 올라가 있는 영상
   let pendingVideoId = null;    // 플레이어 준비 전에 눌린 곡
+  let userVolume     = 100;     // 사용자가 마지막으로 맞춰 둔 볼륨(곡이 바뀌어도 유지)
+  let userMuted      = false;   // 사용자가 직접 음소거해 뒀는지
+  let volumeWatchTimer = null;
 
   function ensurePlayer(){
     if (player || !window.YT || !window.YT.Player) return;
@@ -3054,7 +3061,8 @@
 
   function onPlayerReady(){
     playerReady = true;
-    try { player.unMute(); player.setVolume(100); } catch(e){}
+    try { player.unMute(); player.setVolume(userVolume); } catch(e){}
+    startVolumeWatch();
     if (pendingVideoId) {                   // 준비되기 전에 고른 곡이 있으면 지금 재생
       const id = pendingVideoId;
       pendingVideoId = null;
@@ -3062,13 +3070,31 @@
     }
   }
 
-  /* 지정한 영상을 즉시(소리 켜고) 재생.
+  /* ── 볼륨 기억하기 ────────────────────────────────────────────
+     사용자가 플레이어에서 볼륨을 조절하면 그 값을 기억해 두었다가
+     다음 곡에도 그대로 적용한다. (유튜브 API 에는 볼륨 변경 이벤트가
+     없어서 주기적으로 확인하는 방식) */
+  function startVolumeWatch(){
+    if (volumeWatchTimer) return;
+    volumeWatchTimer = setInterval(()=>{
+      if (!player || !playerReady) return;
+      try {
+        const v = player.getVolume();
+        const m = player.isMuted();
+        if (typeof v === "number" && v > 0) userVolume = v;   // 0 은 음소거로 취급
+        userMuted = !!m;
+      } catch(e){}
+    }, 800);
+  }
+
+  /* 지정한 영상을 즉시 재생. 볼륨은 사용자가 맞춰 둔 값을 그대로 유지한다.
      사용자 탭 핸들러 안에서 부르면 모바일에서도 소리가 그대로 난다. */
   function playVideoFor(videoId){
     if (!player || !playerReady) { pendingVideoId = videoId; return; }
     try {
-      player.unMute();
-      player.setVolume(100);
+      if (userMuted) player.mute();         // 사용자가 꺼 뒀으면 계속 꺼 둠
+      else           player.unMute();
+      player.setVolume(userVolume);         // 100 으로 되돌리지 않음
       if (currentVideoId === videoId) {
         player.seekTo(0, true);
         player.playVideo();
