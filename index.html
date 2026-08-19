@@ -2761,12 +2761,14 @@
       </li>`).join("");
 
     closeSongSheet();
-    const scroller = songView.querySelector(".lyrics-scroll");
-    if (scroller) scroller.scrollTop = 0;
 
-    // 곡 화면 보이기
+    // 곡 화면 보이기 (먼저 보여야 컨테이너 높이를 정확히 잴 수 있음)
     songView.classList.remove("offstage");
     app.style.display = "none";
+
+    updateLyricsPadding();                 // 첫 소절도 가운데 오도록 여백 계산
+    const scroller = songView.querySelector(".lyrics-scroll");
+    if (scroller) scroller.scrollTop = 0;
 
     ensurePlaying(song.youtubeId);
   }
@@ -2962,6 +2964,35 @@
       scrollLyricIntoView(lines[activeIdx]);
     }
   }
+
+  /* 첫 소절·마지막 소절도 화면 한가운데에 놓이도록 가사 목록의 위아래에
+     "빈 공간(패딩)"을 컨테이너 높이의 절반만큼 준다.
+     이게 없으면 스크롤이 맨 위에서 더 내려갈 곳이 없어 첫 가사가 위에 붙는다. */
+  function updateLyricsPadding(){
+    const container = document.querySelector(".lyrics-scroll");
+    const list = document.getElementById("lyrics-list");
+    if (!container || !list) return;
+    const first = list.querySelector(".lyric-line");
+    const h = container.clientHeight;
+    if (!first || !h) return;
+    const half = h / 2 - first.getBoundingClientRect().height / 2;
+    list.style.paddingTop    = Math.max(8, half) + "px";
+    list.style.paddingBottom = Math.max(140, h / 2) + "px";
+  }
+
+  /* 화면 크기가 크게 바뀌면(회전 등) 가운데 기준도 달라지므로 다시 계산한다.
+     모바일 주소창이 접히며 생기는 자잘한 높이 변화로는 다시 잡지 않는다
+     — 사용자가 직접 가사를 넘겨 보는 중에 화면이 튀지 않도록. */
+  let lastLyricsW = window.innerWidth, lastLyricsH = window.innerHeight;
+  window.addEventListener("resize", ()=>{
+    const w = window.innerWidth, h = window.innerHeight;
+    const changed = (w !== lastLyricsW) || Math.abs(h - lastLyricsH) > 100;
+    if (!changed) return;
+    lastLyricsW = w; lastLyricsH = h;
+    if (!songShellBuilt) return;
+    updateLyricsPadding();
+    if (isSongViewActive()) updateLyricsSync(true);
+  });
 
   // 가사 컨테이너만 스크롤한다. scrollIntoView는 상위 스크롤 영역까지
   // 함께 움직여서 큰 화면 2단 레이아웃에서 화면이 흔들리는 원인이 됨.
