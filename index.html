@@ -2,9 +2,26 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>VAUNDY ASIA ARENA TOUR 2026 "HORO" — SEOUL 응원가이드</title>
+<meta name="description" content="VAUNDY ASIA ARENA TOUR 2026 &quot;HORO&quot; 서울 공연 응원 가이드 — 곡별 가사와 떼창·박수·손 흔들기 포인트">
 <meta name="theme-color" content="#2a0a06">
+
+<!-- 홈 화면 설치(PWA) -->
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./icon-192.png" type="image/png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="응원가이드">
+
+<!-- 링크 공유용 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="VAUNDY &quot;HORO&quot; SEOUL 응원가이드">
+<meta property="og:description" content="곡별 가사와 떼창·박수·손 흔들기 포인트를 영상에 맞춰 확인하세요">
+<meta property="og:image" content="./icon-512.png">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Anton&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -1018,6 +1035,17 @@
 
   .lyric-line.active .ico-mic svg{ animation-duration:.8s; }
 
+  /* 화면에 보이는 가사 줄의 아이콘만 실제로 움직인다.
+     (한 곡에 아이콘이 100개 넘게 들어가므로 전부 돌리면 발열·배터리 소모가 큼) */
+  .lyric-line .ico-wave svg,
+  .lyric-line .ico-mic svg,
+  .lyric-line .ico-clap .hand,
+  .lyric-line .ico-clap .spark{ animation-play-state:paused; }
+  .lyric-line.in-view .ico-wave svg,
+  .lyric-line.in-view .ico-mic svg,
+  .lyric-line.in-view .ico-clap .hand,
+  .lyric-line.in-view .ico-clap .spark{ animation-play-state:running; }
+
   /* 왼쪽 종류 표시(동그라미)와 범례에도 같은 움직이는 아이콘을 그대로 사용.
      em 기준 크기라서 font-size 만 정해 주면 동그라미 안에 딱 맞게 들어간다. */
   .lyric-type-icon .ico{ margin:0; font-size:11px; }
@@ -1118,6 +1146,45 @@
     background:#aab6c9;
   }
 
+
+  /* ── 앱 안내 배너 (새 버전 / 오프라인 / 홈 화면 추가) ───────── */
+  .app-banner{
+    position:fixed;
+    left:12px;right:12px;
+    bottom:calc(12px + env(safe-area-inset-bottom));
+    z-index:60;
+    display:none;
+    align-items:center;gap:10px;
+    padding:11px 14px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:rgba(20,6,4,0.94);
+    backdrop-filter:blur(6px);
+    box-shadow:0 8px 26px rgba(0,0,0,0.55);
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--cream);
+  }
+  .app-banner.show{display:flex;}
+  .app-banner .msg{flex:1;min-width:0;}
+  .app-banner .msg b{color:var(--gold);font-weight:700;}
+  .app-banner button{
+    flex:none;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(0,0,0,0.3);
+    color:var(--gold);
+    font-family:inherit;font-size:12px;
+    padding:7px 12px;
+    cursor:pointer;
+  }
+  .app-banner button:hover{border-color:var(--teal);color:var(--teal);}
+  .app-banner .close{
+    padding:7px 10px;color:#8d7d62;
+  }
+  .app-banner.offline .msg b{color:var(--chant);}
+
+  .icon-sprite{position:absolute;width:0;height:0;overflow:hidden;}
   #app{min-height:100svh;}
 
   /* 곡 화면은 DOM 에서 지우지 않고 화면 밖으로 치워 둔다.
@@ -1185,9 +1252,33 @@
 </head>
 
 <body>
+<!-- 반복되는 아이콘은 여기 한 번만 정의하고 <use> 로 가져다 씁니다.
+     (가사 한 곡에 수백 개가 복제되던 것을 줄이기 위한 스프라이트) -->
+<svg class="icon-sprite" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-wave" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8.5 12V7.2a1.5 1.5 0 0 1 3 0v4"/><path d="M11.5 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M14.5 11.2V7.6a1.5 1.5 0 0 1 3 0v6.2a6.6 6.6 0 0 1-6.6 6.6 5.9 5.9 0 0 1-4.2-1.7l-2.9-2.9a1.6 1.6 0 0 1 2.3-2.3l1.9 1.8"/><path d="M8.5 12V10a1.5 1.5 0 0 0-3 0v2.6"/><path d="M19.6 5.2a4 4 0 0 1 0 5.6"/><path d="M21.8 3.2a7 7 0 0 1 0 9.6"/>
+  </symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8.5 12V7.2a1.5 1.5 0 0 1 3 0v4"/><path d="M11.5 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M14.5 11.2V7.6a1.5 1.5 0 0 1 3 0v6.2a6.6 6.6 0 0 1-6.6 6.6 5.9 5.9 0 0 1-4.2-1.7l-2.9-2.9a1.6 1.6 0 0 1 2.3-2.3l1.9 1.8"/><path d="M8.5 12V10a1.5 1.5 0 0 0-3 0v2.6"/>
+  </symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+    <path d="M12 2.5v3.2"/><path d="M4.7 5.5l2.2 2.3"/><path d="M19.3 5.5l-2.2 2.3"/><path d="M2.6 13h3.1"/><path d="M21.4 13h-3.1"/>
+  </symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+  </symbol>
+</defs></svg>
+
 <div id="app"></div>
 <!-- 곡 화면 — 유튜브 iframe 을 다시 만들지 않으려고 화면 밖에 계속 살려 둔다 -->
 <div id="song-view" class="song-view offstage"></div>
+
+<!-- 새 버전 안내 / 오프라인 안내 / 홈 화면 추가 안내가 여기에 뜹니다 -->
+<div class="app-banner" id="app-banner" role="status">
+  <span class="msg" id="app-banner-msg"></span>
+  <button type="button" id="app-banner-action"></button>
+  <button type="button" class="close" id="app-banner-close" aria-label="닫기">✕</button>
+</div>
 
 <script>
   /* 공연 일정 — 카운트다운이 이 순서대로 자동으로 따라갑니다.
@@ -3091,21 +3182,20 @@
   function stopCountdown(){ if(countdownTimer){ clearInterval(countdownTimer); countdownTimer=null; } }
 
   /* ---------------- SONG DETAIL ---------------- */
-  const MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>';
-  const CLAP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V7a2 2 0 0 1 4 0"/><path d="M12 13V5a2 2 0 0 1 4 0v8"/><path d="M16 13V7a2 2 0 0 1 4 0v6a7 7 0 0 1-7 7h-1a7 7 0 0 1-6.3-4"/><path d="M4 12l1-1"/><path d="M3 9l1.5-.5"/><path d="M4 6l1 1"/></svg>';
 
   /* 손 흔들기 아이콘 (좌우로 흔들리는 애니메이션은 CSS의 handWave 가 담당) */
-  const WAVE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 12V7.2a1.5 1.5 0 0 1 3 0v4"/><path d="M11.5 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M14.5 11.2V7.6a1.5 1.5 0 0 1 3 0v6.2a6.6 6.6 0 0 1-6.6 6.6 5.9 5.9 0 0 1-4.2-1.7l-2.9-2.9a1.6 1.6 0 0 1 2.3-2.3l1.9 1.8"/><path d="M8.5 12V10a1.5 1.5 0 0 0-3 0v2.6"/><path d="M19.6 5.2a4 4 0 0 1 0 5.6"/><path d="M21.8 3.2a7 7 0 0 1 0 9.6"/></svg>';
   /* 박수 아이콘용 — 손 한 짝 (두 개를 마주 보게 놓고 CSS로 마주치게 함) */
-  const HAND_SVG  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 12V7.2a1.5 1.5 0 0 1 3 0v4"/><path d="M11.5 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M14.5 11.2V7.6a1.5 1.5 0 0 1 3 0v6.2a6.6 6.6 0 0 1-6.6 6.6 5.9 5.9 0 0 1-4.2-1.7l-2.9-2.9a1.6 1.6 0 0 1 2.3-2.3l1.9 1.8"/><path d="M8.5 12V10a1.5 1.5 0 0 0-3 0v2.6"/></svg>';
-  const SPARK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 2.5v3.2"/><path d="M4.7 5.5l2.2 2.3"/><path d="M19.3 5.5l-2.2 2.3"/><path d="M2.6 13h3.1"/><path d="M21.4 13h-3.1"/></svg>';
 
   /* 가사 안에 글자처럼 끼워 쓰는 아이콘.
      가사 텍스트 아무 위치에나 [wave] / [clap] / [mic] 이라고 적으면 됩니다. */
+  /* 아이콘 본체는 페이지 맨 위 <svg class="icon-sprite"> 에 한 번만 있고,
+     여기서는 <use> 로 가리키기만 한다. 가사 한 곡에 수백 개가 들어가므로
+     이렇게 해야 DOM 이 가벼워진다. */
+  const useSvg = (id) => `<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#${id}"/></svg>`;
   const INLINE_ICONS = {
-    wave: `<span class="ico ico-wave" title="손 흔들기">${WAVE_SVG}</span>`,
-    clap: `<span class="ico ico-clap" title="박수"><span class="hand l">${HAND_SVG}</span><span class="hand r">${HAND_SVG}</span><span class="spark">${SPARK_SVG}</span></span>`,
-    mic:  `<span class="ico ico-mic" title="떼창">${MIC_SVG}</span>`
+    wave: `<span class="ico ico-wave" title="손 흔들기">${useSvg("i-wave")}</span>`,
+    clap: `<span class="ico ico-clap" title="박수"><span class="hand l">${useSvg("i-hand")}</span><span class="hand r">${useSvg("i-hand")}</span><span class="spark">${useSvg("i-spark")}</span></span>`,
+    mic:  `<span class="ico ico-mic" title="떼창">${useSvg("i-mic")}</span>`
   };
   INLINE_ICONS.chant = INLINE_ICONS.mic;   // [chant] 로 써도 동일
 
@@ -3330,10 +3420,30 @@
     app.style.display = "none";
 
     updateLyricsPadding();                 // 첫 소절도 가운데 오도록 여백 계산
+    observeLyricLines();                   // 보이는 줄의 아이콘만 움직이게
+    requestWakeLock();                     // 가사 보는 동안 화면이 꺼지지 않게
     const scroller = songView.querySelector(".lyrics-scroll");
     if (scroller) scroller.scrollTop = 0;
 
     ensurePlaying(song.youtubeId);
+  }
+
+  /* 보이는 가사 줄에만 .in-view 를 붙여, 화면 밖 아이콘 애니메이션은 멈춰 둔다.
+     (IntersectionObserver 를 못 쓰는 아주 오래된 브라우저에서는 전부 움직이게 둠) */
+  let lyricObserver = null;
+  function observeLyricLines(){
+    if (lyricObserver){ lyricObserver.disconnect(); lyricObserver = null; }
+    const container = songView.querySelector(".lyrics-scroll");
+    const lines = songView.querySelectorAll(".lyric-line");
+    if (!container || !lines.length) return;
+    if (!("IntersectionObserver" in window)){
+      lines.forEach(el => el.classList.add("in-view"));
+      return;
+    }
+    lyricObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(e => e.target.classList.toggle("in-view", e.isIntersecting));
+    }, { root: container, rootMargin: "120px 0px" });
+    lines.forEach(el => lyricObserver.observe(el));
   }
 
   /* 곡 화면을 벗어날 때 — 플레이어는 부수지 않고 일시정지만 한다
@@ -3341,6 +3451,8 @@
   function leaveSongView(){
     stopSyncTimer();
     closeSongSheet();
+    if (lyricObserver){ lyricObserver.disconnect(); lyricObserver = null; }
+    releaseWakeLock();
     if (player && typeof player.pauseVideo === 'function') {
       try { player.pauseVideo(); } catch(e){}
     }
@@ -3411,6 +3523,27 @@
     if (hasChant) html += `<span class="lyric-type-icon chant" title="떼창">${INLINE_ICONS.mic}</span>`;
     return html;
   }
+
+  /* ── 화면 꺼짐 방지 ───────────────────────────────────────────
+     곡 화면에서는 가사를 보는 동안 화면이 자동으로 꺼지지 않게 한다.
+     지원하지 않는 브라우저(주로 iOS 구버전)에서는 조용히 넘어간다. */
+  let wakeLock = null;
+  async function requestWakeLock(){
+    if (!("wakeLock" in navigator) || wakeLock) return;
+    try {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", ()=>{ wakeLock = null; });
+    } catch(e){ wakeLock = null; }
+  }
+  function releaseWakeLock(){
+    if (!wakeLock) return;
+    try { wakeLock.release(); } catch(e){}
+    wakeLock = null;
+  }
+  // 다른 앱에 갔다 돌아오면 화면 잠금 해제가 풀리므로 다시 잡아 준다
+  document.addEventListener("visibilitychange", ()=>{
+    if (document.visibilityState === "visible" && songShellBuilt && isSongViewActive()) requestWakeLock();
+  });
 
   /* ---------------- YouTube Player API 연동 ----------------
      플레이어는 페이지당 딱 하나. 처음 한 번만 만들고 곡이 바뀌면
@@ -3646,6 +3779,107 @@
       player.playVideo();
     }
   }
+
+  /* ── 오프라인 캐시 · 홈 화면 설치 · 안내 배너 ─────────────────
+     서비스워커는 https 로 올렸을 때만 동작합니다.
+     (파일을 그냥 열었을 때(file://)는 조용히 건너뜁니다) */
+  const banner    = document.getElementById("app-banner");
+  const bannerMsg = document.getElementById("app-banner-msg");
+  const bannerBtn = document.getElementById("app-banner-action");
+  const bannerX   = document.getElementById("app-banner-close");
+  let bannerAction = null;
+
+  function showBanner(html, btnLabel, onClick, kind){
+    if (!banner) return;
+    bannerMsg.innerHTML = html;
+    bannerAction = onClick || null;
+    bannerBtn.textContent = btnLabel || "";
+    bannerBtn.style.display = btnLabel ? "" : "none";
+    banner.classList.toggle("offline", kind === "offline");
+    banner.classList.add("show");
+  }
+  function hideBanner(){ if (banner) banner.classList.remove("show"); }
+  if (bannerBtn) bannerBtn.addEventListener("click", ()=>{ if (bannerAction) bannerAction(); });
+  if (bannerX)   bannerX.addEventListener("click", hideBanner);
+
+  /* 저장해 둔 값 읽고 쓰기 (사파리 프라이빗 모드 등에서 막혀도 문제없게) */
+  function store(key, value){
+    try {
+      if (value === undefined) return localStorage.getItem(key);
+      localStorage.setItem(key, value);
+    } catch(e){ return null; }
+  }
+
+  /* 1) 서비스워커 등록 — 오프라인에서도 가사가 열리게 */
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+    window.addEventListener("load", ()=>{
+      navigator.serviceWorker.register("./sw.js").then((reg)=>{
+        reg.addEventListener("updatefound", ()=>{
+          const sw = reg.installing;
+          if (!sw) return;
+          sw.addEventListener("statechange", ()=>{
+            // 이미 쓰고 있는 상태에서 새 버전이 준비된 경우에만 안내
+            if (sw.state === "installed" && navigator.serviceWorker.controller){
+              showBanner("<b>새 버전</b>이 준비됐어요. 가사가 업데이트됐을 수 있어요.",
+                         "새로고침",
+                         ()=>{ sw.postMessage({ type:"SKIP_WAITING" }); });
+            }
+          });
+        });
+      }).catch(()=>{});
+
+      let reloading = false;
+      navigator.serviceWorker.addEventListener("controllerchange", ()=>{
+        if (reloading) return;
+        reloading = true;
+        location.reload();
+      });
+    });
+  }
+
+  /* 2) 오프라인이 되면 알려 주기 — 가사는 되지만 영상은 안 된다는 안내 */
+  function updateOnlineState(){
+    if (!navigator.onLine){
+      showBanner("<b>오프라인</b> 상태예요. 가사와 응원 표시는 그대로 볼 수 있지만, 영상 재생은 안 됩니다.",
+                 "", null, "offline");
+    } else if (banner && banner.classList.contains("offline")){
+      hideBanner();
+    }
+  }
+  window.addEventListener("online",  updateOnlineState);
+  window.addEventListener("offline", updateOnlineState);
+
+  /* 3) 아이폰은 설치 안내가 자동으로 뜨지 않으므로 한 번만 알려 줌 */
+  function maybeShowInstallHint(){
+    if (!navigator.onLine) return;                      // 오프라인 안내가 우선
+    if (store("horo-install-hint") === "done") return;  // 이미 본 사람
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+    if (standalone) return;                             // 이미 홈 화면에서 실행 중
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (!isIOS) return;
+    showBanner("공유 버튼 <b>⎋</b> → <b>홈 화면에 추가</b> 를 누르면 앱처럼 쓸 수 있어요.",
+               "알겠어요",
+               ()=>{ store("horo-install-hint", "done"); hideBanner(); });
+  }
+
+  /* 안드로이드 크롬 — 설치 배너를 직접 띄움 */
+  let deferredInstall = null;
+  window.addEventListener("beforeinstallprompt", (e)=>{
+    e.preventDefault();
+    deferredInstall = e;
+    if (store("horo-install-hint") === "done") return;
+    showBanner("홈 화면에 <b>설치</b>하면 공연장에서 바로 열 수 있어요.",
+               "설치",
+               async ()=>{
+                 hideBanner();
+                 store("horo-install-hint", "done");
+                 try { deferredInstall.prompt(); await deferredInstall.userChoice; } catch(err){}
+                 deferredInstall = null;
+               });
+  });
+  window.addEventListener("appinstalled", ()=>{ store("horo-install-hint", "done"); hideBanner(); });
+
+  setTimeout(()=>{ updateOnlineState(); maybeShowInstallHint(); }, 1500);
 
   window.addEventListener("hashchange", router);
 
