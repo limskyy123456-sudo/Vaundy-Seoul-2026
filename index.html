@@ -74,7 +74,7 @@
     /* 위쪽 정렬 고정 — 공연 정보를 펼쳐도 위 내용(제목·카운트다운)이 밀려 올라가지 않음.
        닫힌 상태에서 가운데처럼 보이게 하는 여백은 JS(layoutHeroCenter)가 한 번만 계산해 고정합니다. */
     justify-content:flex-start;
-    padding:44px 20px 36px;
+    padding:calc(44px + var(--safe-top, 0px)) 20px 36px;
     background:
       radial-gradient(120% 70% at 50% 8%, rgba(200,70,42,0.55), transparent 60%),
       radial-gradient(140% 90% at 50% 100%, rgba(122,39,18,0.9), transparent 70%),
@@ -648,7 +648,9 @@
   }
   .song-topbar{
     display:flex;align-items:center;gap:14px;
-    padding:16px 18px;
+    /* 홈 화면에 설치해 실행하면 화면 맨 위(시계·배터리 영역)까지 앱이 그려지므로
+       그만큼 안쪽으로 밀어 준다. --safe-top 은 아래 @media 에서 정해진다. */
+    padding:calc(16px + var(--safe-top, 0px)) 18px 16px;
     background:#1c0705;
     border-bottom:1px solid var(--line);
     position:relative;
@@ -673,7 +675,7 @@
   }
 
   /* ---------- 곡 이동 (이전/다음 + 제목 탭 → 곡 목록) ---------- */
-  .song-topbar.has-nav{ gap:8px; padding:12px 12px; }
+  .song-topbar.has-nav{ gap:8px; padding:calc(12px + var(--safe-top, 0px)) 12px 12px; }
   .song-topbar.has-nav .back-btn{ flex:none; padding:8px 11px; }
   .song-nav{
     flex:1;
@@ -760,6 +762,7 @@
     border-bottom:none;
     border-radius:20px 20px 0 0;
     box-shadow:0 -12px 40px rgba(0,0,0,0.6);
+    padding-bottom:env(safe-area-inset-bottom, 0px);   /* 제스처 바에 안 가리게 */
     transform:translateY(14px);
     transition:transform .26s cubic-bezier(.4,0,.2,1);
   }
@@ -845,7 +848,7 @@
 
   /* 아주 좁은 기기에서는 버튼·여백을 줄여 곡 제목이 최대한 길게 보이도록 */
   @media (max-width:360px){
-    .song-topbar.has-nav{ padding:10px 8px; gap:6px; }
+    .song-topbar.has-nav{ padding:calc(10px + var(--safe-top, 0px)) 8px 10px; gap:6px; }
     .song-topbar.has-nav .back-btn{ padding:7px 9px; }
     .song-nav{ gap:4px; }
     .song-nav-btn{ width:30px;height:30px; }
@@ -1100,7 +1103,8 @@
 
   .player-controls{
     position:fixed;
-    right:18px;bottom:22px;
+    right:18px;
+    bottom:calc(22px + env(safe-area-inset-bottom, 0px));
     z-index:20;
     display:flex;flex-direction:column;align-items:flex-end;gap:10px;
   }
@@ -1184,6 +1188,17 @@
   }
   .app-banner.offline .msg b{color:var(--chant);}
 
+  /* ── 화면 안전영역(노치·상태바·제스처바) ─────────────────────
+     브라우저 탭으로 열면 0, 홈 화면에 설치해 실행하면 실제 상태바 높이가 들어온다.
+     일부 기기는 값을 0 으로 알려 주므로, 설치 실행일 때는 최소 28px 를 보장한다. */
+  :root{ --safe-top: env(safe-area-inset-top, 0px); }
+  @media all and (display-mode: standalone){
+    :root{ --safe-top: max(env(safe-area-inset-top, 0px), 28px); }
+  }
+  @media all and (display-mode: fullscreen){
+    :root{ --safe-top: max(env(safe-area-inset-top, 0px), 28px); }
+  }
+
   .icon-sprite{position:absolute;width:0;height:0;overflow:hidden;}
   #app{min-height:100svh;}
 
@@ -1236,7 +1251,7 @@
     }
     /* 2단일 때는 가사 영역이 따로 스크롤되므로 하단 여백을 줄임 */
     .player-controls{
-      bottom:26px;
+      bottom:calc(26px + env(safe-area-inset-bottom, 0px));
     }
   }
 
