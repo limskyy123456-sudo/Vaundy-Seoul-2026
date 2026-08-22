@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAUNDY ASIA ARENA TOUR 2026 "HORO" — SEOUL 떼창 가이드</title>
+<title>VAUNDY ASIA ARENA TOUR 2026 "HORO" — SEOUL 응원가이드</title>
 <meta name="theme-color" content="#2a0a06">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,9 +40,9 @@
   /* ---------- utility ---------- */
   .eyebrow{
     font-family:'Anton',sans-serif;
-    letter-spacing:.28em;
-    font-size:13px;
-    color:var(--gold);
+    letter-spacing:.3em;
+    font-size:clamp(13px,3.6vw,16px);
+    color:var(--gold-soft);
     text-transform:uppercase;
     text-shadow:0 1px 6px rgba(0,0,0,0.85), 0 0 20px rgba(0,0,0,0.6);
   }
@@ -82,61 +82,69 @@
   .hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;max-width:560px;}
 
   .tour-title{
-    margin:14px 0 0;
+    margin:16px 0 0;
     font-family:'Anton',sans-serif;
-    font-size:clamp(30px,7vw,44px);
-    letter-spacing:.03em;
+    font-size:clamp(40px,10vw,58px);
+    letter-spacing:.02em;
     color:var(--gold);
-    text-shadow:0 2px 8px rgba(0,0,0,0.9), 0 0 28px rgba(0,0,0,0.65);
-    line-height:1.08;
+    /* 카운트다운·일정과 같은 빨강·파랑 번짐을 옅게 넣어 톤을 맞춤 */
+    text-shadow:1.2px 0 0 rgba(255,64,80,0.3), -1.2px 0 0 rgba(79,168,224,0.3),
+                0 2px 8px rgba(0,0,0,0.9), 0 0 28px rgba(0,0,0,0.65);
+    line-height:1.06;
   }
-  .tour-title span{display:block;font-size:.5em;letter-spacing:.34em;color:var(--gold);margin-bottom:6px;}
+  .tour-title span{
+    display:block;
+    font-size:.44em;
+    letter-spacing:.36em;
+    color:#fff;
+    margin-bottom:8px;
+    text-shadow:1.2px 0 0 rgba(255,64,80,0.42), -1.2px 0 0 rgba(79,168,224,0.42),
+                0 2px 10px rgba(0,0,0,0.85);
+  }
 
-  .countdown-label{
-    margin-top:26px;
-    font-family:'Anton',sans-serif;
-    font-size:14px;
-    letter-spacing:.32em;
-    text-transform:uppercase;
-    color:var(--gold);
-    text-shadow:0 1px 6px rgba(0,0,0,0.85);
-  }
+  /* ── 카운트다운 (D-DAY 알약 + 공연 일정 목록) ───────────────── */
   .countdown{
+    margin-top:30px;
     display:flex;
-    gap:clamp(6px,2vw,12px);
-    margin-top:14px;
-    width:100%;
-    max-width:400px;
     justify-content:center;
+    width:100%;
   }
-  .cd-box{
+  .cd-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:clamp(12px,3.4vw,18px);
+    padding:clamp(11px,3vw,15px) clamp(20px,5.6vw,30px);
+    border:1px solid rgba(246,239,217,0.28);
+    border-radius:999px;
     background:rgba(20,6,4,0.55);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:16px 4px 13px;
-    flex:1 1 0;
-    min-width:0;
-    max-width:88px;
     backdrop-filter:blur(3px);
     box-shadow:0 6px 20px rgba(0,0,0,0.45);
   }
-  .cd-num{
+  .cd-dday{
     font-family:'Anton',sans-serif;
-    font-size:clamp(34px,9vw,46px);
+    font-size:clamp(28px,8.2vw,38px);
     line-height:1;
     color:#fff;
+    letter-spacing:.02em;
+    font-variant-numeric:tabular-nums;
+    text-shadow:1px 0 0 rgba(255,64,80,0.42), -1px 0 0 rgba(79,168,224,0.42), 0 2px 10px rgba(0,0,0,0.8);
+  }
+  .cd-sep{
+    width:1px;
+    align-self:stretch;
+    background:rgba(246,239,217,0.3);
+  }
+  .cd-clock{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(28px,8.2vw,38px);
+    line-height:1;
+    color:#e7e3d8;
+    letter-spacing:.03em;
     font-variant-numeric:tabular-nums;
     text-shadow:0 2px 10px rgba(0,0,0,0.8);
   }
-  .cd-unit{
-    margin-top:8px;
-    font-size:11px;
-    letter-spacing:.22em;
-    color:var(--gold);
-    text-shadow:0 1px 5px rgba(0,0,0,0.8);
-  }
   .countdown-done{
-    margin-top:16px;
+    margin-top:30px;
     font-family:'Black Han Sans',sans-serif;
     font-size:22px;
     color:var(--teal);
@@ -145,20 +153,43 @@
   }
 
   .show-meta{
-    margin-top:34px;
-    font-family:'Anton',sans-serif;
-    letter-spacing:.04em;
+    margin-top:30px;
+    width:100%;
+    max-width:420px;
+    text-align:left;
   }
-  .show-date{
-    font-size:clamp(20px,5.4vw,26px);
+  .show-row{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+    padding:13px 2px;
+    border-top:1px solid rgba(246,239,217,0.16);
+  }
+  .show-day{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(18px,5vw,22px);
+    letter-spacing:.03em;
     color:#fff;
-    text-shadow:0 2px 10px rgba(0,0,0,0.85);
+    text-shadow:1px 0 0 rgba(255,64,80,0.4), -1px 0 0 rgba(79,168,224,0.4), 0 2px 8px rgba(0,0,0,0.8);
+  }
+  .show-day .dow{ margin-left:6px; }
+  .show-time{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(16px,4.4vw,20px);
+    letter-spacing:.04em;
+    color:#b9b3a6;
+    font-variant-numeric:tabular-nums;
+    text-shadow:0 2px 8px rgba(0,0,0,0.8);
   }
   .show-venue{
-    margin-top:2px;
-    font-size:clamp(14px,3.6vw,16px);
-    color:var(--gold);
-    letter-spacing:.14em;
+    margin-top:0;
+    padding-top:13px;
+    border-top:1px solid rgba(246,239,217,0.16);
+    font-family:'Anton',sans-serif;
+    font-size:clamp(12px,3.2vw,13px);
+    color:#8d8577;
+    letter-spacing:.18em;
     text-shadow:0 1px 6px rgba(0,0,0,0.85);
   }
 
@@ -183,9 +214,9 @@
     outline:none;
   }
   .menu-btn-label{
-    font-family:'Anton',sans-serif;
+    font-family:'Black Han Sans','Anton',sans-serif;
     font-size:26px;
-    letter-spacing:.06em;
+    letter-spacing:.02em;
     color:#fff;
     text-shadow:0 2px 10px rgba(0,0,0,0.8);
   }
@@ -465,6 +496,71 @@
     font-size:11.5px;
     color:var(--gold-soft);
     line-height:1.6;
+  }
+
+  /* 공연 개요 — 항목 : 내용 목록 */
+  .info-facts{
+    margin:14px 0 0;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:9px 14px;
+    font-size:13px;
+    line-height:1.55;
+  }
+  .info-facts dt{
+    color:var(--gold-soft);
+    white-space:nowrap;
+    font-size:12px;
+    padding-top:1px;
+  }
+  .info-facts dd{
+    margin:0;
+    color:var(--cream);
+  }
+  .info-facts .em{ color:var(--gold); font-weight:700; }
+  .info-facts .sub{
+    display:block;
+    margin-top:2px;
+    font-size:11.5px;
+    color:#a99a80;
+  }
+  .info-price{
+    margin:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 8px;
+  }
+  .info-price span{
+    display:inline-block;
+    padding:3px 9px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,0.25);
+    font-size:12px;
+    color:var(--cream);
+  }
+  .info-book-link{
+    display:inline-flex;align-items:center;gap:7px;
+    margin:16px 0 0;
+    padding:10px 14px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(0,0,0,0.28);
+    color:var(--gold);
+    text-decoration:none;
+    font-size:12.5px;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .info-book-link:hover{ border-color:var(--teal); color:var(--teal); }
+  .info-book-link svg{ width:14px;height:14px; }
+  .info-divider{
+    margin:22px 0 0;
+    border:0;
+    border-top:1px solid var(--line);
+  }
+  @media (max-width:400px){
+    .info-facts{ grid-template-columns:1fr; gap:2px 0; }
+    .info-facts dt{ margin-top:9px; }
   }
 
   /* 좁은 화면에서는 카드 안쪽 여백을 줄여 표가 쓸 수 있는 폭을 최대한 확보 */
@@ -2635,22 +2731,29 @@
           <div class="eyebrow">ASIA ARENA TOUR 2026</div>
           <h1 class="tour-title"><span>VAUNDY</span>&ldquo;HORO&rdquo;</h1>
 
-          <div class="countdown-label">COUNTDOWN</div>
           <div class="countdown" id="countdown">
-            <div class="cd-box"><div class="cd-num" id="cd-d">00</div><div class="cd-unit">DAYS</div></div>
-            <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-unit">HRS</div></div>
-            <div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-unit">MIN</div></div>
-            <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-unit">SEC</div></div>
+            <div class="cd-pill">
+              <span class="cd-dday" id="cd-dday">D-00</span>
+              <span class="cd-sep"></span>
+              <span class="cd-clock" id="cd-clock">00:00:00</span>
+            </div>
           </div>
 
           <div class="show-meta">
-            <div class="show-date">9.19–20</div>
-            <div class="show-venue">SEOUL · INSPIRE ARENA</div>
+            <div class="show-row">
+              <span class="show-day">09.19<span class="dow">SAT</span></span>
+              <span class="show-time">17:00</span>
+            </div>
+            <div class="show-row">
+              <span class="show-day">09.20<span class="dow">SUN</span></span>
+              <span class="show-time">16:00</span>
+            </div>
+            <div class="show-venue">INSPIRE ARENA, SEOUL</div>
           </div>
 
           <nav class="main-menu">
             <button class="menu-btn" id="guide-btn">
-              <span class="menu-btn-label">Call Guide</span>
+              <span class="menu-btn-label">응원가이드</span>
             </button>
           </nav>
 
@@ -2669,6 +2772,58 @@
           </div>
           <div class="info-panel" id="info-panel">
             <div class="info-panel-inner">
+              <div class="info-panel-title"><span class="bar">|</span> 공연 개요 <span class="bar">|</span></div>
+              <dl class="info-facts">
+                <dt>공연명</dt>
+                <dd>Vaundy ASIA ARENA TOUR 2026 &ldquo;HORO&rdquo; IN SEOUL</dd>
+
+                <dt>일시</dt>
+                <dd>
+                  <span class="em">2026.09.19(토) 17:00</span> / <span class="em">09.20(일) 16:00</span>
+                  <span class="sub">공연시간 약 120분</span>
+                </dd>
+
+                <dt>장소</dt>
+                <dd>
+                  인스파이어 아레나
+                  <span class="sub">인천 중구 공항문화로 127</span>
+                </dd>
+
+                <dt>관람연령</dt>
+                <dd>
+                  만 7세 이상 (2019년생 이전)
+                  <span class="sub">만 13세 이하는 만 19세 이상 보호자 동반 입장</span>
+                </dd>
+
+                <dt>티켓 가격</dt>
+                <dd>
+                  <p class="info-price">
+                    <span>스탠딩 165,000원</span>
+                    <span>R석 165,000원</span>
+                    <span>S석 154,000원</span>
+                  </p>
+                  <span class="sub">예매 수수료 별도</span>
+                </dd>
+
+                <dt>티켓 수령</dt>
+                <dd>
+                  모바일 티켓만 제공
+                  <span class="sub">실물 티켓·배송·현장 수령 없음 / 선물하기 불가</span>
+                </dd>
+
+                <dt>예매</dt>
+                <dd>
+                  NOL 티켓
+                  <span class="sub">본인인증 필요 · 예매자와 관람자 정보 일치 / 문의 1544-1555 (매일 09:00~18:00)</span>
+                </dd>
+              </dl>
+
+              <a class="info-book-link" href="https://tickets.interpark.com/goods/26003199" target="_blank" rel="noopener">
+                ${EXT_LINK_SVG} NOL 예매 페이지에서 보기
+              </a>
+
+              <hr class="info-divider">
+
               <div class="info-panel-title"><span class="bar">|</span> 관객 입장안내 <span class="bar">|</span></div>
               <div class="info-table-wrap">
                 <table class="info-table">
@@ -2720,7 +2875,7 @@
                   </tbody>
                 </table>
               </div>
-              <p class="info-footnote">※ 운영 시간은 당일 현장 상황에 따라 변동될 수 있습니다.</p>
+              <p class="info-footnote">※ 운영 시간은 당일 현장 상황에 따라 변동될 수 있습니다.<br>※ 공연 정보는 예매처(NOL 티켓) 기준이며, 최신 내용은 예매 페이지에서 확인해 주세요.</p>
             </div>
           </div>
         </div>
@@ -2806,12 +2961,12 @@
       <div class="guide-page">
         <div class="song-topbar">
           <button class="back-btn" id="back-btn">← 홈으로</button>
-          <h1>떼창가이드</h1>
+          <h1>응원가이드</h1>
         </div>
 
         <section class="songs-section">
           <div class="songs-head">
-            <h2>떼창 가이드</h2>
+            <h2>응원가이드</h2>
             <p>곡을 선택하면 영상에 맞춰 가사 · 떼창 포인트를 확인할 수 있어요</p>
           </div>
           <ul class="song-list">
@@ -2856,9 +3011,10 @@
       const h = Math.floor(diff%86400000/3600000);
       const m = Math.floor(diff%3600000/60000);
       const s = Math.floor(diff%60000/1000);
-      const dd=document.getElementById("cd-d"), hh=document.getElementById("cd-h"),
-            mm=document.getElementById("cd-m"), ss=document.getElementById("cd-s");
-      if(dd){dd.textContent=pad(d); hh.textContent=pad(h); mm.textContent=pad(m); ss.textContent=pad(s);}
+      const dday  = document.getElementById("cd-dday");
+      const clock = document.getElementById("cd-clock");
+      if (dday)  dday.textContent  = `D-${pad(d)}`;
+      if (clock) clock.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
     }
     tick();
     countdownTimer = setInterval(tick, 1000);
