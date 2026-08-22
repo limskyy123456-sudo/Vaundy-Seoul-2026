@@ -40,6 +40,7 @@
     --chant:#f5942c;
     --clap:#4fa8e0;
     --wave:#8de05f;
+    --jump:#b98cff;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -1015,6 +1016,33 @@
     74%,100%{ opacity:0; transform:scale(1.3) translateY(-2px); }
   }
 
+  /* 점프 — 바닥선 위에서 웅크렸다 튀어오름 */
+  .ico-jump{
+    position:relative;
+    width:1.3em;height:1.45em;
+    vertical-align:-0.3em;
+    color:var(--jump);
+  }
+  .ico-jump svg{
+    position:absolute;left:0;top:0;
+    width:100%;height:84%;
+    transform-origin:50% 100%;
+    animation:iconJump .72s cubic-bezier(.3,.7,.4,1) infinite;
+  }
+  .ico-jump .ground{
+    position:absolute;
+    left:6%;right:6%;bottom:0;
+    height:2px;border-radius:2px;
+    background:currentColor;
+    opacity:.42;
+  }
+  @keyframes iconJump{
+    0%      { transform:translateY(0)    scaleY(1); }
+    14%     { transform:translateY(5%)   scaleY(.91); }   /* 웅크림 */
+    46%     { transform:translateY(-17%) scaleY(1.03); }  /* 점프 (높이 조절은 이 값) */
+    78%,100%{ transform:translateY(0)    scaleY(1); }
+  }
+
   /* 떼창(마이크) — 살짝 커졌다 작아지는 맥박 */
   .ico-mic{
     width:1.05em;height:1.05em;
@@ -1037,15 +1065,19 @@
   .lyric-line.active .ico-clap{ filter:drop-shadow(0 0 6px rgba(79,168,224,0.45)); }
 
   .lyric-line.active .ico-mic svg{ animation-duration:.8s; }
+  .lyric-line.active .ico-jump svg{ animation-duration:.5s; }
+  .lyric-line.active .ico-jump{ filter:drop-shadow(0 0 6px rgba(185,140,255,0.5)); }
 
   /* 화면에 보이는 가사 줄의 아이콘만 실제로 움직인다.
      (한 곡에 아이콘이 100개 넘게 들어가므로 전부 돌리면 발열·배터리 소모가 큼) */
   .lyric-line .ico-wave svg,
   .lyric-line .ico-mic svg,
+  .lyric-line .ico-jump svg,
   .lyric-line .ico-clap .hand,
   .lyric-line .ico-clap .spark{ animation-play-state:paused; }
   .lyric-line.in-view .ico-wave svg,
   .lyric-line.in-view .ico-mic svg,
+  .lyric-line.in-view .ico-jump svg,
   .lyric-line.in-view .ico-clap .hand,
   .lyric-line.in-view .ico-clap .spark{ animation-play-state:running; }
 
@@ -1059,7 +1091,7 @@
   .lyric-type-icon .ico-clap, .legend-icon .ico-clap{ color:inherit; }
 
   @media (prefers-reduced-motion: reduce){
-    .ico-wave svg, .ico-clap .hand, .ico-clap .spark, .ico-mic svg{ animation:none; }
+    .ico-wave svg, .ico-clap .hand, .ico-clap .spark, .ico-mic svg, .ico-jump svg{ animation:none; }
     .ico-clap .hand.r{ transform:scaleX(-1); }
   }
   .lyric-body{min-width:0;display:block;flex:1;}
@@ -1279,6 +1311,9 @@
   <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
     <path d="M12 2.5v3.2"/><path d="M4.7 5.5l2.2 2.3"/><path d="M19.3 5.5l-2.2 2.3"/><path d="M2.6 13h3.1"/><path d="M21.4 13h-3.1"/>
   </symbol>
+  <symbol id="i-jump" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="4" r="2.2"/><path d="M12 6.5v5.5"/><path d="M12 8 7.5 4.8"/><path d="M12 8 16.5 4.8"/><path d="M12 12 8 17.5"/><path d="M12 12 16 17.5"/>
+  </symbol>
   <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
   </symbol>
@@ -1323,9 +1358,11 @@
      ── 움직이는 아이콘을 가사 사이에 넣기 ────────────────────────
      jp / ko / tr / bg 어디든, 글자 쓰듯 아래 표시를 적으면
      그 자리에 실시간으로 움직이는 아이콘이 들어갑니다. 개수·위치 제한 없음.
+     대괄호 [wave] 와 소괄호 (wave) 둘 다 인식합니다.
 
        [wave]  손 흔들기 (좌우로 흔들림)
        [clap]  박수 (두 손이 마주치며 반짝)
+       [jump]  점프 (웅크렸다 튀어오름)
        [mic]   떼창 (콩닥콩닥 커졌다 작아짐)
 
      예)
@@ -1806,14 +1843,11 @@
       title: "나는 어떻게 아는 걸까 (僕にはどうしてわかるんだろう)",
       youtubeId: "x4aWXNWPrtY",
       lyrics: [
-        { time: 0,         ko: [{ text: "[clap]비트에 맞춰 박수", tag: "clap" }],                                                    },
         { time: 28, jp: "今晩は降りる駅を変え僕の心に咲いていた",        ko: [{ text: "콘반와 오리루 에키오 카에 보쿠노 코코로니 사이테이타"}],         tr: "오늘밤은 내릴 역을 바꿔 내 마음에 피어있던" },
-        { time: 34, jp: "小さなプライドの行方を探した",        ko: [{ text: "치이사나 프라이도노 유쿠-에오 사가시타"}],         tr: "작은 프라이드의 행방을 찾았어" },
-        { time: 40, jp: "[clap]ずっと気づけなかったんだ",        ko: [{ text: "즛토 키즈케나캇탄다", tag: "clap"}],         tr: "계속 눈치채지 못했어" },
-        { time: 43, jp: "[clap]僕の心がどうにもあの聴きなれたリリックで",        ko: [{ text: "보쿠노 코코로가 도오니모 아노키키나레타 리릿쿠데", tag: "clap"}],         tr: "내 마음이 아무래도 자주듣던 그 가사에" },
-        { time: 48, jp: "[clap]涙を流し出すまで今どうにか言い訳探して",        ko: [{ text: "나미-다오 나가시 다스마데 이마 도오니카 이이와케 사가시테", tag: "clap"}],         tr: "눈물을 흘릴때 까지. 지금 어떻게든 변명거릴 찾아서" },
-        { time: 58.5, jp: "[clap]目をそらしてみようが",        ko: [{ text: "메오 소라시테 미요오가", tag: "clap"}],         tr: "눈을 돌리려 해도" },
-        { time: 61.5, jp: "きっと僕以上に",        ko: [{ text: "킷토 보쿠이조오니"}],         tr: "분명 나 이상으로" },
+        { time: 34, jp: "小さなプライドの行方を探したずっと気づけなかったんだ",        ko: [{ text: "치이사나 프라이도노 유쿠-에오 사가시타 즛토 키즈케나캇탄다"}],         tr: "작은 프라이드의 행방을 찾았어. 계속 눈치채지 못했어" },
+        { time: 43, jp: "僕の心がどうにもあの聴きなれたリリックで",        ko: [{ text: "보쿠노 코코로가 도오니모 아노키키나레타 리릿쿠데"}],         tr: "내 마음이 아무래도 자주듣던 그 가사에" },
+        { time: 48, jp: "涙を流し出すまで今どうにか言い訳探して",        ko: [{ text: "나미-다오 나가시 다스마데 이마 도오니카 이이와케 사가시테"}],         tr: "눈물을 흘릴때 까지. 지금 어떻게든 변명거릴 찾아서" },
+        { time: 58.5, jp: "目をそらしてみようがきっと僕以上に",        ko: [{ text: "메오 소라시테 미요오가 킷토 보쿠이조오니"}],         tr: "눈을 돌리려 해도 분명 나 이상으로" },
         { time: 64.5, jp: "僕以前に僕よりも僕のことつくってる",        ko: [{ text: "보쿠이젠니 보쿠요리모 보쿠노 코토 츠쿳테루"}],         tr: "나 보다 먼저, 나 보다 더 나 라는 것을 만들어 온-" },
         { time: 75, jp: "[wave]僕にはどうしてわかるんだろう",        ko: [{ text: "보쿠니와 도오시테 와카룬다로", tag: "chant"}],         tr: "나는 어떻게 아는 걸까" },
         { time: 80, jp: "[wave]迷える日々がこれとない味のエッセイ",        ko: [{ text: "마요에루 히비가 코레토 나이 아지노 엣세이"}],         tr: "헤매이던 날들이 지금껏 본 적 없는 맛의 에세이라는걸" },
@@ -2234,11 +2268,11 @@
         { time: 59, jp: "[wave]先生ここにあるものじゃ",        ko: [{ text: "센세이", tag: "chant"}, { text: " 코코니 아루 모노쟈"}],         tr: "선생님, 여기 있는 것만으로는" },
         { time: 61.5, jp: "[wave]全然足りなかったような 愛しさと未来を",        ko: [{ text: "젠젠", tag: "chant"}, { text: " 타리나캇타 요오나 이토시사토 미라이오"}],         tr: "전혀 충분하지 않은 듯한 사랑스러움과 미래를" },
         { time: 67.5, jp: "[wave]もう、笑っていこうぜ",        ko: [{ text: "모오 와랏테이코오제", tag: "chant"}],         tr: "이제, 웃으며 나아가자" },
-        { time: 70.5, jp: "[clap]子供の頃は世界を守って精一杯 ただ、めいっぱいだった",        ko: [{ text: "코도모노 코로와 세카이오 마못테 세잇파이 타다 메잇파이 닷타", tag: "clap"}],         tr: "어릴 적엔 세상을 지키려 애썼고 그저 있는 힘껏이었어" },
-        { time: 82, jp: "[clap]でっかくなったが変わることが苦しいなら やめてたのに",        ko: [{ text: "뎃카쿠 낫타가 카와루 코토가 쿠루시이나라 야메테타노니", tag: "clap"}],         tr: "컸지만 변하는 게 괴롭다면 진작 포기했을 텐데" },
+        { time: 70.5, jp: "[clap]子供の頃は世界を守って精一杯 ただ、めいっぱいだった",        ko: [{ text: "코도모노 코로와 세카이오 마못테 세잇파이 타다 메잇파이 닷타"}],         tr: "어릴 적엔 세상을 지키려 애썼고 그저 있는 힘껏이었어" },
+        { time: 82, jp: "[clap]でっかくなったが変わることが苦しいなら やめてたのに",        ko: [{ text: "뎃카쿠 낫타가 카와루 코토가 쿠루시이나라 야메테타노니"}],         tr: "컸지만 변하는 게 괴롭다면 진작 포기했을 텐데" },
         { time: 92.5, jp: "[clap]「胸にいっぱいの葛藤と愛しさでまだ",        ko: [{ text: "무네니 잇파이노 캇토오토 이토시사데 마다", tag: "chant"}],         tr: "가슴 가득한 갈등과 그리움 속에서도 아직은" },
         { time: 96.5, jp: "[clap]変わることができてた」",        ko: [{ text: "카와루 코토가 데키테타", tag: "chant"}],         tr: "변할 수 있었어" },
-        { time: 98.5, jp: "[clap]ずっとそんなに苦しまなくたって もういいよ",        ko: [{ text: "즛토 손나니 쿠루시마나쿠탓테 모오 이이요 ", tag: "clap"}],         tr: "계속 그렇게 아파하지 않아도 돼 이젠 됐어요" },
+        { time: 98.5, jp: "[clap]ずっとそんなに苦しまなくたって もういいよ",        ko: [{ text: "즛토 손나니 쿠루시마나쿠탓테 모오 이이요 "}],         tr: "계속 그렇게 아파하지 않아도 돼 이젠 됐어요" },
         { time: 104, jp: "[wave]先生ここにあるものじゃ",        ko: [{ text: "센세이", tag: "chant"}, { text: " 코코니 아루 모노쟈"}],         tr: "선생님, 여기 있는 것만으로는" },
         { time: 106.5, jp: "[wave]全然足りなかったような 愛しさと未来を",        ko: [{ text: "젠젠", tag: "chant"}, { text: " 타리나캇타 요오나 이토시사토 미라이오"}],         tr: "전혀 충분하지 않은 듯한 사랑스러움과 미래를" },
         { time: 113, jp: "[wave]もう、笑っていこうぜ",        ko: [{ text: "모오 와랏테이코오제", tag: "chant"}],         tr: "이제, 웃으며 나아가자" },
@@ -3213,7 +3247,8 @@
   const INLINE_ICONS = {
     wave: `<span class="ico ico-wave" title="손 흔들기">${useSvg("i-wave")}</span>`,
     clap: `<span class="ico ico-clap" title="박수"><span class="hand l">${useSvg("i-hand")}</span><span class="hand r">${useSvg("i-hand")}</span><span class="spark">${useSvg("i-spark")}</span></span>`,
-    mic:  `<span class="ico ico-mic" title="떼창">${useSvg("i-mic")}</span>`
+    mic:  `<span class="ico ico-mic" title="떼창">${useSvg("i-mic")}</span>`,
+    jump: `<span class="ico ico-jump" title="점프">${useSvg("i-jump")}<span class="ground"></span></span>`
   };
   INLINE_ICONS.chant = INLINE_ICONS.mic;   // [chant] 로 써도 동일
 
@@ -3484,14 +3519,15 @@
 
   /* 가사 글자를 안전하게 처리하면서, [wave] [clap] [mic] 같은 표시를
      그 자리에서 움직이는 아이콘으로 바꿔 준다. 가사 어느 위치에나 넣을 수 있다. */
-  const ICON_TOKEN_RE = /\[(wave|clap|mic|chant)\]/gi;
+  /* [wave] 처럼 대괄호로도, (wave) 처럼 소괄호로도 쓸 수 있게 둘 다 인식 */
+  const ICON_TOKEN_RE = /[\[(](wave|clap|mic|chant|jump)[\])]/gi;
   function withIcons(str){
     if (str === undefined || str === null) return "";
     return escapeHtml(String(str)).replace(ICON_TOKEN_RE, (m, key)=> INLINE_ICONS[key.toLowerCase()] || m);
   }
   function hasIconToken(str, name){
     if (typeof str !== "string") return false;
-    return new RegExp(`\\[${name}\\]`, "i").test(str);
+    return new RegExp(`[\\[(]${name}[\\])]`, "i").test(str);
   }
 
   function renderKo(ko){
