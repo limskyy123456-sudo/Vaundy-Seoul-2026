@@ -143,6 +143,30 @@
     font-variant-numeric:tabular-nums;
     text-shadow:0 2px 10px rgba(0,0,0,0.8);
   }
+  /* 마지막 공연 진행 중 / 공연 종료 상태 */
+  .cd-pill.is-live{
+    border-color:rgba(245,148,44,0.55);
+    box-shadow:0 6px 20px rgba(0,0,0,0.45), 0 0 22px rgba(245,148,44,0.18);
+  }
+  .cd-pill.is-live .cd-dday{ color:var(--chant); }
+  .cd-pill.is-live .cd-clock{ color:#fff; }
+  .cd-pill.is-end{
+    border-color:rgba(246,239,217,0.22);
+    background:rgba(20,6,4,0.4);
+  }
+  .cd-pill.is-end .cd-sep,
+  .cd-pill.is-end .cd-clock{ display:none; }
+  .cd-pill.is-end .cd-dday{
+    color:#b9b3a6;
+    letter-spacing:.16em;
+    text-shadow:0 2px 10px rgba(0,0,0,0.8);
+  }
+  /* 이미 끝난 공연은 흐리게 / 진행 중인 공연은 주황으로 */
+  .show-row.past{ opacity:.38; }
+  .show-row.live .show-day{ color:var(--chant); }
+  .show-row.live .show-time{ color:var(--chant); opacity:.85; }
+  .show-row{ transition:opacity .3s ease; }
+
   .countdown-done{
     margin-top:30px;
     font-family:'Black Han Sans',sans-serif;
@@ -1166,7 +1190,13 @@
 <div id="song-view" class="song-view offstage"></div>
 
 <script>
-  const SHOW_DATETIME = "2026-09-19T17:00:00+09:00";
+  /* 공연 일정 — 카운트다운이 이 순서대로 자동으로 따라갑니다.
+     start ~ end 사이에는 "NOW / ON AIR", 그 사이 기간에는 다음 공연까지 카운트,
+     마지막 end 가 지나면 "END" 로 바뀝니다. */
+  const SHOW_SCHEDULE = [
+    { start:"2026-09-19T17:00:00+09:00", end:"2026-09-19T20:00:00+09:00" },  // 9/19(토)
+    { start:"2026-09-20T16:00:00+09:00", end:"2026-09-20T19:00:00+09:00" }   // 9/20(일)
+  ];
 
   /* 가사 한 줄의 형식
      {
@@ -2995,27 +3025,66 @@
     });
   }
 
+  /* 알약 안의 두 글자를 바꿔 준다. clock 을 비우면 왼쪽 글자만 크게 보인다. */
+  function setPill(dday, clock, mode){
+    const pill  = document.querySelector(".cd-pill");
+    const dEl   = document.getElementById("cd-dday");
+    const cEl   = document.getElementById("cd-clock");
+    if (!pill || !dEl || !cEl) return;
+    dEl.textContent = dday;
+    cEl.textContent = clock || "";
+    pill.classList.toggle("is-live", mode === "live");
+    pill.classList.toggle("is-end",  mode === "end");
+  }
+
+  /* 끝난 공연은 흐리게, 진행 중인 공연은 주황으로 —
+     지금 어느 공연을 세고 있는지 한눈에 보이도록 */
+  function markShowRows(liveIdx, nextIdx){
+    const rows = document.querySelectorAll(".show-meta .show-row");
+    rows.forEach((row, i)=>{
+      const live   = (i === liveIdx);
+      const passed = !live && ((nextIdx === -1) || (i < nextIdx));
+      row.classList.toggle("live", live);
+      row.classList.toggle("past", passed);
+    });
+  }
+
   function startCountdown(){
-    const target = new Date(SHOW_DATETIME).getTime();
+    const shows = SHOW_SCHEDULE.map(v => ({
+      start: new Date(v.start).getTime(),
+      end:   new Date(v.end).getTime()
+    }));
+    const finalEnd = shows[shows.length - 1].end;
+
     function tick(){
-      const now = Date.now();
-      const diff = target - now;
       const box = document.getElementById("countdown");
       if (!box) { stopCountdown(); return; }
-      if (diff <= 0){
-        box.outerHTML = `<div class="countdown-done">🎤 공연이 시작되었습니다!</div>`;
-        stopCountdown();
+
+      const now     = Date.now();
+      const liveIdx = shows.findIndex(v => now >= v.start && now < v.end);   // 진행 중인 공연
+      const nextIdx = shows.findIndex(v => v.start > now);                   // 아직 시작 전인 첫 공연
+      markShowRows(liveIdx, nextIdx);
+
+      if (liveIdx !== -1){                 // 공연 진행 중 (토·일 모두)
+        setPill("NOW", "ON AIR", "live");
         return;
       }
+      if (nextIdx === -1){                 // 남은 공연 없음
+        if (now >= finalEnd){
+          setPill("END", "", "end");
+          stopCountdown();
+        }
+        return;
+      }
+
+      const diff = shows[nextIdx].start - now;
       const d = Math.floor(diff/86400000);
       const h = Math.floor(diff%86400000/3600000);
       const m = Math.floor(diff%3600000/60000);
       const s = Math.floor(diff%60000/1000);
-      const dday  = document.getElementById("cd-dday");
-      const clock = document.getElementById("cd-clock");
-      if (dday)  dday.textContent  = `D-${pad(d)}`;
-      if (clock) clock.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+      setPill(`D-${pad(d)}`, `${pad(h)}:${pad(m)}:${pad(s)}`, "count");
     }
+
     tick();
     countdownTimer = setInterval(tick, 1000);
   }
