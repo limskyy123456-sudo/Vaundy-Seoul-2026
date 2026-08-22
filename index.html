@@ -237,14 +237,17 @@
 
   .main-menu{
     position:relative;z-index:1;
-    margin-top:30px;
+    margin-top:28px;
+    width:100%;
+    max-width:560px;
   }
   .menu-btn{
+    width:100%;
     display:flex;flex-direction:column;align-items:center;
-    background:rgba(246,239,217,0.06);
-    border:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(246,239,217,0.10), rgba(246,239,217,0.04));
+    border:1px solid rgba(233,217,163,0.34);
     border-radius:16px;
-    padding:22px 56px;
+    padding:20px 24px;
     cursor:pointer;
     box-shadow:0 6px 20px rgba(0,0,0,0.4);
     transition:background .2s ease, border-color .2s ease, transform .2s ease;
@@ -257,7 +260,7 @@
   }
   .menu-btn-label{
     font-family:'Black Han Sans','Anton',sans-serif;
-    font-size:26px;
+    font-size:clamp(20px,5.6vw,24px);
     letter-spacing:.02em;
     color:#fff;
     text-shadow:0 2px 10px rgba(0,0,0,0.8);
@@ -345,7 +348,7 @@
     position:relative;z-index:1;
     width:100%;
     max-width:560px;
-    margin:26px auto 0;
+    margin:0 auto;
     text-align:left;
   }
   .info-card{
@@ -356,33 +359,47 @@
     backdrop-filter:blur(3px);
     box-shadow:0 6px 20px rgba(0,0,0,0.45);
   }
-  /* 카드 맨 윗줄 — 왼쪽 "공연 정보"(펼침), 오른쪽 "Vaundy 공식사이트"(외부 링크) */
-  .info-head-row{
-    display:flex;
-    align-items:stretch;
+  /* ── 홈 아래 메뉴 — 한 장의 카드 안에 같은 모양의 줄로 정리 ──────
+     응원가이드(주 버튼) → 공연 정보 · 가는 길 · 공식사이트 순서. */
+  .menu-card{
+    width:100%;
+    max-width:560px;
+    margin:14px auto 0;
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    background:rgba(20,6,4,0.55);
+    backdrop-filter:blur(3px);
+    box-shadow:0 6px 20px rgba(0,0,0,0.45);
+    text-align:left;
   }
-  /* 두 버튼은 항상 같은 크기(절반씩)로 좌우에 나란히 */
-  .info-toggle, .site-link{
-    flex:1 1 0;
-    min-width:0;
-    justify-content:center;
+  .menu-card > * + *{ border-top:1px solid var(--line); }
+
+  /* 카드 안에서는 각 항목의 테두리를 없애 한 덩어리로 보이게 */
+  .menu-card .info-card{
+    border:none;border-radius:0;
+    background:none;box-shadow:none;backdrop-filter:none;
+    margin:0;
   }
-  .info-toggle{
-    display:flex;align-items:center;gap:8px;
+
+  .menu-row{
+    width:100%;
+    display:flex;align-items:center;gap:11px;
+    padding:14px 15px;
     background:none;border:none;
     color:var(--cream);
-    padding:12px 10px;
+    font-family:inherit;
+    text-align:left;text-decoration:none;
     cursor:pointer;
-    text-align:center;
     transition:background .2s ease;
   }
-  .info-toggle:hover, .info-toggle:focus-visible{
-    background:linear-gradient(90deg, rgba(94,205,196,0.10), transparent 70%);
+  .menu-row:hover, .menu-row:focus-visible{
+    background:linear-gradient(90deg, rgba(94,205,196,0.10), transparent 75%);
     outline:none;
   }
   .info-toggle-icon{
     flex:none;
-    width:24px;height:24px;
+    width:26px;height:26px;
     border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     background:linear-gradient(135deg, rgba(94,205,196,0.18), rgba(63,143,214,0.14));
@@ -391,59 +408,43 @@
   }
   .info-toggle-icon svg{width:14px;height:14px;}
   .info-toggle-label{
-    flex:none;
+    flex:1;
     min-width:0;
     font-family:'Black Han Sans',sans-serif;
-    font-size:clamp(11px, 3.4vw, 13px);
+    font-size:14px;
     letter-spacing:.02em;
     color:#fff;
     white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    overflow:hidden;text-overflow:ellipsis;
     text-shadow:0 1px 6px rgba(0,0,0,0.6);
   }
   .info-toggle-chevron{
     flex:none;
-    width:15px;height:15px;
+    width:16px;height:16px;
     color:var(--gold-soft);
     display:flex;align-items:center;justify-content:center;
     transition:transform .3s ease;
   }
-  .info-toggle-chevron svg{width:15px;height:15px;}
-
-  .site-link{
-    display:flex;align-items:center;gap:8px;
-    padding:12px 10px;
-    border-left:1px solid var(--line);
-    color:var(--gold-soft);
-    text-decoration:none;
-    letter-spacing:.01em;
-    white-space:nowrap;
-    transition:background .2s ease, color .2s ease;
-  }
-  .site-link:hover, .site-link:focus-visible{
-    background:linear-gradient(270deg, rgba(94,205,196,0.12), transparent 80%);
-    color:var(--teal);
-    outline:none;
-  }
-  .site-link-icon{
-    flex:none;
-    width:22px;height:22px;
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg, rgba(212,175,110,0.16), rgba(94,205,196,0.10));
-    border:1px solid var(--line);
-    color:inherit;
-  }
-  .site-link-icon svg{width:12px;height:12px;}
-  .site-link-label{
-    font-family:'Black Han Sans',sans-serif;
-    font-size:clamp(11px, 3.4vw, 13px);
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
+  .info-toggle-chevron svg{width:16px;height:16px;}
   .info-card.open .info-toggle-chevron{ transform:rotate(180deg); }
+
+  /* 외부 링크 줄 (공식사이트) */
+  .menu-row.ext .info-toggle-icon{
+    background:linear-gradient(135deg, rgba(212,175,110,0.18), rgba(94,205,196,0.10));
+    color:var(--gold-soft);
+  }
+  .menu-row.ext .info-toggle-label{ color:var(--gold); font-size:13.5px; }
+  .menu-row.ext .go{
+    flex:none;
+    font-size:13px;
+    color:var(--gold-soft);
+  }
+  .menu-row.ext:hover .go{ color:var(--teal); }
+
+  @media (max-width:400px){
+    .menu-row{ padding:13px 13px; gap:9px; }
+    .info-toggle-label{ font-size:13px; }
+  }
 
   .info-panel{
     max-height:0;
@@ -611,12 +612,6 @@
   /* 좁은 화면에서는 카드 안쪽 여백을 줄여 표가 쓸 수 있는 폭을 최대한 확보 */
   @media (max-width:480px){
     .info-panel-inner{ padding:4px 10px 20px; }
-    .info-toggle, .site-link{ padding:11px 8px; gap:6px; }
-  }
-  /* 아주 좁은 화면에서도 위아래로 나누지 않고, 아이콘만 접어 한 줄을 유지 */
-  @media (max-width:400px){
-    .info-toggle-icon, .site-link-icon{ display:none; }
-    .info-toggle, .site-link{ gap:5px; padding:11px 6px; }
   }
   /* 아주 좁은 기기(320px 등) — 시간 열이 겹치지 않도록 비율과 글자를 한 단계 더 조임 */
   @media (max-width:359px){
@@ -1223,6 +1218,198 @@
   }
   .app-banner.offline .msg b{color:var(--chant);}
 
+
+  /* ── 오늘의 일정 카드 (공연 당일에만 나타남) ────────────────── */
+  .today-card{
+    width:100%;max-width:420px;
+    margin:18px auto 0;
+    border:1px solid rgba(245,148,44,0.45);
+    border-radius:16px;
+    background:rgba(20,6,4,0.62);
+    backdrop-filter:blur(3px);
+    box-shadow:0 6px 20px rgba(0,0,0,0.45);
+    padding:14px 15px 12px;
+    text-align:left;
+  }
+  .today-head{
+    display:flex;align-items:center;gap:8px;
+    font-family:'Anton',sans-serif;
+    font-size:12px;letter-spacing:.14em;
+    color:var(--chant);
+  }
+  .today-head .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--chant);
+    box-shadow:0 0 0 0 rgba(245,148,44,.6);
+    animation:todayPulse 1.8s ease-out infinite;
+  }
+  @keyframes todayPulse{
+    0%  { box-shadow:0 0 0 0 rgba(245,148,44,.55); }
+    70% { box-shadow:0 0 0 7px rgba(245,148,44,0); }
+    100%{ box-shadow:0 0 0 0 rgba(245,148,44,0); }
+  }
+  .today-now{
+    margin-top:8px;
+    font-size:14px;line-height:1.5;
+    color:var(--cream);
+  }
+  .today-now b{ color:#fff; }
+  .today-now .left{
+    font-family:'Anton',sans-serif;
+    font-size:17px;letter-spacing:.03em;
+    color:var(--gold);
+    font-variant-numeric:tabular-nums;
+  }
+  .today-list{
+    list-style:none;margin:11px 0 0;padding:0;
+    border-top:1px solid var(--line);
+  }
+  .today-list li{
+    display:flex;align-items:baseline;gap:10px;
+    padding:6px 0 5px;
+    font-size:12.5px;
+    color:#b9a98a;
+  }
+  .today-list li .t{
+    font-family:'Anton',sans-serif;
+    font-size:12px;letter-spacing:.03em;
+    width:42px;flex:none;
+    color:var(--gold-soft);
+  }
+  .today-list li.past{ opacity:.4; }
+  .today-list li.now{ color:#fff; }
+  .today-list li.now .t{ color:var(--chant); }
+
+  /* ── 준비물 체크 / 가는 길 카드 ───────────────────────────── */
+  .info-card.solo{ margin-top:9px; }
+  .info-card.solo .info-toggle{
+    width:100%;
+    justify-content:flex-start;
+    text-align:left;
+    gap:10px;
+  }
+  .info-card.solo .info-toggle-label{ flex:none; }
+  .info-card.solo .info-toggle-chevron{ margin-left:auto; }
+  .way-addr{
+    margin-top:14px;
+    font-size:13.5px;line-height:1.6;
+  }
+  .way-addr b{ display:block;color:var(--gold);font-size:15px; }
+  .way-addr span{ color:#b9a98a;font-size:12.5px; }
+  .way-note{
+    margin:14px 0 0;
+    padding:10px 12px;
+    border-left:2px solid var(--chant);
+    background:rgba(245,148,44,0.08);
+    border-radius:0 8px 8px 0;
+    font-size:12.5px;line-height:1.6;
+    color:#e2d4b8;
+  }
+  .way-note b{ color:#fff; }
+  .way-sec{ margin-top:18px; }
+  .way-sec h4{
+    margin:0 0 8px;
+    display:flex;align-items:baseline;gap:8px;
+    font-family:'Black Han Sans',sans-serif;
+    font-size:14px;letter-spacing:.02em;
+    color:var(--gold);
+  }
+  .way-sec h4 span{
+    font-family:'Noto Sans KR',sans-serif;
+    font-size:11.5px;font-weight:400;
+    color:#8d7d62;
+  }
+  .way-block{
+    margin-bottom:10px;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:rgba(0,0,0,0.22);
+  }
+  .way-block-t{
+    font-size:12.5px;font-weight:700;
+    color:var(--cream);
+    margin-bottom:6px;
+  }
+  .way-block-t b{ color:var(--teal); }
+  .way-ul{
+    list-style:none;margin:0;padding:0;
+  }
+  .way-ul li{
+    position:relative;
+    padding-left:11px;
+    margin-top:5px;
+    font-size:12.5px;line-height:1.6;
+    color:#b9a98a;
+  }
+  .way-ul li::before{
+    content:"";
+    position:absolute;left:0;top:8px;
+    width:4px;height:4px;border-radius:50%;
+    background:var(--gold-soft);
+    opacity:.7;
+  }
+  .way-ul li b{ color:var(--cream); }
+  .way-hint{
+    display:block;margin-top:2px;
+    font-family:'Anton',sans-serif;
+    font-size:11.5px;letter-spacing:.02em;
+    color:var(--teal);
+  }
+  .way-ul.warn li::before{ background:var(--chant);opacity:.85; }
+  .way-ul.warn li{ color:#a99a80;font-size:12px; }
+
+  .way-btns{
+    display:flex;flex-wrap:wrap;gap:7px;
+    margin-top:12px;
+  }
+  .way-btns a, .way-btns button{
+    flex:1 1 auto;
+    min-width:88px;
+    text-align:center;
+    padding:9px 10px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(0,0,0,0.28);
+    color:var(--cream);
+    font-family:inherit;font-size:12.5px;
+    text-decoration:none;cursor:pointer;
+    transition:border-color .2s ease,color .2s ease;
+  }
+  .way-btns a:hover, .way-btns button:hover{ border-color:var(--teal);color:var(--teal); }
+
+  /* ── 홈 맨 아래 — 오프라인 준비 상태 · 공유 ─────────────────── */
+  .home-foot{
+    display:flex;align-items:center;justify-content:center;
+    flex-wrap:wrap;gap:9px;
+    margin:18px auto 0;
+    width:100%;max-width:560px;
+  }
+  .offline-badge{
+    display:none;align-items:center;gap:7px;
+    padding:8px 13px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(0,0,0,0.25);
+    font-size:12px;color:#b9a98a;
+  }
+  .offline-badge.show{ display:inline-flex; }
+  .offline-badge.ready{ border-color:rgba(141,224,95,0.5);color:var(--wave); }
+  .offline-badge .mark{ font-weight:700; }
+  .share-btn{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:8px 15px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(0,0,0,0.25);
+    color:var(--gold);
+    font-family:inherit;font-size:12.5px;
+    cursor:pointer;
+    transition:border-color .2s ease,color .2s ease;
+  }
+  .share-btn:hover{ border-color:var(--teal);color:var(--teal); }
+  .share-btn svg{ width:14px;height:14px; }
+
   /* ── 화면 안전영역(노치·상태바·제스처바) ─────────────────────
      브라우저 탭으로 열면 0, 홈 화면에 설치해 실행하면 실제 상태바 높이가 들어온다.
      일부 기기는 값을 0 으로 알려 주므로, 설치 실행일 때는 최소 28px 를 보장한다. */
@@ -1334,6 +1521,27 @@
 </div>
 
 <script>
+  /* 공연 당일 타임라인 — 그날이 되면 홈 화면 위쪽에 자동으로 나타납니다.
+     (시각은 예매처 입장 안내 기준. 바꾸려면 이 표만 고치면 됩니다) */
+  const SHOW_TIMELINE = {
+    "2026-09-19": [
+      { t:"13:00", label:"티켓 부스 · 스탠딩 부스 오픈" },
+      { t:"14:00", label:"아레나 로비 오픈 · 스탠딩 입장 대기" },
+      { t:"15:00", label:"공연장 입장 시작" },
+      { t:"17:00", label:"본 공연 시작" },
+      { t:"17:30", label:"티켓 부스 마감" },
+      { t:"20:00", label:"공연 종료 예정" }
+    ],
+    "2026-09-20": [
+      { t:"12:00", label:"티켓 부스 · 스탠딩 부스 오픈" },
+      { t:"13:00", label:"아레나 로비 오픈 · 스탠딩 입장 대기" },
+      { t:"14:00", label:"공연장 입장 시작" },
+      { t:"16:00", label:"본 공연 시작" },
+      { t:"16:30", label:"티켓 부스 마감" },
+      { t:"19:00", label:"공연 종료 예정" }
+    ]
+  };
+
   /* 공연 일정 — 카운트다운이 이 순서대로 자동으로 따라갑니다.
      start ~ end 사이에는 "NOW / ON AIR", 그 사이 기간에는 다음 공연까지 카운트,
      마지막 end 가 지나면 "END" 로 바뀝니다. */
@@ -2853,6 +3061,8 @@
   const songView = document.getElementById("song-view");
   const INFO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
   const EXT_LINK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+  const MAP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+  const SHARE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5"/><path d="M15.4 6.5 8.6 10.5"/></svg>';
   const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
   let countdownTimer = null;
   let player = null;
@@ -2927,6 +3137,13 @@
             <div class="show-venue">INSPIRE ARENA, SEOUL</div>
           </div>
 
+          <!-- 공연 당일에만 나타나는 오늘의 일정 -->
+          <div class="today-card" id="today-card" hidden>
+            <div class="today-head"><span class="dot"></span><span id="today-title">TODAY</span></div>
+            <div class="today-now" id="today-now"></div>
+            <ul class="today-list" id="today-list"></ul>
+          </div>
+
           <nav class="main-menu">
             <button class="menu-btn" id="guide-btn">
               <span class="menu-btn-label">응원가이드</span>
@@ -2934,18 +3151,13 @@
           </nav>
 
           <section class="info-section">
+        <div class="menu-card">
         <div class="info-card" id="info-card">
-          <div class="info-head-row">
-            <button class="info-toggle" id="info-toggle" aria-expanded="false" aria-controls="info-panel">
-              <span class="info-toggle-icon">${INFO_SVG}</span>
-              <span class="info-toggle-label">공연 정보</span>
-              <span class="info-toggle-chevron">${CHEVRON_SVG}</span>
-            </button>
-            <a class="site-link" href="https://vaundy.jp/?lang=ko" target="_blank" rel="noopener">
-              <span class="site-link-icon">${EXT_LINK_SVG}</span>
-              <span class="site-link-label">Vaundy 공식사이트</span>
-            </a>
-          </div>
+          <button class="menu-row info-toggle" id="info-toggle" aria-expanded="false" aria-controls="info-panel">
+            <span class="info-toggle-icon">${INFO_SVG}</span>
+            <span class="info-toggle-label">공연 정보</span>
+            <span class="info-toggle-chevron">${CHEVRON_SVG}</span>
+          </button>
           <div class="info-panel" id="info-panel">
             <div class="info-panel-inner">
               <div class="info-panel-title"><span class="bar">|</span> 공연 개요 <span class="bar">|</span></div>
@@ -3055,6 +3267,82 @@
             </div>
           </div>
         </div>
+
+        <div class="info-card" id="way-card">
+          <button class="menu-row info-toggle" aria-expanded="false">
+            <span class="info-toggle-icon">${MAP_SVG}</span>
+            <span class="info-toggle-label">가는 길</span>
+            <span class="info-toggle-chevron">${CHEVRON_SVG}</span>
+          </button>
+          <div class="info-panel">
+            <div class="info-panel-inner">
+              <div class="way-addr">
+                <b>인스파이어 아레나</b>
+                <span>인천 중구 공항문화로 127</span>
+              </div>
+              <div class="way-btns">
+                <a href="https://map.kakao.com/link/search/%EC%9D%B8%EC%8A%A4%ED%8C%8C%EC%9D%B4%EC%96%B4%20%EC%95%84%EB%A0%88%EB%82%98" target="_blank" rel="noopener">카카오맵</a>
+                <a href="https://map.naver.com/p/search/%EC%9D%B8%EC%8A%A4%ED%8C%8C%EC%9D%B4%EC%96%B4%20%EC%95%84%EB%A0%88%EB%82%98" target="_blank" rel="noopener">네이버지도</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Inspire+Arena+Incheon" target="_blank" rel="noopener">구글맵</a>
+                <button type="button" id="copy-addr">주소 복사</button>
+              </div>
+
+              <p class="way-note">공연 당일 공연장 주변 교통 혼잡이 예상되고 입장에도 시간이 걸립니다. <b>여유 있게 도착해 주세요.</b></p>
+
+              <div class="way-sec">
+                <h4>무료 셔틀 <span>지하철 이용 시</span></h4>
+
+                <div class="way-block">
+                  <div class="way-block-t">① 올 때 — 공항철도 <b>화물청사역</b> → 아레나</div>
+                  <ul class="way-ul">
+                    <li>화물청사역 <b>2번 출구</b> 앞에서 아레나 전용 무료 순환 셔틀 탑승</li>
+                    <li>운영 <b>공연 시작 5시간 전 ~ 공연 시작</b>
+                      <span class="way-hint">9/19(토) 12:00~17:00 · 9/20(일) 11:00~16:00</span></li>
+                    <li>약 10~15분 소요 · <b>20분 간격</b> 배차 (현장 상황에 따라 탄력 운영)</li>
+                  </ul>
+                </div>
+
+                <div class="way-block">
+                  <div class="way-block-t">② 갈 때 — 아레나 → 인천공항 <b>제2여객터미널</b></div>
+                  <ul class="way-ul">
+                    <li>아레나 외부 별도 장소에서 탑승 (안내문·직원 안내를 따라 주세요)</li>
+                    <li>운영 <b>공연 종료 ~ 종료 1시간 30분 후</b>까지</li>
+                    <li>귀가 시 탑승까지 <b>30분 이상</b> 대기가 생길 수 있습니다</li>
+                  </ul>
+                </div>
+
+                <ul class="way-ul warn">
+                  <li>주차장이 협소하고 주변 교통이 혼잡해 주차가 어려울 수 있으니 가급적 셔틀을 이용해 주세요.</li>
+                  <li>교통 상황·주차로 관람이 지연되어도 티켓 변경·환불은 불가합니다.</li>
+                  <li>도로 사정에 따라 운영이 지연될 수 있으니 시간 여유를 두고 이용해 주세요.</li>
+                </ul>
+              </div>
+
+              <div class="way-sec">
+                <h4>주차</h4>
+                <ul class="way-ul">
+                  <li>인스파이어 엔터테인먼트 리조트 내 주차장</li>
+                  <li>공연 관람객 <b>1일 주차 무료</b> — 아레나 로비의 QR코드로 사전 등록 가능</li>
+                  <li>휠체어석 관객은 리조트 내 장애인 주차 공간을 이용해 주세요</li>
+                </ul>
+              </div>
+
+              <p class="info-footnote">※ 지도 앱은 인터넷 연결이 필요합니다.<br>※ 셔틀·주차 안내는 예매처 공지 기준이며 현장 상황에 따라 달라질 수 있습니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <a class="menu-row ext" href="https://vaundy.jp/?lang=ko" target="_blank" rel="noopener">
+          <span class="info-toggle-icon">${EXT_LINK_SVG}</span>
+          <span class="info-toggle-label">Vaundy 공식사이트</span>
+          <span class="go">↗</span>
+        </a>
+        </div>
+
+        <div class="home-foot">
+          <span class="offline-badge" id="offline-badge"><span class="mark">✓</span><span id="offline-text">오프라인 가사 저장 중…</span></span>
+          <button class="share-btn" type="button" id="share-btn">${SHARE_SVG} 공유하기</button>
+        </div>
           </section>
         </div>
       </section>
@@ -3063,7 +3351,8 @@
     `;
 
     document.getElementById("guide-btn").addEventListener("click", ()=>{ location.hash = "#/guide"; });
-    setupInfoAccordion();
+    setupAccordions();
+    setupHomeExtras();
     startCountdown();
 
     // 첫 화면 세로 가운데 여백을 계산해 고정한다.
@@ -3101,10 +3390,13 @@
   });
 
   /* 홈 화면 "공연 정보" 아코디언 — 클릭 시 관객 입장안내가 아래로 펼쳐짐 */
-  function setupInfoAccordion(){
-    const card  = document.getElementById("info-card");
-    const btn   = document.getElementById("info-toggle");
-    const panel = document.getElementById("info-panel");
+  /* 공연 정보 · 준비물 · 가는 길 — 접었다 펴는 카드 전부에 동일하게 적용 */
+  function setupAccordions(){
+    document.querySelectorAll(".info-card").forEach(card => setupOneAccordion(card));
+  }
+  function setupOneAccordion(card){
+    const btn   = card.querySelector(".info-toggle");
+    const panel = card.querySelector(".info-panel");
     if (!card || !btn || !panel) return;
 
     btn.addEventListener("click", ()=>{
@@ -3195,6 +3487,99 @@
     });
   }
 
+
+  /* ── 오늘의 일정 ─────────────────────────────────────────────
+     한국 시간 기준으로 오늘이 공연날이면 카드가 나타나고,
+     지금 어느 단계인지와 다음 단계까지 남은 시간을 1초마다 갱신한다. */
+  function kstDateKey(d){
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone:"Asia/Seoul", year:"numeric", month:"2-digit", day:"2-digit"
+    }).format(d);
+  }
+  let todayBuiltKey = null;
+  function updateTodayCard(now){
+    const card = document.getElementById("today-card");
+    if (!card) return;
+    const key   = kstDateKey(new Date(now));
+    const steps = SHOW_TIMELINE[key];
+    if (!steps){ card.hidden = true; todayBuiltKey = null; return; }
+    card.hidden = false;
+
+    const times   = steps.map(v => new Date(`${key}T${v.t}:00+09:00`).getTime());
+    const nextIdx = times.findIndex(t => t > now);
+    const curIdx  = nextIdx === -1 ? steps.length - 1 : nextIdx - 1;
+
+    if (todayBuiltKey !== key){
+      todayBuiltKey = key;
+      const d = new Date(`${key}T12:00:00+09:00`);
+      const dow = ["일","월","화","수","목","금","토"][d.getDay()];
+      document.getElementById("today-title").textContent =
+        `오늘 공연 · ${Number(key.slice(5,7))}/${Number(key.slice(8,10))}(${dow})`;
+    }
+    document.getElementById("today-list").innerHTML = steps.map((v,i)=>{
+      const cls = i < curIdx ? "past" : (i === curIdx ? "now" : "");
+      return `<li class="${cls}"><span class="t">${v.t}</span><span class="l">${escapeHtml(v.label)}</span></li>`;
+    }).join("");
+
+    const nowEl = document.getElementById("today-now");
+    if (nextIdx === -1){
+      nowEl.innerHTML = `<b>공연이 모두 끝났습니다.</b> 오늘 고생 많으셨어요!`;
+      return;
+    }
+    const diff = times[nextIdx] - now;
+    const h = Math.floor(diff/3600000), m = Math.floor(diff%3600000/60000), sec = Math.floor(diff%60000/1000);
+    const left = h > 0 ? `${h}시간 ${pad(m)}분 ${pad(sec)}초` : `${m}분 ${pad(sec)}초`;
+    const cur  = curIdx >= 0 ? `<b>${escapeHtml(steps[curIdx].label)}</b> 진행 중<br>` : "";
+    nowEl.innerHTML = `${cur}${escapeHtml(steps[nextIdx].label)}까지 <span class="left">${left}</span>`;
+  }
+
+  /* ── 준비물 체크 · 주소 복사 · 공유 · 오프라인 상태 ───────────── */
+  function setupHomeExtras(){
+    // 주소 복사
+    const copyBtn = document.getElementById("copy-addr");
+    if (copyBtn){
+      copyBtn.addEventListener("click", async ()=>{
+        const addr = "인천 중구 공항문화로 127 인스파이어 아레나";
+        try { await navigator.clipboard.writeText(addr); copyBtn.textContent = "복사됨 ✓"; }
+        catch(e){ copyBtn.textContent = addr; }
+        setTimeout(()=>{ copyBtn.textContent = "주소 복사"; }, 1600);
+      });
+    }
+
+    // 공유하기 — 공유 시트가 없으면 링크 복사로 대체
+    const shareBtn = document.getElementById("share-btn");
+    if (shareBtn){
+      shareBtn.addEventListener("click", async ()=>{
+        const data = {
+          title: "VAUNDY \"HORO\" SEOUL 응원가이드",
+          text: "곡별 가사와 떼창·박수·손 흔들기 포인트를 영상에 맞춰 볼 수 있어요",
+          url: location.href.split("#")[0]
+        };
+        try {
+          if (navigator.share){ await navigator.share(data); return; }
+          await navigator.clipboard.writeText(data.url);
+          showBanner("링크를 <b>복사</b>했어요. 붙여넣기로 공유해 주세요.", "확인", hideBanner);
+        } catch(e){ /* 사용자가 취소한 경우 등 — 아무것도 하지 않음 */ }
+      });
+    }
+
+    // 오프라인 준비 상태
+    const badge = document.getElementById("offline-badge");
+    const text  = document.getElementById("offline-text");
+    if (badge && text){
+      if (!("serviceWorker" in navigator) || !location.protocol.startsWith("http")) return;
+      badge.classList.add("show");
+      const markReady = ()=>{
+        badge.classList.add("ready");
+        text.textContent = "오프라인 가사 저장 완료";
+      };
+      if (navigator.serviceWorker.controller) markReady();
+      else navigator.serviceWorker.ready.then(()=> setTimeout(()=>{
+        if (navigator.serviceWorker.controller) markReady();
+      }, 800));
+    }
+  }
+
   function startCountdown(){
     const shows = SHOW_SCHEDULE.map(v => ({
       start: new Date(v.start).getTime(),
@@ -3207,6 +3592,7 @@
       if (!box) { stopCountdown(); return; }
 
       const now     = Date.now();
+      updateTodayCard(now);                                                  // 공연 당일이면 오늘 일정 갱신
       const liveIdx = shows.findIndex(v => now >= v.start && now < v.end);   // 진행 중인 공연
       const nextIdx = shows.findIndex(v => v.start > now);                   // 아직 시작 전인 첫 공연
       markShowRows(liveIdx, nextIdx);
