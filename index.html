@@ -298,7 +298,7 @@
   }
   .song-row{
     width:100%;
-    display:flex;align-items:center;gap:16px;
+    display:flex;align-items:center;gap:13px;
     background:none;border:none;border-bottom:1px solid var(--line);
     color:var(--cream);
     padding:20px 6px;
@@ -320,12 +320,15 @@
     line-height:1.45;
     color:var(--cream);
   }
-  .song-arrow{
-    font-family:'Anton',sans-serif;
-    font-size:18px;
-    background:linear-gradient(90deg,var(--teal),var(--sky));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
+  /* 곡 번호 */
+  .song-num{
     flex:none;
+    width:26px;
+    font-family:'Anton',sans-serif;
+    font-size:14px;
+    letter-spacing:.04em;
+    color:var(--gold-soft);
+    text-align:right;
   }
 
   .credits{
@@ -3146,8 +3149,8 @@
             ${SONGS.map((s,i)=>`
               <li>
                 <button class="song-row" data-id="${s.id}">
+                  <span class="song-num">${pad(i+1)}</span>
                   <span class="song-title">${escapeHtml(s.title)}</span>
-                  <span class="song-arrow">→</span>
                 </button>
               </li>`).join("")}
           </ul>
