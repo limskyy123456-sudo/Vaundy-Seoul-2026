@@ -1494,6 +1494,84 @@
   .share-btn:hover{ border-color:var(--teal);color:var(--teal); }
   .share-btn svg{ width:14px;height:14px; }
 
+
+  /* ── 단축모드 ────────────────────────────────────────────────
+     영상을 화면에서 완전히 감추고 한글 발음 가사만 크게 보여 준다.
+     플레이어는 화면 밖으로 옮겨 두기만 하므로(없애지 않음)
+     온라인이면 소리도 그대로 나오고 가사 동기화도 계속 동작한다. */
+  .venue-toggle{
+    display:flex;align-items:center;gap:7px;
+    background:linear-gradient(180deg, #2c130c, #1c0a06);
+    border:1px solid var(--gold-soft);
+    border-radius:999px;
+    padding:5px 5px 5px 10px;
+    cursor:pointer;
+    box-shadow:0 3px 9px rgba(0,0,0,0.45);
+    transition:opacity .18s ease, transform .12s ease, border-color .18s ease;
+  }
+  .venue-toggle:active{ transform:scale(0.97); }
+  .venue-toggle:not(.active){ opacity:.55; }
+  .venue-toggle.active{ border-color:var(--wave); }
+  .venue-label{
+    font-family:'Anton',sans-serif;
+    font-size:10px;letter-spacing:.14em;
+    color:var(--gold-soft);
+    white-space:nowrap;
+  }
+  .venue-toggle.active .venue-label{ color:var(--wave); }
+  .venue-switch{
+    width:26px;height:15px;border-radius:999px;
+    background:#3a2a1c;
+    display:flex;align-items:center;padding:2px;
+    transition:background .2s ease;
+  }
+  .venue-knob{
+    width:11px;height:11px;border-radius:50%;
+    background:#8d8f93;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .venue-toggle.active .venue-switch{ background:#12240a; }
+  .venue-toggle.active .venue-knob{ transform:translateX(11px); background:var(--wave); }
+
+  /* 켜진 상태 — 영상 영역은 화면에서 사라지고 가사만 남는다 */
+  .song-page.venue .song-body{ flex-direction:column; }
+  .song-page.venue .song-fixed-top{
+    flex:none;
+    height:0;                        /* 영상 자리를 완전히 없앰 */
+    padding:0;margin:0;
+    overflow:visible;
+  }
+  /* 플레이어는 지우지 않고 화면 밖으로만 옮긴다 → 소리는 계속 나옴 */
+  .song-page.venue .video-wrap{
+    position:fixed;
+    left:-10000px;top:0;
+    width:220px;
+    max-width:220px !important;
+    margin:0;padding:0;
+    opacity:0;
+    pointer-events:none;
+  }
+  .song-page.venue .watch-on-yt,
+  .song-page.venue .lyrics-note,
+  .song-page.venue .lyrics-legend,
+  .song-page.venue .venue-hint{ display:none; }
+  .song-page.venue .lyrics-scroll{
+    flex:1;min-height:0;
+    border-left:none;border-top:1px solid var(--line);
+  }
+  /* 발음 줄만 크게, 원문·해석은 접어 화면을 넓게 쓴다 */
+  .song-page.venue .lyric-jp,
+  .song-page.venue .lyric-tr{ display:none; }
+  .song-page.venue .lyric-ko{
+    font-size:clamp(19px,5.6vw,26px);
+    line-height:1.45;
+  }
+  .song-page.venue .lyric-bg{ font-size:clamp(15px,4.4vw,19px); }
+  .song-page.venue .lyric-line{ padding:15px 10px; }
+  .song-page.venue .lyric-icons{ width:24px; }
+
+  .venue-hint{ display:none; }
+
   /* ── 화면 안전영역(노치·상태바·제스처바) ─────────────────────
      브라우저 탭으로 열면 0, 홈 화면에 설치해 실행하면 실제 상태바 높이가 들어온다.
      일부 기기는 값을 0 으로 알려 주므로, 설치 실행일 때는 최소 28px 를 보장한다. */
@@ -3152,6 +3230,7 @@
   let player = null;
   let syncTimer = null;
   let autoScrollEnabled = true;
+  let venueMode = false;          // 단축모드 (첫 실행 때 저장값을 읽어 옴)
   let lastActiveIdx = -1;
 
   /* ── 가사 넘어가는 속도 조절값 (이 세 값만 바꾸면 됨) ──────────────
@@ -3843,6 +3922,7 @@
   function buildSongShell(){
     if (songShellBuilt) return;
     songShellBuilt = true;
+    venueMode = store("horo-venue") === "1";   // 지난번 설정 그대로
 
     songView.innerHTML = `
       <div class="song-page" id="song-page">
@@ -3884,6 +3964,10 @@
         </div>
 
         <div class="player-controls">
+          <button class="venue-toggle" id="venue-btn" aria-label="단축모드 켜기/끄기">
+            <span class="venue-label">단축모드</span>
+            <span class="venue-switch"><span class="venue-knob"></span></span>
+          </button>
           <button class="autoscroll-toggle${autoScrollEnabled ? " active" : ""}" id="autoscroll-btn" aria-label="자동 스크롤 켜기/끄기">
             <span class="autoscroll-label">AUTO SCROLL</span>
             <span class="autoscroll-switch"><span class="autoscroll-knob"></span></span>
@@ -3939,6 +4023,14 @@
       const btn = e.target.closest(".lyric-line");
       if (!btn) return;
       seekTo(Number(btn.dataset.time));
+    });
+
+    /* 단축모드 — 영상을 감추고 발음 가사만 크게.
+       온라인이면 소리와 가사 동기화는 그대로 유지된다. */
+    document.getElementById("venue-btn").addEventListener("click", (e)=>{
+      venueMode = !venueMode;
+      store("horo-venue", venueMode ? "1" : "");
+      applyVenueMode();
     });
 
     document.getElementById("autoscroll-btn").addEventListener("click", (e)=>{
@@ -4020,6 +4112,7 @@
     songView.classList.remove("offstage");
     app.style.display = "none";
 
+    applyVenueMode();                      // 단축모드 상태 반영 (글자 크기 등)
     updateLyricsPadding();                 // 첫 소절도 가운데 오도록 여백 계산
     observeLyricLines();                   // 보이는 줄의 아이콘만 움직이게
     requestWakeLock();                     // 가사 보는 동안 화면이 꺼지지 않게
@@ -4046,6 +4139,21 @@
     }, { root: container, rootMargin: "120px 0px" });
     lines.forEach(el => lyricObserver.observe(el));
   }
+
+  /* 단축모드 화면 적용 — 곡을 바꿔도 유지된다 */
+  function applyVenueMode(){
+    const page = document.getElementById("song-page");
+    const btn  = document.getElementById("venue-btn");
+    if (!page) return;
+    page.classList.toggle("venue", venueMode);
+    page.classList.toggle("offline", !navigator.onLine);
+    if (btn) btn.classList.toggle("active", venueMode);
+    // 글자 크기가 달라지므로 가운데 기준을 다시 잡고 현재 소절로 맞춘다
+    updateLyricsPadding();
+    updateLyricsSync(true);
+  }
+  window.addEventListener("online",  ()=>{ if (songShellBuilt) applyVenueMode(); });
+  window.addEventListener("offline", ()=>{ if (songShellBuilt) applyVenueMode(); });
 
   /* 곡 화면을 벗어날 때 — 플레이어는 부수지 않고 일시정지만 한다
      (iframe 을 없앴다 다시 만들면 모바일에서 소리 권한이 초기화됨) */
