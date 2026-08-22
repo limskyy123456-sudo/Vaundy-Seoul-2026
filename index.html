@@ -294,6 +294,90 @@
     font-size:13px;
     color:#b9a98a;
   }
+
+  /* ── 곡 목록 검색 ─────────────────────────────────────────── */
+  .song-search{
+    position:sticky;
+    top:0;
+    z-index:5;
+    max-width:640px;margin:0 auto 12px;
+    padding:10px 0 10px;
+  }
+  /* 화면 맨 위에 붙었을 때만 뒤를 살짝 흐린다.
+     (붙기 전에는 아무 배경도 깔지 않아 포스터 위에 네모가 생기지 않음) */
+  .song-search::before{
+    content:"";
+    position:absolute;
+    top:0;bottom:0;
+    left:calc(50% - 50vw);
+    right:calc(50% - 50vw);
+    background:linear-gradient(180deg, rgba(0,0,0,0.62), rgba(0,0,0,0));
+    backdrop-filter:blur(9px);
+    -webkit-backdrop-filter:blur(9px);
+    -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent);
+    mask-image:linear-gradient(180deg,#000 62%,transparent);
+    opacity:0;
+    transition:opacity .22s ease;
+    pointer-events:none;
+  }
+  .song-search.stuck::before{ opacity:1; }
+  .song-search-sentinel{ height:1px; margin:0; }
+  .song-search-box{
+    position:relative;                 /* 위 흐림 레이어보다 앞에 */
+    display:flex;align-items:center;gap:9px;
+    padding:11px 14px;
+    border:1px solid rgba(246,239,217,0.20);
+    border-radius:999px;
+    /* 색을 얹지 않고 뒤 배경을 그대로 어둡게만 — 포스터 색이 무엇이든 겉돌지 않게 */
+    background:rgba(0,0,0,0.30);
+    backdrop-filter:blur(16px) saturate(1.05) brightness(0.92);
+    -webkit-backdrop-filter:blur(16px) saturate(1.05) brightness(0.92);
+    box-shadow:0 4px 14px rgba(0,0,0,0.28);
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .song-search-box:focus-within{
+    border-color:var(--teal);
+    background:rgba(0,0,0,0.44);
+  }
+  .song-search-box svg{ width:15px;height:15px;color:var(--gold-soft);flex:none; }
+  .song-search-box input{
+    flex:1;min-width:0;
+    border:none;background:none;outline:none;
+    color:var(--cream);
+    font-family:inherit;font-size:14px;
+  }
+  .song-search-box input::placeholder{ color:#8d7d62; }
+  /* 브라우저 기본 지우기 버튼은 숨기고 우리 ✕ 하나만 쓴다 */
+  .song-search-box input::-webkit-search-cancel-button,
+  .song-search-box input::-webkit-search-decoration{ -webkit-appearance:none; appearance:none; display:none; }
+  .song-search-clear{
+    flex:none;
+    border:none;background:none;
+    color:#8d7d62;
+    font-size:15px;line-height:1;
+    padding:2px 2px;
+    cursor:pointer;
+    display:none;
+  }
+  .song-search-clear.show{ display:block; }
+  .song-search-meta{
+    display:flex;align-items:center;justify-content:space-between;
+    max-width:640px;margin:0 auto 6px;
+    padding:0 2px;
+    font-family:'Anton',sans-serif;
+    font-size:11.5px;letter-spacing:.08em;
+    color:#a5947a;
+    text-shadow:0 1px 6px rgba(0,0,0,0.85);
+  }
+  .song-empty{
+    max-width:640px;margin:0 auto;
+    padding:46px 10px;
+    text-align:center;
+    color:#8d7d62;
+    font-size:13.5px;line-height:1.7;
+  }
+  .song-empty b{ display:block;color:var(--cream);font-size:15px;margin-bottom:6px; }
+  .song-row .hit{ color:var(--teal); }
   .song-list{
     max-width:640px;margin:0 auto;
     list-style:none;padding:0;
@@ -3437,6 +3521,17 @@
             <h2>응원가이드</h2>
             <p>곡을 선택하면 영상에 맞춰 가사 · 떼창 포인트를 확인할 수 있어요</p>
           </div>
+          <div class="song-search-sentinel" id="song-search-sentinel"></div>
+          <div class="song-search">
+            <div class="song-search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+              <input id="song-search-input" type="search" inputmode="search" autocomplete="off"
+                     placeholder="곡 제목 · 번호 검색 (한글 · 일본어 · ㄱㄴㄷ)">
+              <button type="button" class="song-search-clear" id="song-search-clear" aria-label="지우기">✕</button>
+            </div>
+          </div>
+          <div class="song-search-meta"><span id="song-count">전체 ${SONGS.length}곡</span></div>
+          <p class="song-empty" id="song-empty" hidden><b>찾는 곡이 없어요</b>제목 일부나 곡 번호를 입력해 보세요</p>
           <ul class="song-list">
             ${SONGS.map((s,i)=>`
               <li>
@@ -3453,6 +3548,8 @@
     `;
 
     document.getElementById("back-btn").addEventListener("click", ()=>{ location.hash = "#/"; });
+
+    setupSongSearch();
 
     // 곡을 탭한 그 순간 바로 재생을 시작시킨다 (모바일 소리 허용을 위해)
     app.querySelectorAll(".song-row").forEach(btn=>{
@@ -3578,6 +3675,68 @@
         if (navigator.serviceWorker.controller) markReady();
       }, 800));
     }
+  }
+
+
+  /* ── 곡 목록 검색 ─────────────────────────────────────────────
+     한글 제목, 괄호 안 원제(일본어·영문), 그리고 초성(ㅁㅎ → 무희)까지 찾습니다. */
+  const CHO_TABLE = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+  function toCho(str){
+    return [...String(str)].map(ch=>{
+      const c = ch.charCodeAt(0);
+      return (c >= 0xAC00 && c <= 0xD7A3) ? CHO_TABLE[Math.floor((c - 0xAC00) / 588)] : ch;
+    }).join("");
+  }
+  const squash = (str) => String(str).toLowerCase().replace(/\s+/g, "");
+
+  function setupSongSearch(){
+    const input = document.getElementById("song-search-input");
+    const clear = document.getElementById("song-search-clear");
+    const count = document.getElementById("song-count");
+    const empty = document.getElementById("song-empty");
+    if (!input) return;
+
+    const rows = [...document.querySelectorAll(".song-list > li")].map((li,i)=>{
+      const title = li.querySelector(".song-title").textContent;
+      return {
+        li,
+        plain: squash(title),
+        cho:   squash(toCho(title)),
+        num:   String(i + 1),          // "5"
+        pad:   pad(i + 1)              // "05"
+      };
+    });
+
+    const apply = ()=>{
+      // "5", "05", "5번" 모두 5번 곡으로 인식
+      const raw = squash(input.value).replace(/번$/, "");
+      const q   = raw;
+      const isNum = /^\d{1,2}$/.test(q);
+      let hit = 0;
+      rows.forEach(r=>{
+        const ok = !q || (isNum
+          ? (r.num === String(Number(q)) || r.pad === q)   // 번호 검색
+          : (r.plain.includes(q) || r.cho.includes(q)));   // 제목 · 초성 검색
+        r.li.hidden = !ok;
+        if (ok) hit++;
+      });
+      count.textContent = q ? `검색 결과 ${hit}곡` : `전체 ${rows.length}곡`;
+      empty.hidden = hit !== 0;
+      clear.classList.toggle("show", !!input.value);
+    };
+
+    // 검색창이 화면 맨 위에 붙었을 때만 뒤 배경을 흐리게 (붙기 전에는 그대로 둠)
+    const bar = document.querySelector(".song-search");
+    const sentinel = document.getElementById("song-search-sentinel");
+    if (bar && sentinel && "IntersectionObserver" in window){
+      new IntersectionObserver(([e])=>{
+        bar.classList.toggle("stuck", !e.isIntersecting);
+      }, { threshold: 0 }).observe(sentinel);
+    }
+
+    input.addEventListener("input", apply);
+    clear.addEventListener("click", ()=>{ input.value = ""; apply(); input.focus(); });
+    apply();
   }
 
   function startCountdown(){
