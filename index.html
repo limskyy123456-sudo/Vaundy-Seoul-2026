@@ -881,6 +881,18 @@
   }
   .song-sheet-close svg{width:14px;height:14px;}
   .song-sheet-close:hover{border-color:var(--teal);color:var(--teal);}
+  .sheet-search{
+    flex:none;
+    padding:10px 14px 6px;
+  }
+  .sheet-search .song-search-box{ padding:9px 13px; }
+  .sheet-search .song-search-box input{ font-size:13.5px; }
+  .sheet-empty{
+    flex:none;
+    margin:0;padding:28px 10px;
+    text-align:center;
+    color:#8d7d62;font-size:13px;
+  }
   .song-sheet-list{
     flex:1;min-height:0;
     overflow-y:auto;overscroll-behavior:contain;
@@ -1499,6 +1511,26 @@
      영상을 화면에서 완전히 감추고 한글 발음 가사만 크게 보여 준다.
      플레이어는 화면 밖으로 옮겨 두기만 하므로(없애지 않음)
      온라인이면 소리도 그대로 나오고 가사 동기화도 계속 동작한다. */
+  /* 단축모드에서는 영상이 안 보이므로 재생/정지 버튼을 따로 둔다 */
+  .play-toggle{
+    display:none;
+    align-items:center;justify-content:center;
+    width:48px;height:48px;
+    border-radius:50%;
+    border:1px solid var(--gold-soft);
+    background:linear-gradient(180deg, #2c130c, #1c0a06);
+    color:var(--gold);
+    cursor:pointer;
+    box-shadow:0 3px 12px rgba(0,0,0,0.5);
+    transition:transform .12s ease, border-color .18s ease, color .18s ease;
+  }
+  .play-toggle:active{ transform:scale(0.94); }
+  .play-toggle svg{ width:20px;height:20px; }
+  .play-toggle.playing{ border-color:var(--wave); color:var(--wave); }
+  .song-page.venue .play-toggle{ display:flex; }
+  /* 오프라인이면 재생할 것이 없으므로 숨김 */
+  .song-page.venue.offline .play-toggle{ display:none; }
+
   .venue-toggle{
     display:flex;align-items:center;gap:7px;
     background:linear-gradient(180deg, #2c130c, #1c0a06);
@@ -1860,7 +1892,7 @@
         { time: 58.5, jp: "[wave]血がたぎってもう煮立ってもう 止まれない", ko: "치가 타깃테 모- 니탓테 모- 토마레나이",                                 tr: "피가 끓고, 들끓어도 멈출 수 없어" },
         { time: 61.5, jp: "[wave]血を喰らうたび悪夢また よぎる Hu-Hu-Hu-Hu", ko: [{ text: "치오 쿠라우타비 아쿠무 마타 요기루"}, { text: " Hu-Hu-Hu-Hu", tag: "chant" }],               tr: "피를 삼킬 때마다 악몽이 또 스쳐 지나가 Hu-Hu-Hu-Hu" },
         { time: 68, jp: "[wave]Tell me why cry? Tell me why you grinning?", ko: "Tell me why cry? Tell me why you grinning?",                                 tr: "Tell me why cry? Tell me why you grinning?" },
-        { time: 71.5,         ko: [{ text: "[clap]비트에 맞춰 박수", tag: "clap" }],                                                    },
+        { time: 69,         ko: [{ text: "[clap]비트에 맞춰 박수", tag: "clap" }],                                                    },
         { time: 84, jp: "[clap]妄想に侵された 右脳操作不能機能の相殺法に",        ko: [{ text: "모-소-니 오카사레타 우노-소-사 후노-키노-노 소-사이호-니", tag: "clap" }],                                                     tr: "망상에 침식되어 우뇌 조작 불능의 기능을 상쇄하는 법에" },
         { time: 88.5, jp: "[clap]使った愛の手！ (ハイッ ハイッ)", ko: [{ text: "치츠캇타 아이노 테", tag: "clap"}, { text: " (하잇 하잇)", tag: "chant" }],               tr: "써 버렸지 사랑의 손길! (하잇 하잇)" },
         { time: 90, jp: "[clap]笑かしたbadなschemeを食ってしまう紳士",        ko: [{ text: "와라카시타 맛토나 스키-무오 쿳테 시마우 신시", tag: "clap" }],                                                     tr: "우스운 bad한 scheme까지 집어삼켜 버리는 신사" },
@@ -3224,6 +3256,8 @@
   const INFO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
   const EXT_LINK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
   const MAP_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+  const PLAY_SVG  = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.2v13.6a1 1 0 0 0 1.5.87l11-6.8a1 1 0 0 0 0-1.74l-11-6.8A1 1 0 0 0 8 5.2z"/></svg>';
+  const PAUSE_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6.5" y="4.5" width="4" height="15" rx="1.4"/><rect x="13.5" y="4.5" width="4" height="15" rx="1.4"/></svg>';
   const SHARE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5"/><path d="M15.4 6.5 8.6 10.5"/></svg>';
   const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
   let countdownTimer = null;
@@ -3883,6 +3917,41 @@
   const CHEV_RIGHT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
   const CLOSE_SVG      = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
+  /* 곡 목록 시트 안 검색 — 곡 목록 화면과 동일한 규칙 */
+  function applySheetFilter(){
+    const input = document.getElementById("sheet-search-input");
+    const clear = document.getElementById("sheet-search-clear");
+    const count = songView.querySelector(".song-sheet-count");
+    const empty = document.getElementById("sheet-empty");
+    const items = songView.querySelectorAll("#song-sheet-list > li");
+    if (!input || !items.length) return;
+
+    const q = squash(input.value).replace(/번$/, "");
+    const isNum = /^\d{1,2}$/.test(q);
+    let hit = 0;
+
+    items.forEach((li, i)=>{
+      const name = li.querySelector(".song-sheet-name").textContent;
+      const ok = !q || (isNum
+        ? (String(i + 1) === String(Number(q)) || pad(i + 1) === q)
+        : (squash(name).includes(q) || squash(toCho(name)).includes(q)));
+      li.hidden = !ok;
+      if (ok) hit++;
+    });
+
+    if (count) count.textContent = q ? `${hit}곡` : `${items.length}곡`;
+    if (empty) empty.hidden = hit !== 0;
+    if (clear) clear.classList.toggle("show", !!input.value);
+  }
+
+  /* 시트를 닫을 때 검색어를 비워 다음에 열면 전체가 보이게 한다 */
+  function resetSheetFilter(){
+    const input = document.getElementById("sheet-search-input");
+    if (!input) return;
+    input.value = "";
+    applySheetFilter();
+  }
+
   /* 곡 목록 시트 열기/닫기 (셸을 만들 때 한 번만 연결) */
   function openSongSheet(){
     const sheet = document.getElementById("song-sheet");
@@ -3899,6 +3968,7 @@
     const sheet = document.getElementById("song-sheet");
     const btn   = document.getElementById("song-picker-btn");
     if (!sheet) return;
+    resetSheetFilter();
     sheet.classList.remove("open");
     sheet.setAttribute("aria-hidden", "true");
     if (btn) btn.setAttribute("aria-expanded", "false");
@@ -3964,6 +4034,7 @@
         </div>
 
         <div class="player-controls">
+          <button class="play-toggle" id="play-toggle" aria-label="재생 / 일시정지">${PLAY_SVG}</button>
           <button class="venue-toggle" id="venue-btn" aria-label="단축모드 켜기/끄기">
             <span class="venue-label">단축모드</span>
             <span class="venue-switch"><span class="venue-knob"></span></span>
@@ -3983,6 +4054,15 @@
               <span class="song-sheet-count">${SONGS.length}곡</span>
               <button class="song-sheet-close" data-close-sheet aria-label="닫기">${CLOSE_SVG}</button>
             </div>
+            <div class="sheet-search">
+              <div class="song-search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+                <input id="sheet-search-input" type="search" inputmode="search" autocomplete="off"
+                       placeholder="곡 제목 · 번호 검색">
+                <button type="button" class="song-search-clear" id="sheet-search-clear" aria-label="지우기">✕</button>
+              </div>
+            </div>
+            <p class="sheet-empty" id="sheet-empty" hidden>찾는 곡이 없어요</p>
             <ul class="song-sheet-list" id="song-sheet-list"></ul>
           </div>
         </div>
@@ -4018,6 +4098,18 @@
       gotoSong(target);
     });
 
+    // 곡 목록 시트 안 검색 — 곡 목록 화면과 같은 방식(제목·초성·원제·번호)
+    const sheetInput = document.getElementById("sheet-search-input");
+    const sheetClear = document.getElementById("sheet-search-clear");
+    if (sheetInput){
+      sheetInput.addEventListener("input", applySheetFilter);
+      sheetClear.addEventListener("click", ()=>{
+        sheetInput.value = "";
+        applySheetFilter();
+        sheetInput.focus();
+      });
+    }
+
     // 가사 줄 탭 → 해당 위치로 이동 (목록이 바뀌어도 되도록 위임 방식)
     document.getElementById("lyrics-list").addEventListener("click", (e)=>{
       const btn = e.target.closest(".lyric-line");
@@ -4027,6 +4119,17 @@
 
     /* 단축모드 — 영상을 감추고 발음 가사만 크게.
        온라인이면 소리와 가사 동기화는 그대로 유지된다. */
+    /* 재생 / 일시정지 — 단축모드에서 영상이 안 보일 때 소리를 멈추는 수단 */
+    document.getElementById("play-toggle").addEventListener("click", ()=>{
+      if (!player || !playerReady) return;
+      let st = -1;
+      try { st = player.getPlayerState(); } catch(e){}
+      try {
+        if (st === YT.PlayerState.PLAYING || st === YT.PlayerState.BUFFERING) player.pauseVideo();
+        else player.playVideo();
+      } catch(e){}
+    });
+
     document.getElementById("venue-btn").addEventListener("click", (e)=>{
       venueMode = !venueMode;
       store("horo-venue", venueMode ? "1" : "");
@@ -4107,6 +4210,7 @@
       </li>`).join("");
 
     closeSongSheet();
+    applySheetFilter();
 
     // 곡 화면 보이기 (먼저 보여야 컨테이너 높이를 정확히 잴 수 있음)
     songView.classList.remove("offstage");
@@ -4148,6 +4252,7 @@
     page.classList.toggle("venue", venueMode);
     page.classList.toggle("offline", !navigator.onLine);
     if (btn) btn.classList.toggle("active", venueMode);
+    updatePlayButton();
     // 글자 크기가 달라지므로 가운데 기준을 다시 잡고 현재 소절로 맞춘다
     updateLyricsPadding();
     updateLyricsSync(true);
@@ -4344,7 +4449,20 @@
     playVideoFor(videoId);
   }
 
+  /* 재생 버튼 모양을 현재 상태에 맞춘다 */
+  function updatePlayButton(){
+    const btn = document.getElementById("play-toggle");
+    if (!btn) return;
+    let st = -1;
+    try { st = player && player.getPlayerState(); } catch(e){}
+    const playing = (st === 1 || st === 3);   // PLAYING / BUFFERING
+    btn.innerHTML = playing ? PAUSE_SVG : PLAY_SVG;
+    btn.classList.toggle("playing", playing);
+    btn.setAttribute("aria-label", playing ? "일시정지" : "재생");
+  }
+
   function onPlayerStateChange(event) {
+    updatePlayButton();
     // 영상이 끝나면 다음 곡으로 (마지막 곡이면 첫 곡으로 되돌아감)
     if (event.data === YT.PlayerState.ENDED) {
       stopSyncTimer();
