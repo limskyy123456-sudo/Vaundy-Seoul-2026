@@ -41,6 +41,7 @@
     --clap:#4fa8e0;
     --wave:#8de05f;
     --jump:#b98cff;
+    --spin:#ff86c8;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -1137,6 +1138,42 @@
     78%,100%{ transform:translateY(0)    scaleY(1); }
   }
 
+  /* 머리 위로 팔 돌리기 — 손을 든 채로 팔 전체가 기울며 손이 작은 원을 그린다 */
+  .ico-spin{
+    position:relative;
+    width:1.55em;height:1.55em;
+    vertical-align:-0.38em;
+    color:var(--spin);
+  }
+  .ico-spin .body,
+  .ico-spin .arm{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+  }
+  .ico-spin .arm{
+    transform-origin:47.5% 67.1%;     /* 어깨 위치 (11.4, 16.1) */
+    animation:iconArmCircle 1.15s linear infinite;
+  }
+  /* 든 손이 머리 옆에서 작은 원을 그리도록 —
+     좌우로 기울이기(rotate) + 팔 길이 원근감(scale) 을 90° 어긋나게 겹친다 */
+  @keyframes iconArmCircle{
+    0%     { transform:rotate(11.00deg) scale(1.000); }
+    8.333% { transform:rotate(9.53deg) scale(1.070); }
+    16.667%{ transform:rotate(5.50deg) scale(1.121); }
+    25.000%{ transform:rotate(0.00deg) scale(1.140); }
+    33.333%{ transform:rotate(-5.50deg) scale(1.121); }
+    41.667%{ transform:rotate(-9.53deg) scale(1.070); }
+    50.000%{ transform:rotate(-11.00deg) scale(1.000); }
+    58.333%{ transform:rotate(-9.53deg) scale(0.930); }
+    66.667%{ transform:rotate(-5.50deg) scale(0.879); }
+    75.000%{ transform:rotate(-0.00deg) scale(0.860); }
+    83.333%{ transform:rotate(5.50deg) scale(0.879); }
+    91.667%{ transform:rotate(9.53deg) scale(0.930); }
+    100%   { transform:rotate(11.00deg) scale(1.000); }
+  }
+  .lyric-line.active .ico-spin .arm{ animation-duration:.8s; }
+  .lyric-line.active .ico-spin{ filter:drop-shadow(0 0 6px rgba(255,134,200,0.5)); }
+
   /* 떼창(마이크) — 살짝 커졌다 작아지는 맥박 */
   .ico-mic{
     width:1.05em;height:1.05em;
@@ -1167,11 +1204,13 @@
   .lyric-line .ico-wave svg,
   .lyric-line .ico-mic svg,
   .lyric-line .ico-jump svg,
+  .lyric-line .ico-spin .arm,
   .lyric-line .ico-clap .hand,
   .lyric-line .ico-clap .spark{ animation-play-state:paused; }
   .lyric-line.in-view .ico-wave svg,
   .lyric-line.in-view .ico-mic svg,
   .lyric-line.in-view .ico-jump svg,
+  .lyric-line.in-view .ico-spin .arm,
   .lyric-line.in-view .ico-clap .hand,
   .lyric-line.in-view .ico-clap .spark{ animation-play-state:running; }
 
@@ -1185,7 +1224,8 @@
   .lyric-type-icon .ico-clap, .legend-icon .ico-clap{ color:inherit; }
 
   @media (prefers-reduced-motion: reduce){
-    .ico-wave svg, .ico-clap .hand, .ico-clap .spark, .ico-mic svg, .ico-jump svg{ animation:none; }
+    .ico-wave svg, .ico-clap .hand, .ico-clap .spark, .ico-mic svg, .ico-jump svg,
+    .ico-spin .arm{ animation:none; }
     .ico-clap .hand.r{ transform:scaleX(-1); }
   }
   .lyric-body{min-width:0;display:block;flex:1;}
@@ -1591,9 +1631,20 @@
     flex:1;min-height:0;
     border-left:none;border-top:1px solid var(--line);
   }
-  /* 발음 줄만 크게, 원문·해석은 접어 화면을 넓게 쓴다 */
+  /* 발음 줄만 크게. 원문·해석은 글자만 감추고,
+     그 줄에 들어 있던 응원 아이콘([clap] 등)은 그대로 보이게 한다. */
   .song-page.venue .lyric-jp,
-  .song-page.venue .lyric-tr{ display:none; }
+  .song-page.venue .lyric-tr{
+    font-size:0;
+    line-height:0;
+    margin:0;
+  }
+  .song-page.venue .lyric-jp .ico,
+  .song-page.venue .lyric-tr .ico{
+    font-size:16px;
+    line-height:1;
+    margin:0 3px 2px 0;
+  }
   .song-page.venue .lyric-ko{
     font-size:clamp(19px,5.6vw,26px);
     line-height:1.45;
@@ -1695,6 +1746,18 @@
   <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
     <path d="M12 2.5v3.2"/><path d="M4.7 5.5l2.2 2.3"/><path d="M19.3 5.5l-2.2 2.3"/><path d="M2.6 13h3.1"/><path d="M21.4 13h-3.1"/>
   </symbol>
+  <!-- 몸통(고정) : 머리 + 상체. 팔은 아래 i-cheer-arm 이 통째로 돌아간다 -->
+  <symbol id="i-cheer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="7.8" cy="6.4" r="2.7"/>
+    <path d="M3.2 21.8v-1.7a5.1 5.1 0 0 1 10.2 0v1.7"/>
+  </symbol>
+  <!-- 든 팔(회전) : 어깨(12.3,16)를 축으로, 팔 전체가 기울며 손이 작은 원을 그린다.
+       손끝에는 치켜세운 검지 -->
+  <symbol id="i-cheer-arm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11.4 16.1 14.54 8.1"/>
+    <circle cx="14.85" cy="7.35" r=".85" stroke-width="1.9"/>
+    <path d="M15.05 6.79 16.26 3.72" stroke-width="1.7"/>
+  </symbol>
   <symbol id="i-jump" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="4" r="2.2"/><path d="M12 6.5v5.5"/><path d="M12 8 7.5 4.8"/><path d="M12 8 16.5 4.8"/><path d="M12 12 8 17.5"/><path d="M12 12 16 17.5"/>
   </symbol>
@@ -1768,6 +1831,7 @@
        [wave]  손 흔들기 (좌우로 흔들림)
        [clap]  박수 (두 손이 마주치며 반짝)
        [jump]  점프 (웅크렸다 튀어오름)
+       [spin]  머리 위로 손 돌리기 (든 손만 빙글빙글)
        [mic]   떼창 (콩닥콩닥 커졌다 작아짐)
 
      예)
@@ -1968,10 +2032,10 @@
         { time: 24, jp: "[clap]事が一つ二つ浮いているけど",        ko: [{ text: "코토가 히토츠 후타츠 우이테이루케도", tag: "clap" }],                                                     tr: "것들이 하나둘 떠오르고 있는데 말이야" },
         { time: 31, jp: "[clap]ねぇ、ちゃんと拾っておこう",        ko: [{ text: "네- 챤토 히롯테오코-", tag: "clap" }],                                                     tr: "저기、제대로 주워 두자" },
         { time: 36.5, jp: "[clap]はじけて忘れてしまう前に",        ko: [{ text: "하지케테 와스레테 시마우 마에니", tag: "clap" }],                                                     tr: "터져서 잊어버리기 전에" },
-        { time: 43, jp: "[wave]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
-        { time: 49.5, jp: "[wave]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
-        { time: 55.5, jp: "[wave]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
-        { time: 62, jp: "[wave]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
+        { time: 43, jp: "[spin]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가", bg : "검지를 들고 손을 돌려주세요" },
+        { time: 49.5, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
+        { time: 55.5, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
+        { time: 62, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
         { time: 68, jp: "とぅるるる とぅるるる とぅるる x 4",        ko: [{ text: "투루루루 투루루루 투루루 x 4", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 4" },
         { time: 80, jp: "[clap]あのね、私あなたに会ったの",        ko: [{ text: "아노네 와타시 아나타니 앗타노", tag: "clap"  }],                                                     tr: "있잖아、나 너를 만났어" },
         { time: 85.5, jp: "[clap]夢の中に置いてきたけどね",        ko: [{ text: "유메노 나카니 오이테키타케도네", tag: "clap"  }],                                                     tr: "꿈속에 두고 왔지만 말이야" },
@@ -1980,19 +2044,19 @@
         { time: 104.5, jp: "[clap]思いを蹴って 二人でしてんだ",        ko: [{ text: "오모이오 켓테 후타리데 시텐다", tag: "clap"  }],                                                     tr: "생각을 멈추고 둘이서 함께 해온" },
         { time: 107.5, jp: "[clap]壊れない愛を歌う 言葉を二人に課して",        ko: [{ text: "와스레나이 아이오 우타우 코토바오 후타리 카시테", tag: "clap"  }],                                                     tr: "깨지지 않을 사랑을 노래해 서로에게 말을 짊어지게 하고" },
         { time: 112, jp: "[clap]誓いをたてんだ 忘れない愛を歌うようにね",        ko: [{ text: "치카이오 타텐다 와스레나이 아이오 우타우요-니네", tag: "clap"  }],                                                     tr: "굳게 맹세하고 있어 잊지 못할 사랑을 노래하듯이 말이야" },
-        { time: 116.5, jp: "[wave]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
-        { time: 122.5, jp: "[wave]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
-        { time: 129, jp: "[wave]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
-        { time: 135, jp: "[wave]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
+        { time: 116.5, jp: "[spin]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
+        { time: 122.5, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
+        { time: 129, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
+        { time: 135, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
         { time: 141, jp: "とぅるるる とぅるるる とぅるる x 8",        ko: [{ text: "투루루루 투루루루 투루루 x 8", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 8" },
-        { time: 168.5, jp: "[wave]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
-        { time: 175, jp: "[wave]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
-        { time: 181, jp: "[wave]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
-        { time: 187, jp: "[wave]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
-        { time: 193, jp: "[wave]時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" },
-        { time: 199.5, jp: "[wave]僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" },
-        { time: 205.5, jp: "[wave]時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" },
-        { time: 211.5, jp: "[wave]僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" },
+        { time: 168.5, jp: "[spin]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
+        { time: 175, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
+        { time: 181, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
+        { time: 187, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
+        { time: 193, jp: "[spin]時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" },
+        { time: 199.5, jp: "[spin]僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" },
+        { time: 205.5, jp: "[spin]時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" },
+        { time: 211.5, jp: "[spin]僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" },
         { time: 218, jp: "とぅるるる とぅるるる とぅるる x 4",        ko: [{ text: "투루루루 투루루루 투루루 x 4", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 4" },
       ],
     },
@@ -3909,8 +3973,13 @@
     wave: `<span class="ico ico-wave" title="손 흔들기">${useSvg("i-wave")}</span>`,
     clap: `<span class="ico ico-clap" title="박수"><span class="hand l">${useSvg("i-hand")}</span><span class="hand r">${useSvg("i-hand")}</span><span class="spark">${useSvg("i-spark")}</span></span>`,
     mic:  `<span class="ico ico-mic" title="떼창">${useSvg("i-mic")}</span>`,
-    jump: `<span class="ico ico-jump" title="점프">${useSvg("i-jump")}<span class="ground"></span></span>`
+    jump: `<span class="ico ico-jump" title="점프">${useSvg("i-jump")}<span class="ground"></span></span>`,
+    spin: `<span class="ico ico-spin" title="머리 위로 팔 돌리기">
+             <svg class="body" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cheer"/></svg>
+             <svg class="arm" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cheer-arm"/></svg>
+           </span>`
   };
+  INLINE_ICONS.turn = INLINE_ICONS.spin;   // [turn] 으로 써도 동일
   INLINE_ICONS.chant = INLINE_ICONS.mic;   // [chant] 로 써도 동일
 
   const CHEV_LEFT_SVG  ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
@@ -4281,7 +4350,7 @@
   /* 가사 글자를 안전하게 처리하면서, [wave] [clap] [mic] 같은 표시를
      그 자리에서 움직이는 아이콘으로 바꿔 준다. 가사 어느 위치에나 넣을 수 있다. */
   /* [wave] 처럼 대괄호로도, (wave) 처럼 소괄호로도 쓸 수 있게 둘 다 인식 */
-  const ICON_TOKEN_RE = /[\[(](wave|clap|mic|chant|jump)[\])]/gi;
+  const ICON_TOKEN_RE = /[\[(](wave|clap|mic|chant|jump|spin|turn)[\])]/gi;
   function withIcons(str){
     if (str === undefined || str === null) return "";
     return escapeHtml(String(str)).replace(ICON_TOKEN_RE, (m, key)=> INLINE_ICONS[key.toLowerCase()] || m);
