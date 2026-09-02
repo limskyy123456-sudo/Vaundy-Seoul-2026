@@ -1782,20 +1782,22 @@
      (시각은 예매처 입장 안내 기준. 바꾸려면 이 표만 고치면 됩니다) */
   const SHOW_TIMELINE = {
     "2026-09-19": [
-      { t:"13:00", label:"티켓 부스 · 스탠딩 부스 오픈" },
+      { t:"12:00", label:"티켓 · 스탠딩 · MD 부스 · 물품보관소 오픈" },
       { t:"14:00", label:"아레나 로비 오픈 · 스탠딩 입장 대기" },
       { t:"15:00", label:"공연장 입장 시작" },
+      { t:"16:30", label:"MD 부스 마감" },
       { t:"17:00", label:"본 공연 시작" },
       { t:"17:30", label:"티켓 부스 마감" },
-      { t:"20:00", label:"공연 종료 예정" }
+      { t:"20:00", label:"공연 종료 예정 · 물품보관소 마감" }
     ],
     "2026-09-20": [
-      { t:"12:00", label:"티켓 부스 · 스탠딩 부스 오픈" },
+      { t:"11:00", label:"티켓 · 스탠딩 · MD 부스 · 물품보관소 오픈" },
       { t:"13:00", label:"아레나 로비 오픈 · 스탠딩 입장 대기" },
       { t:"14:00", label:"공연장 입장 시작" },
+      { t:"15:30", label:"MD 부스 마감" },
       { t:"16:00", label:"본 공연 시작" },
       { t:"16:30", label:"티켓 부스 마감" },
-      { t:"19:00", label:"공연 종료 예정" }
+      { t:"19:00", label:"공연 종료 예정 · 물품보관소 마감" }
     ]
   };
 
@@ -3493,9 +3495,21 @@
                   <tbody>
                     <tr>
                       <td class="label" data-label="일정">티켓 부스, 스탠딩 부스</td>
-                      <td data-label="9/19(토)">13:00 ~ 17:30</td>
-                      <td data-label="9/20(일)">12:00 ~ 16:30</td>
-                      <td class="note" data-label="비고">공연시작 4시간 전 - 공연시작 후 30분까지</td>
+                      <td data-label="9/19(토)">12:00 ~ 17:30</td>
+                      <td data-label="9/20(일)">11:00 ~ 16:30</td>
+                      <td class="note" data-label="비고">공연시작 5시간 전 - 공연시작 후 30분까지</td>
+                    </tr>
+                    <tr>
+                      <td class="label" data-label="일정">MD 부스</td>
+                      <td data-label="9/19(토)">12:00 ~ 16:30</td>
+                      <td data-label="9/20(일)">11:00 ~ 15:30</td>
+                      <td class="note" data-label="비고">공연시작 5시간 전 - 공연시작 30분 전까지</td>
+                    </tr>
+                    <tr>
+                      <td class="label" data-label="일정">물품보관소</td>
+                      <td data-label="9/19(토)">12:00 ~ 20:00</td>
+                      <td data-label="9/20(일)">11:00 ~ 19:00</td>
+                      <td class="note" data-label="비고">공연시작 5시간 전 - 공연 종료 후까지</td>
                     </tr>
                     <tr>
                       <td class="label" data-label="일정">아레나 로비 오픈</td>
