@@ -1744,20 +1744,59 @@
   }
   .lyrics-pane > .lyrics-scroll{ flex:1 1 auto; min-height:0; }
 
-  /* 짤방 자체 — 자리를 차지하지 않고 가사 위에 떠 있다 */
+  /* 짤방 자체 — 자리를 차지하지 않고 떠 있다.
+     놓이는 자리는 화면에 따라 세 가지 (아래 at-below-video / at-lyrics-right / at-lyrics) */
   .tip-pic{
     position:absolute;
-    left:0; right:0; top:0;
     z-index:6;
     display:flex;
-    justify-content:center;
-    padding:10px 12px 0;
     pointer-events:none;
     opacity:0;
     visibility:hidden;
-    transform:translateY(-10px) scale(0.97);
     transition:opacity .24s ease, transform .24s ease, visibility .24s;
   }
+
+  /* ① 휴대폰 — 유튜브 영상 바로 아래, 오른쪽.
+        영상도 안 가리고 가사도 안 가린다 (그 사이 빈 자리에 앉는다). */
+  .song-fixed-top{ position:relative; }
+  .tip-pic.at-below-video{
+    right:16px; bottom:4px; left:auto; top:auto;
+    justify-content:flex-end;
+    padding:0;
+    transform:translateY(10px) scale(0.94);
+  }
+  .tip-pic.at-below-video .tip-pic-card{
+    max-width:min(42vw, 190px);
+    padding:5px 5px 3px;
+    border-radius:13px;
+    gap:3px;
+  }
+  .tip-pic.at-below-video .tip-pic-card img{ max-height:min(9svh, 76px); border-radius:9px; }
+  .tip-pic.at-below-video .tip-pic-cap{ font-size:10.5px; padding:0 3px 1px; }
+  .tip-pic.at-below-video.big .tip-pic-card{ max-width:min(80vw, 330px); }
+  .tip-pic.at-below-video.big .tip-pic-card img{ max-height:min(30svh, 230px); }
+
+  /* ② PC 2단 — 가사 칸 오른쪽 위 모서리. 작게 두어 가사를 최소한만 덮는다 */
+  .tip-pic.at-lyrics-right{
+    right:0; top:0; left:auto; bottom:auto;
+    justify-content:flex-end;
+    padding:10px 12px 0;
+    transform:translateY(-10px) scale(0.97);
+  }
+  .tip-pic.at-lyrics-right .tip-pic-card{ max-width:min(62%, 240px); padding:6px 6px 4px; }
+  .tip-pic.at-lyrics-right .tip-pic-card img{ max-height:clamp(80px, 16svh, 148px); }
+  .tip-pic.at-lyrics-right .tip-pic-cap{ font-size:11px; }
+  .tip-pic.at-lyrics-right.big .tip-pic-card{ max-width:min(100%, 420px); }
+  .tip-pic.at-lyrics-right.big .tip-pic-card img{ max-height:min(46svh, 360px); }
+
+  /* ③ 단축모드 — 가사 위 가운데 (영상이 없는 화면이라 제일 크게) */
+  .tip-pic.at-lyrics{
+    left:0; right:0; top:0; bottom:auto;
+    justify-content:center;
+    padding:10px 12px 0;
+    transform:translateY(-10px) scale(0.97);
+  }
+
   .tip-pic.show{
     opacity:1;
     visibility:visible;
@@ -1800,7 +1839,7 @@
   .tip-pic-cap:empty{ display:none; }
 
   /* 탭하면 크게 — 한 번 더 탭하면 원래대로 */
-  .tip-pic.big{ padding-top:6px; }
+  .tip-pic.at-lyrics.big, .tip-pic.at-lyrics-right.big{ padding-top:6px; }
   .tip-pic.big .tip-pic-card{
     cursor:zoom-out;
     max-width:min(100%, 560px);
@@ -4309,7 +4348,7 @@
 
           <div class="lyrics-pane">
             <!-- 짤방(동작 사진) — 지정한 가사에서만 떴다가 사라집니다 -->
-            <div class="tip-pic" id="tip-pic" aria-live="polite">
+            <div class="tip-pic at-below-video" id="tip-pic" aria-live="polite">
               <figure class="tip-pic-card" id="tip-pic-card" title="탭하면 크게 보여요">
                 <img id="tip-pic-img" alt="" decoding="async">
                 <figcaption class="tip-pic-cap" id="tip-pic-cap"></figcaption>
@@ -4552,6 +4591,7 @@
     page.classList.toggle("offline", !navigator.onLine);
     if (btn) btn.classList.toggle("active", venueMode);
     updatePlayButton();
+    placeTipPic();                 // 짤방 자리도 모드에 맞게 옮긴다
     // 글자 크기가 달라지므로 가운데 기준을 다시 잡고 현재 소절로 맞춘다
     updateLyricsPadding();
     updateLyricsSync(true);
@@ -4595,6 +4635,30 @@
     if (!box) return;
     box.classList.remove("show", "big");
     currentPicKey = null;
+  }
+
+  /* 짤방을 화면 크기·모드에 맞는 자리로 옮겨 놓는다.
+       · 휴대폰   → 유튜브 영상 바로 아래 오른쪽 (영상·가사 둘 다 안 가림)
+       · PC 2단   → 가사 칸 오른쪽 위 모서리
+       · 단축모드 → 가사 위 가운데 (영상이 없는 화면)               */
+  function placeTipPic(){
+    const box = document.getElementById("tip-pic");
+    if (!box) return;
+    const lyricsHost = songView.querySelector(".lyrics-pane");
+    const topHost    = songView.querySelector(".song-fixed-top");
+    if (!lyricsHost || !topHost) return;
+    const wide = window.matchMedia("(min-width:900px)").matches;
+
+    const mode = venueMode ? "at-lyrics"          // 단축모드 — 가사 위 가운데
+               : wide      ? "at-lyrics-right"    // PC 2단 — 가사 칸 오른쪽 위
+                           : "at-below-video";    // 휴대폰 — 영상 바로 아래 오른쪽
+    const host = (mode === "at-below-video") ? topHost : lyricsHost;
+
+    if (!box.classList.contains(mode)){
+      box.classList.remove("at-below-video", "at-lyrics", "at-lyrics-right", "big");
+      box.classList.add(mode);
+    }
+    if (box.parentElement !== host) host.appendChild(box);
   }
 
   function showTipPic(pic){
@@ -4942,6 +5006,7 @@
     if (!changed) return;
     lastLyricsW = w; lastLyricsH = h;
     if (!songShellBuilt) return;
+    placeTipPic();                 // 화면이 1단↔2단으로 바뀌면 짤방 자리도 함께
     updateLyricsPadding();
     if (isSongViewActive()) updateLyricsSync(true);
   });
