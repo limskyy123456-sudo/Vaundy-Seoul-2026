@@ -1729,6 +1729,110 @@
     .song-fixed-top .video-wrap{padding:0 36px;}
   }
 </style>
+
+<!-- ─────────────────────────────────────────────────────────────
+     짤방(동작 사진) 패널 — 가사 영역 위에 겹쳐서 떴다 사라집니다.
+     ───────────────────────────────────────────────────────────── -->
+<style>
+  /* 가사 스크롤 영역을 감싸는 칸 — 짤방을 그 위에 겹쳐 놓기 위한 기준 */
+  .lyrics-pane{
+    position:relative;
+    flex:1;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .lyrics-pane > .lyrics-scroll{ flex:1 1 auto; min-height:0; }
+
+  /* 짤방 자체 — 자리를 차지하지 않고 가사 위에 떠 있다 */
+  .tip-pic{
+    position:absolute;
+    left:0; right:0; top:0;
+    z-index:6;
+    display:flex;
+    justify-content:center;
+    padding:10px 12px 0;
+    pointer-events:none;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-10px) scale(0.97);
+    transition:opacity .24s ease, transform .24s ease, visibility .24s;
+  }
+  .tip-pic.show{
+    opacity:1;
+    visibility:visible;
+    transform:none;
+  }
+  .tip-pic-card{
+    margin:0;
+    pointer-events:auto;
+    background:rgba(28,7,5,0.92);
+    border:1px solid rgba(141,224,95,0.35);
+    border-radius:16px;
+    padding:8px 8px 6px;
+    box-shadow:0 14px 34px rgba(0,0,0,0.5);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    max-width:min(100%, 420px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    cursor:zoom-in;
+  }
+  .tip-pic-card img{
+    display:block;
+    max-width:100%;
+    max-height:var(--tip-pic-h, clamp(96px, 22svh, 190px));
+    width:auto;
+    height:auto;
+    border-radius:11px;
+    background:#2a0a06;
+  }
+  .tip-pic-cap{
+    font-size:12px;
+    line-height:1.4;
+    color:var(--wave);
+    text-align:center;
+    letter-spacing:-0.2px;
+    padding:0 4px 2px;
+  }
+  .tip-pic-cap:empty{ display:none; }
+
+  /* 탭하면 크게 — 한 번 더 탭하면 원래대로 */
+  .tip-pic.big{ padding-top:6px; }
+  .tip-pic.big .tip-pic-card{
+    cursor:zoom-out;
+    max-width:min(100%, 560px);
+  }
+  .tip-pic.big .tip-pic-card img{
+    max-height:min(52svh, 420px);
+  }
+
+  /* 단축모드에서도 그대로 보인다 (오히려 이때 제일 쓸모 있음) */
+  .song-page.venue .lyrics-pane{ flex:1; min-height:0; }
+
+  /* PC 2단 레이아웃 — 오른쪽 가사 칸이 이제 .lyrics-pane 이다 */
+  @media (min-width:900px){
+    .lyrics-pane{
+      flex:1 1 38%;
+      min-width:0;
+      border-left:1px solid var(--line);
+    }
+    .lyrics-pane > .lyrics-scroll{
+      flex:1 1 auto;
+      border-left:none;
+      border-top:none;
+    }
+  }
+  @media (min-width:1400px){
+    .lyrics-pane{ flex:1 1 34%; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .tip-pic{ transition:none; }
+  }
+</style>
 <!-- YouTube IFrame Player API 스크립트 추가 -->
 <script src="https://www.youtube.com/iframe_api"></script>
 </head>
@@ -1842,6 +1946,36 @@
        ko: [{ text: "[mic] 떼창구간", tag: "chant" }]   ← 구간 색과 함께
      ([wave] 나 [clap] 이 들어간 줄은 왼쪽 종류 표시에도 자동으로 붙습니다) */
 
+  /* ─────────────────────────────────────────────────────────────
+     ★ 짤방(동작 사진) 등록표
+
+     1) 사진 파일을 저장소의  images/tips/  폴더에 넣습니다.
+        (gif · png · jpg · webp 아무거나 됩니다. 움직이는 gif 도 그대로 돌아갑니다)
+     2) 아래에 한 줄씩 등록합니다.  이름은 마음대로 지어도 됩니다.
+     3) 가사 줄에  pic: "이름"  을 적으면 그 가사가 나올 때 사진이 뜹니다.
+
+        예)  { time: 17, jp: "[wave]Hu Hu Hu Ya Ya x3", ko: [...], tr: "...", pic: "wave-basic" },
+
+     · 여러 줄에 걸쳐 계속 보여 주고 싶으면 그 줄들에 같은 이름을 적으면 됩니다
+       (같은 사진이면 끊기지 않고 이어집니다).
+     · 사진을 없애고 싶은 줄에는 아무것도 적지 않으면 됩니다 — 자동으로 사라집니다.
+     · 파일이 아직 없으면 그냥 조용히 넘어갑니다. (화면이 깨지지 않아요)
+     ───────────────────────────────────────────────────────────── */
+  const PICS = {
+    /* 이름            파일 경로                              사진 아래 설명(없어도 됨) */
+    "wave_jump":  { src: "./images/tips/wave_jump.gif",  caption: "jump" },
+    "wave_dada":  { src: "./images/tips/wave_dada.gif",  caption: "DA-DADADADA에 맞춰" },
+    "wave_turn":  { src: "./images/tips/wave_turn.gif",  caption: "손을 회전" },
+    "wave_rl":  { src: "./images/tips/wave_rl.gif",  caption: "좌우로 크게" },
+    "wave-basic":  { src: "./images/tips/wave-basic.gif",  caption: "양손 머리 위로 · 좌우로 크게" },
+    "wave-slow":   { src: "./images/tips/wave-slow.gif",   caption: "한 손으로 천천히" },
+    "clap-basic":  { src: "./images/tips/clap-basic.gif",  caption: "머리 위에서 박수" },
+    "jump":        { src: "./images/tips/jump.gif",        caption: "점프!" },
+    /* ↓ 여기에 계속 추가하세요
+    "이름":        { src: "./images/tips/파일이름.gif",     caption: "설명" },
+    */
+  };
+
   const SONGS = [
     {
       id: "Tokimeki",
@@ -1850,13 +1984,15 @@
       lyrics: [
         { time: 0, jp: "[clap]目に映るのは 確かなときめきで光る魔法",        ko: [{ text: "메니 우츠루노와 타시카나 토키메키데 히카루 마호", tag: "clap" }],                                                     tr: "눈에 비치는 것은 확실한 두근거림으로 빛나는 마법" },
         { time: 9, jp: "[clap]思い当たるのは 誰かの 涙が落ちる音",        ko: [{ text: "오모이아타루노와 다레카노 나미다가 오치루 오토", tag: "clap" }],                                                     tr: "마음에 짚이는 것은 누군가의 눈물이 떨어지는 소리" },
+        /* ↓↓ 짤방 예시 — 이 세 줄 동안 손 흔들기 사진이 가사 위에 떠 있습니다.
+              다른 줄에도 똑같이  pic: "이름"  만 붙이면 됩니다. ↓↓ */
         { time: 17, jp: "[wave]Hu Hu Hu Ya Ya x3",        ko: [{ text: "Hu Hu Hu Ya Ya x3", tag: "chant" }],                                                    tr: "Hu Hu Hu Ya Ya x3" },
-        { time: 22.5, jp: "[wave]それは、軽やかな魔法 Hu Hu Hu Ya Ya x2", ko: [{ text: "소레와 카로야카나 마호-" }, { text: " Hu Hu Hu Ya Ya x2", tag: "chant" }],               tr: "그것은 경쾌한 마법 Hu Hu Hu Ya Ya x2" },
-        { time: 29,  jp: "[wave]美しいほど 止まらぬCRY", ko: "우츠쿠시이 호도 토마라누 CRY",                                 tr: "아름다울수록멈추지 않는 CRY" },
-        { time: 33, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 22.5, jp: "[wave]それは、軽やかな魔法 Hu Hu Hu Ya Ya x2", ko: [{ text: "소레와 카로야카나 마호-" }, { text: " Hu Hu Hu Ya Ya x2", tag: "chant" }],               tr: "그것은 경쾌한 마법 Hu Hu Hu Ya Ya x2"},
+        { time: 29,  jp: "[wave]美しいほど 止まらぬCRY", ko: "우츠쿠시이 호도 토마라누 CRY",                                 tr: "아름다울수록멈추지 않는 CRY", pic: "wave_rl" },
+        { time: 33, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" , pic: "wave_dada" },
         { time: 38, jp: "[wave](DA-DA-DA) 涙流して笑えばいいさ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "나미다 나가시테 와라에바 이-사"}],               tr: "(DA-DA-DA) 눈물 흘리며 웃으면 되는 거야" },
         { time: 44, jp: "[wave]見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: " (나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
-        { time: 49, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 49, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight", pic: "wave_dada" },
         { time: 54, jp: "[wave](DA-DA-DA) あくびしてる暇なんかないぜ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "아쿠비시테루 히마난카 나이제"}],               tr: "(DA-DA-DA) 하품하고 있을 시간 따윈 없어" },
         { time: 59.5, jp: "[wave]ほら、ほらもっと聞かせて Hu Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu Hu" },
         { time: 73, jp: "[clap]聞こえてるのは 確かな ときめきで歌う魔法",        ko: [{ text: "키코에테루노와 타시카나 토키메키데 히카루 마호", tag: "clap" }],                                                     tr: "들리는 것은 확실한 두근거림으로 빛나는 마법" },
@@ -1864,20 +2000,20 @@
         { time: 89, jp: "[wave] Hu Hu Hu Ya Ya x3",        ko: [{ text: "Hu Hu Hu Ya Ya x3", tag: "chant" }],                                                    tr: "Hu Hu Hu Ya Ya x3" },
         { time: 95, jp: "[wave]それは、鮮やかな魔法 Hu Hu Hu Ya Ya x2", ko: [{ text: "소레와 아자야카나 마호-" }, { text: " Hu Hu Hu Ya Ya x2", tag: "chant" }],               tr: "그것은 산뜻한 마법 Hu Hu Hu Ya Ya x2" },
         { time: 101,  jp: "[wave]聞こえてるのは", ko: "키코에테루노와",                                 tr: "들리는 것은" },
-        { time: 105, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 105, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" , pic: "wave_dada"},
         { time: 110, jp: "[wave](DA-DA-DA) 涙流して笑えばいいさ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "나미다 나가시테 와라에바 이-사"}],               tr: "(DA-DA-DA) 눈물 흘리며 웃으면 되는 거야" },
         { time: 115.9, jp: "[wave]見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: " (나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
-        { time: 121, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 121, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" , pic: "wave_dada"},
         { time: 126, jp: "[wave](DA-DA-DA) あくびしてる暇なんかないぜ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "아쿠비시테루 히마난카 나이제"}],               tr: "(DA-DA-DA) 하품하고 있을 시간 따윈 없어" },
         { time: 131.5, jp: "[wave]ほら、ほらもっと聞かせて Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu" },
         { time: 137, jp: "途切れない 悲しみは点で 線を描いてるようだ",        ko: [{ text: "토기레나이 카나시미와 텐데 센오 에가이테루 요-다", tag: "clap" }],                                                     tr: "끝나지 않는 슬픔이라는 점이 선을 그리고 있는 것 같아" },
         { time: 145, jp: "震え出す その線のせいで 動き出してしまうの",        ko: [{ text: "후루에다스 소노 센노 세이데 우고키다시테 시마우노", tag: "clap" }, { text: " (시마우노)", tag: "chant" }],                                                     tr: "떨고 있는 그 선 때문에 움직여 버리고 말아" },
         { time: 153, jp: "[wave]Du Du Du Ya Ya x2",        ko: [{ text: "Du Du Du Ya Ya x2", tag: "chant" }],                                                     tr: "Hu Hu Hu Ya Ya x2" },
         { time: 157.5, jp: "[wave]止まれないのは ときめきのせい", ko: [{ text: "토마레나이노와" }, { text: " 토키메키노 세-", tag: "chant" }],               tr: "멈출 수 없는 것은 두근거림 때문이야" },
-        { time: 161, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 161, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" , pic: "wave_dada"},
         { time: 166, jp: "[wave](DA-DA-DA) 涙流して笑えばいいさ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "나미다 나가시테 와라에바 이-사"}],               tr: "(DA-DA-DA) 눈물 흘리며 웃으면 되는 거야" },
         { time: 172, jp: "[wave]見えぬ未来も 悪くはないぜ (ないぜ)", ko: [{ text: "미에누 미라이모 와루쿠와 나이제" }, { text: " (나이제)", tag: "chant" }],               tr: "보이지 않는 미래도 나쁘진 않은걸" },
-        { time: 177, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" },
+        { time: 177, jp: "[wave]DA-DADADADA Just dancing tonight", ko: [{ text: "DA-DADADADA ", tag: "chant" }, { text: "Just dancing tonight"}],               tr: "DA-DADADADA Just dancing tonight" , pic: "wave_dada"},
         { time: 182, jp: "[wave](DA-DA-DA) あくびしてる暇なんかないぜ", ko: [{ text: "(DA-DA-DA) ", tag: "chant" }, { text: "아쿠비시테루 히마난카 나이제"}],               tr: "(DA-DA-DA) 하품하고 있을 시간 따윈 없어" },
         { time: 187.5, jp: "[wave]ほら、ほらもっと聞かせて Hu Hu Hu Hu Hu", ko: [{ text: "호라 호라 못토 키카세테" }, { text: " Hu Hu Hu Hu Hu", tag: "chant" }],               tr: "자, 좀 더 들려줘 Hu Hu Hu Hu Hu" },
       ],
@@ -2034,10 +2170,10 @@
         { time: 24, jp: "[clap]事が一つ二つ浮いているけど",        ko: [{ text: "코토가 히토츠 후타츠 우이테이루케도", tag: "clap" }],                                                     tr: "것들이 하나둘 떠오르고 있는데 말이야" },
         { time: 31, jp: "[clap]ねぇ、ちゃんと拾っておこう",        ko: [{ text: "네- 챤토 히롯테오코-", tag: "clap" }],                                                     tr: "저기、제대로 주워 두자" },
         { time: 36.5, jp: "[clap]はじけて忘れてしまう前に",        ko: [{ text: "하지케테 와스레테 시마우 마에니", tag: "clap" }],                                                     tr: "터져서 잊어버리기 전에" },
-        { time: 43, jp: "[spin]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가", bg : "검지를 들고 손을 돌려주세요" },
-        { time: 49.5, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
-        { time: 55.5, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
-        { time: 62, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
+        { time: 43, jp: "[spin]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가", pic: "wave_turn" },
+        { time: 49.5, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" , pic: "wave_turn"},
+        { time: 55.5, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" , pic: "wave_turn"},
+        { time: 62, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면", pic: "wave_turn" },
         { time: 68, jp: "とぅるるる とぅるるる とぅるる x 4",        ko: [{ text: "투루루루 투루루루 투루루 x 4", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 4" },
         { time: 80, jp: "[clap]あのね、私あなたに会ったの",        ko: [{ text: "아노네 와타시 아나타니 앗타노", tag: "clap"  }],                                                     tr: "있잖아、나 너를 만났어" },
         { time: 85.5, jp: "[clap]夢の中に置いてきたけどね",        ko: [{ text: "유메노 나카니 오이테키타케도네", tag: "clap"  }],                                                     tr: "꿈속에 두고 왔지만 말이야" },
@@ -2046,19 +2182,19 @@
         { time: 104.5, jp: "[clap]思いを蹴って 二人でしてんだ",        ko: [{ text: "오모이오 켓테 후타리데 시텐다", tag: "clap"  }],                                                     tr: "생각을 멈추고 둘이서 함께 해온" },
         { time: 107.5, jp: "[clap]壊れない愛を歌う 言葉を二人に課して",        ko: [{ text: "와스레나이 아이오 우타우 코토바오 후타리 카시테", tag: "clap"  }],                                                     tr: "깨지지 않을 사랑을 노래해 서로에게 말을 짊어지게 하고" },
         { time: 112, jp: "[clap]誓いをたてんだ 忘れない愛を歌うようにね",        ko: [{ text: "치카이오 타텐다 와스레나이 아이오 우타우요-니네", tag: "clap"  }],                                                     tr: "굳게 맹세하고 있어 잊지 못할 사랑을 노래하듯이 말이야" },
-        { time: 116.5, jp: "[spin]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
-        { time: 122.5, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
-        { time: 129, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
-        { time: 135, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
+        { time: 116.5, jp: "[spin]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가", pic: "wave_turn" },
+        { time: 122.5, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" , pic: "wave_turn"},
+        { time: 129, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" , pic: "wave_turn"},
+        { time: 135, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" , pic: "wave_turn"},
         { time: 141, jp: "とぅるるる とぅるるる とぅるる x 8",        ko: [{ text: "투루루루 투루루루 투루루 x 8", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 8" },
         { time: 168.5, jp: "[spin]回り出した あの子と僕の未来が",        ko: [{ text: "마와리다시타 아노 코토 보쿠노 미라이가" }],                                                     tr: "돌아가기 시작한 그 아이와 나의 미래가" },
-        { time: 175, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" },
-        { time: 181, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" },
-        { time: 187, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면" },
-        { time: 193, jp: "[spin]時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" },
-        { time: 199.5, jp: "[spin]僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" },
-        { time: 205.5, jp: "[spin]時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" },
-        { time: 211.5, jp: "[spin]僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" },
+        { time: 175, jp: "[spin]止まりどっかで またやり直せたら",        ko: [{ text: "토마리 돗카데 마타 야리나오세타라" }],                                                     tr: "멈추고 어딘가에서 다시 시작할 수 있다면" , pic: "wave_turn"},
+        { time: 181, jp: "[spin]回り出した あの子と僕が被害者",        ko: [{ text: "마와리다시타 아노 코토 보쿠가 히가이샤" }],                                                     tr: "돌기 시작한 그 아이와 내가 피해자" , pic: "wave_turn"},
+        { time: 187, jp: "[spin]づらでどっかを また練り歩けたらな",        ko: [{ text: "즈라데 돗카오 마타 네리아루케타라나" }],                                                     tr: "같은 표정으로 어딘가를 다시 줄지어 걸을 수 있다면", pic: "wave_turn" },
+        { time: 193, jp: "[spin]時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" , pic: "wave_turn"},
+        { time: 199.5, jp: "[spin]僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지" , pic: "wave_turn"},
+        { time: 205.5, jp: "[spin]時代に乗って僕たちは 変わらず愛に生きるだろう",        ko: [{ text: "지다이니 놋테 보쿠타치와 카와라즈 아이니 이키루다로-", tag: "chant" }],                                                     tr: "시대 위에 올라타 우리들은 변함없이 사랑으로 살아가겠지" , pic: "wave_turn"},
+        { time: 211.5, jp: "[spin]僕らが散って残るのは 変わらぬ愛の歌なんだろうな",        ko: [{ text: "보쿠라가 칫테 노코루노와 카와라누 아이노 우타난다로-나", tag: "chant" }],                                                     tr: "우리들이 지고 남는 것은 변함없는 사랑의 노래겠지", pic: "wave_turn" },
         { time: 218, jp: "とぅるるる とぅるるる とぅるる x 4",        ko: [{ text: "투루루루 투루루루 투루루 x 4", tag: "chant" }],                                                     tr: "뚜루루루 뚜루루루 뚜루루 x 4" },
       ],
     },
@@ -2194,8 +2330,8 @@
         { time: 53.5, jp: "抱いて抱えて悶えた先には",        ko: [{ text: "이다이테 카카에테 모다에타 사키니와", tag: "chant"}],         tr: "껴안으며 품으며 고민한 끝에는" },
         { time: 57.5, jp: "いつも君がいる そんな事より",        ko: [{ text: "이츠모 키미가 이루 손나 코토요리"}],         tr: "항상 네가 있다는 그런 이야기보다" },
         { time: 61, jp: "[clap]恋路の果てには何があるくだらない話をニ人でしよう",        ko: [{ text: "코이지노 하테니와 나니가 아루 쿠다라나이 하나시오 후타리데 시요", tag: "clap"}],         tr: "사랑의 끝에는 무엇이 있는 걸까 형편없는 이야기를 둘이서 하자"},
-        { time: 74, jp: "[wave]僕達の千年の恋は相槌で折れる花のようだ",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 오레루 하나노 요다"}],         tr: "우리의 천 년의 사랑은 맞장구에 부러진 꽃과 같아",bg:"손을 들고 양옆으로 흔들어 주세요!" },
-        { time: 81, jp: "[wave]僕達は千年後もまだ同じ様にまってんだ笑っちゃうよね",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니 맛텐다 와랏챠우요네"}],         tr: "우리는 천 년 뒤에도 여전히 변함없이 기다리고 있어 웃긴 이야기지"},
+        { time: 74, jp: "[wave]僕達の千年の恋は相槌で折れる花のようだ",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 오레루 하나노 요다"}],         tr: "우리의 천 년의 사랑은 맞장구에 부러진 꽃과 같아", pic: "wave_rl"},
+        { time: 81, jp: "[wave]僕達は千年後もまだ同じ様にまってんだ笑っちゃうよね",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니 맛텐다 와랏챠우요네"}],         tr: "우리는 천 년 뒤에도 여전히 변함없이 기다리고 있어 웃긴 이야기지", pic: "wave_rl"},
         { time: 96.5, jp: "貴方と以外もう何処にも行けない",        ko: [{ text: "아나타토 이가이 모 도코니모 이케나이", tag: "clap"}],         tr: "당신이 있는 곳이 아니라면 이제 어디에도 갈 수없어" },
         { time: 101, jp: "波の中で混じり合わない日々の中で",        ko: [{ text: "나미노 나카데 마지리아와나이 히비노 나카데", tag: "clap"}],         tr: "파도 속에서 섞이지 않는 나날 속에서" },
         { time: 107, jp: "2人がたっている永劫を",        ko: [{ text: "후타리가 탓테 이루 에이고-오", tag: "clap"}],         tr: "두 사람이 견디고 있는 영겁을" },
@@ -2204,20 +2340,20 @@
         { time: 118, jp: "抱いて抱えて悶えた先には",        ko: [{ text: "이다이테 카카에테 모다에타 사키니와", tag: "chant"}],         tr: "껴안으며 품으며 고민한 끝에는" },
         { time: 121.5, jp: "いつも君がいる そんな事より",        ko: [{ text: "이츠모 키미가 이루 손나 코토요리"}],         tr: "항상 네가 있다는 그런 이야기보다" },
         { time: 125, jp: "[clap]願いは君との先にあるたわいない話を2人でしよう",        ko: [{ text: "네가이와 키미토노 사키니 아루 타와이나이 하나시오 후타리데 시요-", tag: "clap"}],         tr: "소원은 너와의 그 너머에 있어 시시한 얘기를 둘이서 하자" },
-        { time: 138, jp: "[wave]僕達の千年の恋は相槌で折れる花のようだ",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 오레루 하나노 요다"}],         tr: "우리의 천 년의 사랑은 맞장구에 부러진 꽃과 같아" },
-        { time: 145, jp: "[wave]僕達は千年後もまだ同じ様にまってんだ笑っちゃうよね",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니 맛텐다 와랏챠우요네"}],         tr: "우리는 천 년 뒤에도 여전히 변함없이 기다리고 있어 웃긴 이야기지" },
+        { time: 138, jp: "[wave]僕達の千年の恋は相槌で折れる花のようだ",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 오레루 하나노 요다"}],         tr: "우리의 천 년의 사랑은 맞장구에 부러진 꽃과 같아" , pic: "wave_rl"},
+        { time: 145, jp: "[wave]僕達は千年後もまだ同じ様にまってんだ笑っちゃうよね",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니 맛텐다 와랏챠우요네"}],         tr: "우리는 천 년 뒤에도 여전히 변함없이 기다리고 있어 웃긴 이야기지" , pic: "wave_rl"},
         { time: 160, jp: "[clap] 何年経っても妄想が根を張って",        ko: [{ text: "난넨 탓테모 모-소-가 네오 핫테", tag: "chant"}],         tr: "몇 년이 지나도 망상이 뿌리를 내려" },
         { time: 163, jp: "[clap]もうこんなに溢れ出している",        ko: [{ text: "모- 콘나니 아후레다시테 이루", tag: "chant"}],         tr: "벌써 이렇게나 넘쳐흘러 나오고 있어" },
         { time: 166.5, jp: "[clap]願いは 花が散るほど溢れ出していく",        ko: [{ text: "네가이와"}, { text: " 하나가 치루 호도 아후레다시테 이쿠", tag: "chant"}],         tr: "소원은 꽃이 질 만큼 흘러넘쳐 가" },
         { time: 171.5, jp: "花占う恋歌",        ko: [{ text: "하나우라나우 렌카"}],         tr: "꽃점을 치는 사랑 노래" },
-        { time: 173.5, jp: "[wave]僕達の千年の恋は相槌で咲く花のように",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 사쿠 하나노 요니"}],         tr: "우리의 천 년의 사랑은 맞장구에 피는 꽃처럼" },
-        { time: 181, jp: "[wave]僕達は千年後もまだ同じように",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니"}],         tr: "우리는 천 년 뒤에도 여전히 똑같이" },
-        { time: 185.5, jp: "[wave]ちぎってまた笑っていたいよね",        ko: [{ text: "치깃테 마타 와랏테 이타이요네"}],         tr: "뜯어 또다시 웃고 있고 싶지, 그치" },
-        { time: 188.5, jp: "[wave]何年経っても妄想が根を張って",        ko: [{ text: "난넨 탓테모 모-소-가 네오 핫테", tag: "chant"}],         tr: "몇 년이 지나도 망상이 뿌리를 내려" },
-        { time: 191.5, jp: "[wave]もうこんなに溢れ出している",        ko: [{ text: "모- 콘나니 아후레다시테 이루", tag: "chant"}],         tr: "벌써 이렇게나 넘쳐흘러 나오고 있어" },
-        { time: 194.5, jp: "[wave]願えば",        ko: [{ text: "네가에바"}],         tr: "소원을 빈다면" },
-        { time: 196, jp: "[wave]何年経っても妄想が根を張って",        ko: [{ text: "난넨 탓테모 모-소-가 네오 핫테", tag: "chant"}],         tr: "몇 년이 지나도 망상이 뿌리를 내려" },
-        { time: 198.5, jp: "[wave]もうこんなに溢れ出している",        ko: [{ text: "모- 콘나니 아후레다시테 이루", tag: "chant"}],         tr: "벌써 이렇게나 넘쳐흘러 나오고 있어" },
+        { time: 173.5, jp: "[wave]僕達の千年の恋は相槌で咲く花のように",        ko: [{ text: "보쿠타치노 센넨노 코이와 아이즈치데 사쿠 하나노 요니"}],         tr: "우리의 천 년의 사랑은 맞장구에 피는 꽃처럼", pic: "wave_rl" },
+        { time: 181, jp: "[wave]僕達は千年後もまだ同じように",        ko: [{ text: "보쿠타치와 센넨고모 마다 오나지 요니"}],         tr: "우리는 천 년 뒤에도 여전히 똑같이", pic: "wave_rl" },
+        { time: 185.5, jp: "[wave]ちぎってまた笑っていたいよね",        ko: [{ text: "치깃테 마타 와랏테 이타이요네"}],         tr: "뜯어 또다시 웃고 있고 싶지, 그치" , pic: "wave_rl"},
+        { time: 188.5, jp: "[wave]何年経っても妄想が根を張って",        ko: [{ text: "난넨 탓테모 모-소-가 네오 핫테", tag: "chant"}],         tr: "몇 년이 지나도 망상이 뿌리를 내려" , pic: "wave_rl"},
+        { time: 191.5, jp: "[wave]もうこんなに溢れ出している",        ko: [{ text: "모- 콘나니 아후레다시테 이루", tag: "chant"}],         tr: "벌써 이렇게나 넘쳐흘러 나오고 있어" , pic: "wave_rl"},
+        { time: 194.5, jp: "[wave]願えば",        ko: [{ text: "네가에바"}],         tr: "소원을 빈다면" , pic: "wave_rl"},
+        { time: 196, jp: "[wave]何年経っても妄想が根を張って",        ko: [{ text: "난넨 탓테모 모-소-가 네오 핫테", tag: "chant"}],         tr: "몇 년이 지나도 망상이 뿌리를 내려", pic: "wave_rl" },
+        { time: 198.5, jp: "[wave]もうこんなに溢れ出している",        ko: [{ text: "모- 콘나니 아후레다시테 이루", tag: "chant"}],         tr: "벌써 이렇게나 넘쳐흘러 나오고 있어" , pic: "wave_rl"},
 
 
       ],
@@ -2451,7 +2587,7 @@
         { time: 57.5, jp: "[clap]先天的だ過敏なこの衝動",        ko: [{ text: "센텐테키다", tag: "chant"}, { text: " 카빈 나 코노 쇼-도-", tag: "clap" }],         tr: "선천적이야, 예민한 이 충동" },
         { time: 61.5, jp: "[clap]珍回答だ僕は気にしないけど",        ko: [{ text: "칭카이토- 다", tag: "chant"}, { text: " 보쿠 와 키니 시나이 케도", tag: "clap" }],         tr: "엉뚱한 답이래도, 난 신경 안 쓰지만" },
         { time: 65, jp: "[clap]1発打ったこのビートを鳴らしてよさぁ",        ko: [{ text: "잇파츠 웃타", tag: "chant"}, { text: " 코노 비-토 오 나라시테요 사-", tag: "clap" }],         tr: "한 발 쏜 이 비트를 울려줘 자" },
-        { time: 70, ko: [{ text: "[wave](jump) Distance This Dance? x 2 ", tag: "chant"}]},
+        { time: 70, ko: [{ text: "[wave](jump) Distance This Dance? x 2 ", tag: "chant"}], pic: "wave_jump"},
         { time: 94.5, jp: "[clap]今日も愉快だねでも何もかもが不快だね",        ko: [{ text: "쿄- 모 유카이 다네", tag: "chant"}, { text: " 데모 나니모카모 가 후카이 다네", tag: "clap" }],         tr: "오늘도 유쾌하네 하지만 뭐든 전부 불쾌하네" },
         { time: 98, jp: "[clap]だいたいそんなもん自己満たちが踊る世界だもん",        ko: [{ text: "다이타이 손나 몬", tag: "chant"}, { text: " 지코만 타치 가 오도루 세카이 다몬", tag: "clap" }],         tr: "대충 그런 거지 자기만족쟁이들이 춤추는 세상이잖아" },
         { time: 102, jp: "[clap]で、まぁいいかな",        ko: [{ text: "데 마- 이- 카나", tag: "chant"}],         tr: "그래서, 뭐, 괜찮겠지" },
@@ -2465,7 +2601,7 @@
         { time: 135.5, jp: "[clap]先天的だ過敏なこの衝動",        ko: [{ text: "센텐테키다", tag: "chant"}, { text: " 카빈 나 코노 쇼-도-", tag: "clap" }],         tr: "선천적이야, 예민한 이 충동" },
         { time: 139, jp: "[clap]珍回答だ僕は気にしないけど",        ko: [{ text: "칭카이토- 다", tag: "chant"}, { text: " 보쿠 와 키니 시나이 케도", tag: "clap" }],         tr: "엉뚱한 답이래도, 난 신경 안 쓰지만" },
         { time: 142.5, jp: "[clap]1発打ったこのビートを鳴らしてよさぁ",        ko: [{ text: "잇파츠 웃타 코노 비-토 오 나라시테요 사-", tag: "chant"}],         tr: "한 발 쏜 이 비트를 울려줘 자" },
-        { time: 147.5, ko: [{ text: "[wave](jump) Distance This Dance? x 4 ", tag: "chant"}]},
+        { time: 147.5, ko: [{ text: "[wave](jump) Distance This Dance? x 4 ", tag: "chant"}], pic: "wave_jump"},
 
       ],
     },
@@ -3065,14 +3201,14 @@
         { time: 33, jp: "[clap]心臓を突破して 忘れた頃、到達 脳に",        ko: [{ text: "신조오오 톳파시테 와스레타 코로 토오타츠 노오니", tag: "clap"}],         tr: "심장을 뚫고 지나 잊을 즈음, 도달해" },
         { time: 44, jp: "[wave]まぁ辛くはないが この小さな、この小さな",        ko: [{ text: "마아 츠라쿠와 나이가"},{ text: " 코노 치이사나 코노 치이사나", tag: "chant" }],         tr: "뭐, 괴롭진 않지만 이 작은, 이 작은" },
         { time: 49.5, jp: "[wave]うらみわびの隙間風は 許してくれ",        ko: [{ text: "우라미와비노 스키마카제와 유루시테 쿠레"}],         tr: "원망과 사과 사이의 웃바람은 용서해줘" },
-        { time: 58, jp: "[wave]この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" },
-        { time: 61, jp: "[wave]僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" },
-        { time: 65, jp: "[wave]気分次第で生えた羽だって",        ko: [{ text: "키분 시다이데 하에타 하네닷테"}],         tr: "기분 따라 돋아난 날개라 해도" },
-        { time: 68.5, jp: "[wave]今は背で受けておくよ全部",        ko: [{ text: "이마와 세데 우케테오쿠요"}, { text: " 젠부", tag: "chant" }],         tr: "지금은 등으로 받아둘게, 전부" },
-        { time: 71.5, jp: "[wave]それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또" },
-        { time: 75, jp: "[wave]ここに置いていくから全部",        ko: [{ text: "코코니 오이테이쿠카라 젠부"}],         tr: "여기에 두고 갈게, 전부" },
-        { time: 78.5, jp: "[wave]怖くない この空へ",        ko: [{ text: "코와쿠나이 코노 소라에"}],         tr: "무섭지 않아 이 하늘로" },
-        { time: 82, jp: "[wave]風に靡く羽に ほら従って",        ko: [{ text: "카제니 나비쿠 하네니 호라 시타갓테"}],         tr: "바람에 나부끼는 날개에 봐, 따라가" },
+        { time: 58, jp: "[wave](jump)この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" , pic: "wave_jump"},
+        { time: 61, jp: "[wave](jump)僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" , pic: "wave_jump"},
+        { time: 65, jp: "[wave](jump)気分次第で生えた羽だって",        ko: [{ text: "키분 시다이데 하에타 하네닷테"}],         tr: "기분 따라 돋아난 날개라 해도" , pic: "wave_jump"},
+        { time: 68.5, jp: "[wave](jump)今は背で受けておくよ全部",        ko: [{ text: "이마와 세데 우케테오쿠요"}, { text: " 젠부", tag: "chant" }],         tr: "지금은 등으로 받아둘게, 전부" , pic: "wave_jump"},
+        { time: 71.5, jp: "[wave](jump)それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또", pic: "wave_jump" },
+        { time: 75, jp: "[wave](jump)ここに置いていくから全部",        ko: [{ text: "코코니 오이테이쿠카라 젠부"}],         tr: "여기에 두고 갈게, 전부" , pic: "wave_jump"},
+        { time: 78.5, jp: "[wave](jump)怖くない この空へ",        ko: [{ text: "코와쿠나이 코노 소라에"}],         tr: "무섭지 않아 이 하늘로" , pic: "wave_jump"},
+        { time: 82, jp: "[wave](jump)風に靡く羽に ほら従って",        ko: [{ text: "카제니 나비쿠 하네니 호라 시타갓테"}],         tr: "바람에 나부끼는 날개에 봐, 따라가", pic: "wave_jump" },
         { time: 87, ko: [{ text: "[wave]Woah-oh, woah-oh", tag: "chant" }],                                                    },
         { time: 93.5, ko: [{ text: "[wave]Woah-oh, ah, ah, ah, ah", tag: "chant" }],                                                    },
         { time: 100.5, jp: "[clap]言葉の数だけ",        ko: [{ text: "코토바노 카즈다케", tag: "clap"}],         tr: "말의 수만큼" },
@@ -3081,26 +3217,26 @@
         { time: 125.5, jp: "[wave]されどイメージしたのは",        ko: [{ text: "사레도 이메에지시타노와"}],         tr: "하지만 떠올린 것은" },
         { time: 129, jp: "[wave]光飛び散った最中",        ko: [{ text: "히카리 토비칫타 사나카"}],         tr: "빛이 흩어지던 한가운데" },
         { time: 133, jp: "[wave]当てはないことを 許してくれ",        ko: [{ text: "아테와 나이 코토오 유루시테 쿠레"}],         tr: "오갈 데 없는 것을 용서해줘" },
-        { time: 139, jp: "[wave]この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" },
-        { time: 142.5, jp: "[wave]僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" },
-        { time: 146, jp: "[wave]向かい風受けた羽だって",        ko: [{ text: "무카이카제 우케타 하네닷테"}],         tr: "맞바람을 받은 날개라도" },
-        { time: 150, jp: "[wave]今は背で受けておくよ全部",        ko: [{ text: "이마와 세데 우케테오쿠요 "}, { text: " 젠부", tag: "chant" }],         tr: "지금은 등으로 받아둘게, 전부" },
-        { time: 152.5, jp: "[wave]それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또" },
-        { time: 155.5, jp: "[wave]ここに置いていくから全部",        ko: [{ text: "코코니 오이테이쿠카라 젠부"}],         tr: "여기에 두고 갈게, 전부" },
-        { time: 159.5, jp: "[wave]怖くない この空へ",        ko: [{ text: "코와쿠나이 코노 소라에"}],         tr: "무섭지 않아 이 하늘로" },
-        { time: 163, jp: "[wave]風に靡く羽に",        ko: [{ text: "카제니 나비쿠 하네니"}],         tr: "바람에 나부끼는 날개에" },
+        { time: 139, jp: "[wave](jump)この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" , pic: "wave_jump"},
+        { time: 142.5, jp: "[wave](jump)僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" , pic: "wave_jump"},
+        { time: 146, jp: "[wave](jump)向かい風受けた羽だって",        ko: [{ text: "무카이카제 우케타 하네닷테"}],         tr: "맞바람을 받은 날개라도" , pic: "wave_jump"},
+        { time: 150, jp: "[wave](jump)今は背で受けておくよ全部",        ko: [{ text: "이마와 세데 우케테오쿠요 "}, { text: " 젠부", tag: "chant" }],         tr: "지금은 등으로 받아둘게, 전부", pic: "wave_jump"},
+        { time: 152.5, jp: "[wave](jump)それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또", pic: "wave_jump" },
+        { time: 155.5, jp: "[wave](jump)ここに置いていくから全部",        ko: [{ text: "코코니 오이테이쿠카라 젠부"}],         tr: "여기에 두고 갈게, 전부" , pic: "wave_jump"},
+        { time: 159.5, jp: "[wave](jump)怖くない この空へ",        ko: [{ text: "코와쿠나이 코노 소라에"}],         tr: "무섭지 않아 이 하늘로" , pic: "wave_jump"},
+        { time: 163, jp: "[wave](jump)風に靡く羽に",        ko: [{ text: "카제니 나비쿠 하네니"}],         tr: "바람에 나부끼는 날개에" , pic: "wave_jump"},
         { time: 173, jp: "その鬱蒼としげる兵糧と退路",        ko: [{ text: "소노 웃소오토 시게루 효오료오토"}, { text: " 타이로", tag: "chant" }],         tr: "그 울창하게 뒤엉킨 식량과 퇴로" },
         { time: 176, jp: "眼前が正解じゃ無いよ",        ko: [{ text: "간젠가 세이카이자"}, { text: " 나이요", tag: "chant" }],         tr: "눈앞이 정답은 아니야" },
         { time: 177.5, jp: "擦り切れる突風が解廊",        ko: [{ text: "스리키레루 톳푸우가 "}, { text: " 카이로오", tag: "chant" }],         tr: "닳아버릴 듯한 돌풍이 길을 열고" },
         { time: 179, jp: "僕の運命に 僕がすれ違ってしまう前に",        ko: [{ text: "보쿠노 운메이니 보쿠가 스레치갓테 시마우 마에니"}],         tr: "내 운명에 내가 스쳐 지나가버리기 전에" },
-        { time: 186.5, jp: "[wave]この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" },
-        { time: 189.5, jp: "[wave]僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" },
-        { time: 193, jp: "[wave]気分次第で生えた羽だって",        ko: [{ text: "키분 시다이데 하에타 하네닷테"}],         tr: "기분 따라 돋아난 날개라 해도" },
-        { time: 197, jp: "[wave]でも僕の翼だよ全部",        ko: [{ text: "데모 보쿠노 츠바사다요"}, { text: " 젠부", tag: "chant" }],         tr: "그래도 내 날개야, 전부" },
-        { time: 200, jp: "[wave]それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또" },
-        { time: 203, jp: "[wave]ずっと忘れない 軒並み全部",        ko: [{ text: "즛토 와스레나이 노키나미 젠부"}],         tr: "절대 잊지 않을게 남김없이 전부" },
-        { time: 207, jp: "[wave]怖くない、この夜空で 明日を目指す",        ko: [{ text: "코와쿠나이 코노 요조라데 아스오 메자스"}],         tr: "무섭지 않아, 이 밤하늘에서 내일을 향해" },
-        { time: 211.5, jp: "[wave]朝焼けに ほら、連なって",        ko: [{ text: "아사야케니 호라 츠라낫테"}],         tr: "아침노을에 봐, 이어져" },
+        { time: 186.5, jp: "[wave](jump)この不甲斐ない",        ko: [{ text: "코노 후가이"}, { text: " 나이", tag: "chant" }],         tr: "이 한심한" , pic: "wave_jump" },
+        { time: 189.5, jp: "[wave](jump)僕の言葉も涙も全部",        ko: [{ text: "보쿠노 코토바모 나미다모"}, { text: " 젠부", tag: "chant" }],         tr: "내 말도 눈물도 전부" , pic: "wave_jump" },
+        { time: 193, jp: "[wave](jump)気分次第で生えた羽だって",        ko: [{ text: "키분 시다이데 하에타 하네닷테"}],         tr: "기분 따라 돋아난 날개라 해도" , pic: "wave_jump" },
+        { time: 197, jp: "[wave](jump)でも僕の翼だよ全部",        ko: [{ text: "데모 보쿠노 츠바사다요"}, { text: " 젠부", tag: "chant" }],         tr: "그래도 내 날개야, 전부" , pic: "wave_jump" },
+        { time: 200, jp: "[wave](jump)それじゃまた",        ko: [{ text: "소레자"}, { text: " 마타", tag: "chant" }],         tr: "그럼 또" , pic: "wave_jump" },
+        { time: 203, jp: "[wave](jump)ずっと忘れない 軒並み全部",        ko: [{ text: "즛토 와스레나이 노키나미 젠부"}],         tr: "절대 잊지 않을게 남김없이 전부" , pic: "wave_jump" },
+        { time: 207, jp: "[wave](jump)怖くない、この夜空で 明日を目指す",        ko: [{ text: "코와쿠나이 코노 요조라데 아스오 메자스"}],         tr: "무섭지 않아, 이 밤하늘에서 내일을 향해" , pic: "wave_jump" },
+        { time: 211.5, jp: "[wave](jump)朝焼けに ほら、連なって",        ko: [{ text: "아사야케니 호라 츠라낫테"}],         tr: "아침노을에 봐, 이어져" , pic: "wave_jump" },
         { time: 215, ko: [{ text: "[wave]Woah-oh, woah-oh", tag: "chant" }],                                                    },
         { time: 222, ko: [{ text: "[wave]Woah-oh, ah, ah, ah, ah", tag: "chant" }],    },
         { time: 229, ko: [{ text: "[wave]Woah-oh, woah-oh", tag: "chant" }],                                                    },
@@ -4171,8 +4307,18 @@
             </div>
           </div>
 
-          <div class="lyrics-scroll">
-            <ul class="lyrics-list" id="lyrics-list"></ul>
+          <div class="lyrics-pane">
+            <!-- 짤방(동작 사진) — 지정한 가사에서만 떴다가 사라집니다 -->
+            <div class="tip-pic" id="tip-pic" aria-live="polite">
+              <figure class="tip-pic-card" id="tip-pic-card" title="탭하면 크게 보여요">
+                <img id="tip-pic-img" alt="" decoding="async">
+                <figcaption class="tip-pic-cap" id="tip-pic-cap"></figcaption>
+              </figure>
+            </div>
+
+            <div class="lyrics-scroll">
+              <ul class="lyrics-list" id="lyrics-list"></ul>
+            </div>
           </div>
         </div>
 
@@ -4253,6 +4399,14 @@
       });
     }
 
+    // 짤방 탭 → 크게 보기 / 원래대로
+    const tipCard = document.getElementById("tip-pic-card");
+    if (tipCard){
+      tipCard.addEventListener("click", ()=>{
+        document.getElementById("tip-pic").classList.toggle("big");
+      });
+    }
+
     // 가사 줄 탭 → 해당 위치로 이동 (목록이 바뀌어도 되도록 위임 방식)
     document.getElementById("lyrics-list").addEventListener("click", (e)=>{
       const btn = e.target.closest(".lyric-line");
@@ -4317,6 +4471,8 @@
 
     currentSong = song;
     lastActiveIdx = -1;
+    hideTipPic();                 // 곡을 바꾸면 짤방도 초기화
+    preloadSongPics(song);        // 이 곡에서 쓰는 짤방 미리 받아 두기
     if (scrollRafId !== null) { cancelAnimationFrame(scrollRafId); scrollRafId = null; }
 
     const { prev, next } = songNeighbors(song);
@@ -4408,6 +4564,7 @@
   function leaveSongView(){
     stopSyncTimer();
     closeSongSheet();
+    hideTipPic();
     if (lyricObserver){ lyricObserver.disconnect(); lyricObserver = null; }
     releaseWakeLock();
     if (player && typeof player.pauseVideo === 'function') {
@@ -4415,6 +4572,86 @@
     }
     if (songShellBuilt) songView.classList.add("offstage");
     app.style.display = "";
+  }
+
+  /* ── 짤방(동작 사진) ─────────────────────────────────────────
+     가사 줄의 pic:"이름" 을 보고, 그 줄이 나올 때만 가사 위에 사진을 띄운다.
+     같은 사진이 이어지는 줄에서는 다시 뜨지 않고 그대로 유지된다.
+     파일이 없거나 못 불러오면 조용히 넘어간다(화면이 깨지지 않도록). */
+  let currentPicKey = null;                 // 지금 떠 있는 짤방 이름
+  const picBroken   = new Set();            // 불러오기 실패한 주소 — 다시 시도하지 않음
+
+  function resolvePic(id){
+    if (!id || typeof id !== "string") return null;
+    const entry = PICS[id];
+    // 등록표에 없으면 경로를 직접 적은 것으로 본다 ("./images/tips/a.gif")
+    const src = entry ? entry.src : (/[\/.]/.test(id) ? id : null);
+    if (!src || picBroken.has(src)) return null;
+    return { key: id, src, caption: (entry && entry.caption) || "" };
+  }
+
+  function hideTipPic(){
+    const box = document.getElementById("tip-pic");
+    if (!box) return;
+    box.classList.remove("show", "big");
+    currentPicKey = null;
+  }
+
+  function showTipPic(pic){
+    const box = document.getElementById("tip-pic");
+    const img = document.getElementById("tip-pic-img");
+    const cap = document.getElementById("tip-pic-cap");
+    if (!box || !img) return;
+
+    img.onerror = ()=>{                     // 파일이 아직 없을 때
+      picBroken.add(img.getAttribute("src"));
+      hideTipPic();
+    };
+    img.alt = pic.caption || "응원 동작";
+    if (img.getAttribute("src") !== pic.src) img.setAttribute("src", pic.src);
+    if (cap) cap.textContent = pic.caption || "";
+    box.classList.remove("big");
+    box.classList.add("show");
+    currentPicKey = pic.key;
+  }
+
+  /* 지금 활성화된 가사 줄에 맞춰 짤방을 갈아 끼운다 */
+  function updateTipPic(activeIdx){
+    if (!currentSong) return hideTipPic();
+    const line = activeIdx >= 0 ? currentSong.lyrics[activeIdx] : null;
+    const pic  = line ? resolvePic(line.pic) : null;
+
+    if (!pic) return hideTipPic();
+    if (pic.key === currentPicKey) return;   // 같은 사진이 이어지는 줄 — 그대로 둔다
+    showTipPic(pic);
+  }
+
+  /* 곡에 들어갈 때 그 곡에서 쓰는 사진들을 미리 받아 둔다 (뜰 때 바로 보이도록) */
+  function preloadSongPics(song){
+    if (!song || !Array.isArray(song.lyrics)) return;
+    const seen = new Set();
+    song.lyrics.forEach(l => {
+      const pic = resolvePic(l && l.pic);
+      if (!pic || seen.has(pic.src)) return;
+      seen.add(pic.src);
+      const im = new Image();
+      im.onerror = ()=> picBroken.add(pic.src);
+      im.src = pic.src;
+    });
+  }
+
+  /* 서비스워커에게 "이 사진들도 오프라인용으로 저장해 둬" 라고 알려 준다 */
+  function cachePicsOffline(){
+    if (!("serviceWorker" in navigator)) return;
+    const urls = [];
+    SONGS.forEach(s => (s.lyrics || []).forEach(l => {
+      const pic = resolvePic(l && l.pic);
+      if (pic && !urls.includes(pic.src)) urls.push(pic.src);
+    }));
+    if (!urls.length) return;
+    navigator.serviceWorker.ready
+      .then(reg => reg.active && reg.active.postMessage({ type:"CACHE_URLS", urls }))
+      .catch(()=>{});
   }
 
   function escapeHtml(str){
@@ -4669,6 +4906,8 @@
     // (매 틱마다 전체 줄을 갱신하고 smooth 스크롤을 다시 시작하던 것이 버벅임의 원인)
     if (activeIdx === lastActiveIdx && !force) return;
 
+    updateTipPic(activeIdx);          // 짤방도 이 줄에 맞춰 바꿔 준다
+
     if (lastActiveIdx >= 0 && lines[lastActiveIdx]) lines[lastActiveIdx].classList.remove("active");
     if (activeIdx >= 0 && lines[activeIdx]) lines[activeIdx].classList.add("active");
     lastActiveIdx = activeIdx;
@@ -4798,6 +5037,8 @@
           });
         });
       }).catch(()=>{});
+
+      cachePicsOffline();      // 짤방 사진도 오프라인용으로 저장해 둔다
 
       let reloading = false;
       navigator.serviceWorker.addEventListener("controllerchange", ()=>{
