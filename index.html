@@ -1752,8 +1752,50 @@
   .menu-row.spoiler:hover .go{ color:var(--teal); }
 
   .setlist-page{
+    position:relative;
     min-height:100svh;
     background:linear-gradient(180deg,#170504 0%, #0f0403 100%);
+  }
+  /* 첫 화면(경고 화면) 뒤에 깔리는 사진 — 아래로 갈수록 어둠에 녹아든다.
+     사진을 바꾸려면 아래 url() 파일명만 갈아 끼우면 된다. */
+  .setlist-page::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:100svh;
+    background:
+      linear-gradient(180deg,
+        rgba(20,7,6,0.62) 0%,
+        rgba(20,7,6,0.58) 38%,
+        rgba(19,6,5,0.88) 76%,
+        #150605 94%,
+        #130504 100%),
+      url('images/setlist-bg.jpg') center 34%/cover no-repeat;
+    z-index:0;
+    pointer-events:none;
+  }
+  .setlist-page > *{ position:relative; z-index:1; }
+  /* 좁은 화면에서는 cover 로 깔면 얼굴 부분만 크게 잘리므로,
+     사진 전체가 보이도록 위쪽에 띠처럼 앉히고 아래로 어둠에 녹인다. */
+  @media (max-width:600px){
+    .setlist-page::before{
+      /* 사진 높이(≈ 화면 폭)에 맞춰 vw 단위로 어둠을 입혀 경계선이 보이지 않게 한다 */
+      background:
+        linear-gradient(180deg,
+          rgba(20,7,6,0.44) 0,
+          rgba(20,7,6,0.40) 34vw,
+          rgba(19,6,5,0.74) 74vw,
+          #150605 101vw,
+          #130504 100%),
+        url('images/setlist-bg.jpg') center top/152% auto no-repeat;
+    }
+  }
+  /* 사진 위에 얹히는 상단바 — 색을 덮지 않고 뒤를 살짝 흐리기만 한다 */
+  .setlist-page .song-topbar{
+    background:rgba(14,5,5,0.34);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom-color:rgba(233,217,163,0.14);
   }
   /* 첫 화면을 꽉 채우는 경고 — 여기까지만 보이고 목록은 아래에 있다 */
   .spoiler-hero{
