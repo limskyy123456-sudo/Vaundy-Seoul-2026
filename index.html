@@ -2121,7 +2121,7 @@
     .song-fixed-top .video-wrap{padding:0 36px;}
   }
 
-  /* ---------- 도쿄 셋리스트 (스포일러 페이지) ----------
+  /* ---------- 도쿄 · 서울 셋리스트 (스포일러 페이지) ----------
      첫 화면에는 경고만 보이고, 스크롤을 내려야 곡 목록이 드러난다. */
   .menu-row.spoiler .info-toggle-icon{
     background:none;
@@ -4418,12 +4418,13 @@
      (빛살 모양은 작게 줄이면 사선이 묻혀서 오히려 '불빛 켜기'처럼 보입니다) */
   const FLASH_OFF_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6.6" y="2.6" width="10.8" height="18.8" rx="2.4"/><line x1="10.4" y1="5.6" x2="13.6" y2="5.6"/><line x1="3.6" y1="20.8" x2="20.4" y2="3.2"/></svg>';
 
-  /* ── 도쿄(아시아 아레나 투어) 셋리스트 ──────────────────────────
-     2026.09.05(토) · 09.06(일) 이틀 공연. songs 가 2개인 번호는 날짜별로
-     곡이 달랐던 자리다. id 는 위 SONGS 의 id 와 같아야 곡 화면으로 넘어간다. */
-  const SETLIST_TOKYO = {
-    label: "도쿄 공연",
-    dates: "2026.09.05 (토) · 09.06 (일)",
+  /* ── 도쿄 · 서울(아시아 아레나 투어) 셋리스트 ──────────────────
+     도쿄 2026.09.05(토)·09.06(일), 서울 09.19(토)·09.20(일).
+     서울도 도쿄와 같은 순서였다. songs 가 2개인 번호는 날짜별로 곡이
+     달랐던 자리(토 / 일)다. id 는 위 SONGS 의 id 와 같아야 곡 화면으로 넘어간다. */
+  const SETLIST = {
+    label: "도쿄 & 서울 공연",
+    dates: "도쿄 09.05 · 06  |  서울 09.19 · 20",
     items: [
       { n:1,  songs:[{ id:"NakiJizo" }] },
       { n:2,  songs:[{ id:"Homunculus" }] },
@@ -4468,7 +4469,7 @@
   /* 지금 폰에 깔려 있는 화면이 몇 번째 판인지 알려 주는 표시.
      새로 올렸는데 화면이 그대로일 때, 옛 판이 남아 있는지 바로 확인할 수 있다.
      sw.js 의 CACHE_VERSION 과 같이 올려 주세요. */
-  const BUILD = "v121";
+  const BUILD = "v123";
 
   /* 주소 뒤에 ?debug=1 을 붙이면 화면 위에 상태가 뜬다.
      "재생 중인 줄이 여러 개" 같은 문제가 폰에서만 날 때 원인을 보기 위한 것. */
@@ -5372,7 +5373,7 @@
           </a>
           <button class="menu-chip spoiler" type="button" id="setlist-btn">
             <span class="chip-ico warn">${WARN_SVG}</span>
-            <span class="chip-label">도쿄 셋리스트</span>
+            <span class="chip-label">도쿄·서울 셋리</span>
             <span class="chip-note">스포 포함</span>
           </button>
         </div>
@@ -5609,7 +5610,7 @@
      드러나지 않는다. */
   function setlistFlat(){
     const out = [];
-    SETLIST_TOKYO.items.forEach(it =>
+    SETLIST.items.forEach(it =>
       it.songs.forEach((e, i) => out.push({ key: it.n + ":" + i, id: e.id }))
     );
     return out;
@@ -5711,12 +5712,12 @@
     const total = setlistFlat().length;
 
     listEl.innerHTML = isOrder
-      ? SETLIST_TOKYO.items.map(setlistRowHtml).join("")
+      ? SETLIST.items.map(setlistRowHtml).join("")
       : setlistRandomSongs().map(setlistRandomRowHtml).join("");
 
     const countEl = document.getElementById("setlist-count");
     if (countEl) countEl.textContent = isOrder
-      ? `본편 ${SETLIST_TOKYO.items.length}곡 · 총 ${total}곡`
+      ? `본편 ${SETLIST.items.length}곡 · 총 ${total}곡`
       : `총 ${total}곡`;
 
     const metaEl = document.getElementById("setlist-mode-meta");
@@ -5727,14 +5728,14 @@
 
     const desc = document.getElementById("setlist-desc");
     if (desc) desc.innerHTML = isOrder
-      ? `${escapeHtml(SETLIST_TOKYO.dates)}<br>곡을 누르면 응원가이드로 넘어가요`
-      : `${escapeHtml(SETLIST_TOKYO.dates)}<br><b>공연 순서는 감춘 채</b> 섞어서 보여 주고 있어요`;
+      ? `${escapeHtml(SETLIST.dates)}<br>곡을 누르면 응원가이드로 넘어가요`
+      : `${escapeHtml(SETLIST.dates)}<br><b>공연 순서는 감춘 채</b> 섞어서 보여 주고 있어요`;
 
     const note = document.getElementById("setlist-note");
     if (note) note.innerHTML = isOrder
-      ? `※ 팬 기록을 정리한 비공식 셋리스트입니다. 서울 공연은 다를 수 있어요.<br>
+      ? `※ 팬 기록을 정리한 비공식 셋리스트입니다. <b>서울 공연도 같은 순서</b>였어요.<br>
          ※ 날짜별로 다른 곡이 있었던 자리는 <b>토</b> · <b>일</b>로 나눠 두었습니다.`
-      : `※ 팬 기록을 정리한 비공식 셋리스트입니다. 서울 공연은 다를 수 있어요.<br>
+      : `※ 팬 기록을 정리한 비공식 셋리스트입니다. <b>서울 공연도 같은 순서</b>였어요.<br>
          ※ 순서도, 날짜별로 갈린 자리도 감춰 두었습니다. 전부 보려면 위에서 <b>공연 순서</b>를 눌러 주세요.`;
 
     app.querySelectorAll(".set-mode").forEach(b=>{
@@ -5772,7 +5773,7 @@
           <div class="spoiler-mark">${WARN_SVG}</div>
           <h2 class="spoiler-title">스포주의</h2>
           <p class="spoiler-desc">
-            이 화면에는 <b>${SETLIST_TOKYO.label}의 곡명과 순서</b>가 있어요.<br>
+            이 화면에는 <b>${SETLIST.label}의 곡명과 순서</b>가 있어요.<br>
             보기 방식을 고르기 전에는 내용이 표시되지 않습니다.
           </p>
           <button class="spoiler-safe" type="button" id="spoiler-safe">스포 없이 홈으로</button>
@@ -5791,7 +5792,7 @@
 
         <section class="setlist-body" id="setlist-body" hidden inert>
           <div class="setlist-head">
-            <h2>${escapeHtml(SETLIST_TOKYO.label)} 셋리스트</h2>
+            <h2>${escapeHtml(SETLIST.label)} 셋리스트</h2>
             <p id="setlist-desc"></p>
           </div>
 
