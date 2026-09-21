@@ -4,7 +4,7 @@
    ★ 가사나 화면을 고쳐서 다시 올릴 때는 아래 CACHE_VERSION 숫자를 꼭 올려 주세요.
      그래야 사람들 폰에 새 내용이 내려갑니다. (v1 → v2 → v3 …)
    ───────────────────────────────────────────────────────────── */
-const CACHE_VERSION = "v123";
+const CACHE_VERSION = "v128";
 const CACHE_NAME    = `horo-guide-${CACHE_VERSION}`;
 
 /* 처음 방문할 때 미리 받아 둘 파일들.
@@ -24,22 +24,7 @@ const PRECACHE = [
   "./images/poster.jpg",
   "./images/poster-guide.jpg",
   "./images/poster-song.jpg",
-  "./images/setlist-bg.jpg",
-
-  /* 공지 · 안내 이미지 (images/notice/) — 없는 파일은 그냥 건너뜁니다 */
-  "./images/notice/01-venue-map.jpg",
-  "./images/notice/02-id-check.jpg",
-  "./images/notice/03-camera.jpg",
-  "./images/notice/04-md-sales.jpg",
-  "./images/notice/05-md-list.jpg",
-  "./images/notice/06-md-notice.jpg",
-  "./images/notice/07-cd-sales.jpg",
-  "./images/notice/08-cd-bonus.jpg",
-  "./images/notice/09-vaws-booth.jpg",
-  "./images/notice/10-vaws-card.jpg",
-  "./images/notice/11-photo-booth.jpg",
-  "./images/notice/12-quick-bites.jpg",
-  "./images/notice/13-sns-event.jpg"
+  "./images/setlist-bg.jpg"
 ];
 
 /* 구글 폰트처럼 다른 도메인에 있지만 저장해 두면 좋은 것들 */
