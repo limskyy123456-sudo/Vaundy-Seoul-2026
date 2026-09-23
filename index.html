@@ -239,6 +239,15 @@
   .show-time .go{ margin-left:8px;font-size:.7em;opacity:.45; }
 
   /* ── 라이브 일정 카드 ──────────────────────────────────────── */
+  /* 홈 메뉴의 "다른 화면으로 가는 줄" (콘서트 셋리스트) */
+  .menu-link-row{
+    width:100%;
+    background:none;border:0;
+    color:inherit;font-family:inherit;text-align:left;cursor:pointer;
+  }
+  .menu-link-row .info-toggle-label{ flex:1 1 auto; }
+  .menu-row-go{ margin-left:auto;font-size:18px;line-height:1;color:var(--gold-soft);padding-right:2px; }
+
   .live-list{ list-style:none;margin:10px 0 4px;padding:0; }
   .live-item + .live-item{ border-top:1px solid var(--line); }
   .live-item{
@@ -430,6 +439,21 @@
     font-size:13.5px;line-height:1.7;
   }
   .song-empty b{ display:block;color:var(--cream);font-size:15px;margin-bottom:6px; }
+  /* 응원콜 없는 곡 숨기기 / 보기 */
+  .song-filter{
+    flex:none;
+    padding:5px 10px;
+    border:1px solid var(--line);border-radius:999px;
+    background:rgba(0,0,0,0.3);
+    color:#b9a98a;
+    font-family:'Gmarket Sans',sans-serif;font-size:11px;letter-spacing:.04em;
+    cursor:pointer;white-space:nowrap;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  /* 곡 목록 화면은 밝은 종이 느낌이라 색을 따로 맞춘다 */
+  .guide-page .song-filter{ border:0;background:var(--page-control);color:var(--page-muted); }
+  .guide-page .song-filter:hover{ color:var(--page-ink); }
+  .guide-page .song-filter.on{ background:var(--page-paper);color:var(--page-ink);box-shadow:inset 0 0 0 1px var(--page-line); }
   .song-row .hit{ color:var(--teal); }
   /* ── 곡 목록 정렬 ─────────────────────────────────────────
      여기서 고른 순서대로 곡 화면의 '이전/다음 곡'도 따라갑니다. */
@@ -713,7 +737,7 @@
     .menu-chip{ padding:9px 6px; gap:5px; }
     .chip-label{ font-size:11.5px; }
     .chip-ico svg{ width:13px;height:13px; }
-    .chip-note{ font-size:10px; }
+    .chip-note{ display:none; }   /* 좁은 폰에서는 제목이 잘리지 않게 '스포 포함'을 숨긴다 (경고 아이콘은 남음) */
   }
 
   .info-panel{
@@ -1414,6 +1438,7 @@
     .ico-clap .hand.r{ transform:scaleX(-1); }
   }
   .lyric-body{min-width:0;display:block;flex:1;}
+  .lyric-jp:empty, .lyric-tr:empty{ display:none; }
   .lyric-jp{
     display:block;
     font-size:clamp(13px,3.6vw,14px);
@@ -1655,6 +1680,9 @@
   .today-list li.past{ opacity:.4; }
   .today-list li.now{ color:#fff; }
   .today-list li.now .t{ color:var(--chant); }
+  .today-list li.main .l{ font-weight:600; }
+  .today-list li .l small{ font-weight:400;font-size:11px;opacity:.7; }
+  .today-link{ color:var(--gold);white-space:nowrap;font-size:12.5px; }
 
   /* ── 준비물 체크 / 가는 길 카드 ───────────────────────────── */
   .info-card.solo{ margin-top:9px; }
@@ -2521,6 +2549,79 @@
     background:rgba(94,205,196,0.12);
     color:var(--teal);
   }
+  /* ── 콘서트 셋리스트 화면 ─ 투어 고르기 */
+  /* 투어가 한눈에 다 보이도록 옆으로 넘기지 않고 칸으로 나눠 놓는다 (폰 3칸 · 넓은 화면 6칸) */
+  /* ── 위쪽 고르기 줄 — 자리를 적게 쓰도록 아주 납작하게 ── */
+  .cset-kinds{ max-width:640px;margin:2px auto 5px;display:grid;grid-template-columns:1fr 1fr;gap:5px; }
+  .cset-kind{
+    padding:5px 6px;border:1px solid var(--line);border-radius:8px;
+    background:var(--surface);color:var(--cream);
+    font-family:'Gmarket Sans',sans-serif;font-size:11px;cursor:pointer;
+  }
+  .cset-kind small{ font-size:9.5px;color:var(--gold-soft);opacity:.7; }
+  .cset-kind.active{ border-color:var(--gold);background:rgba(233,217,163,.12);color:var(--gold); }
+  .cset-years{ max-width:640px;margin:0 auto 12px; }
+  .cset-yrs{ display:flex;gap:4px;margin-bottom:6px; }
+  .cset-yr-chip{
+    flex:1;min-width:0;
+    padding:4px 2px;
+    border:1px solid var(--line);border-radius:7px;
+    background:var(--surface);color:var(--gold-soft);
+    font-family:'Gmarket Sans',sans-serif;font-size:11px;letter-spacing:.02em;
+    cursor:pointer;
+  }
+  .cset-yr-chip::before{ content:"’"; opacity:.5; }
+  .cset-yr-chip.active{ border-color:var(--gold);background:rgba(233,217,163,.14);color:var(--gold); }
+  .cset-mons{ display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px; }
+  .cset-mon{
+    padding:3px 7px;
+    border:1px solid var(--line);border-radius:999px;
+    background:var(--surface);color:var(--gold-soft);
+    font-family:'Gmarket Sans',sans-serif;font-size:10.5px;cursor:pointer;
+  }
+  .cset-mon.active{ border-color:var(--gold);background:rgba(233,217,163,.14);color:var(--gold); }
+  .cset-yr-panel{ }
+  /* 페스는 목록이 길어서 이 칸 안에서만 스크롤한다 (페이지가 길어지지 않게) */
+  .cset-yr-panel.scroll{
+    max-height:40vh;overflow-y:auto;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    padding-right:2px;
+  }
+  .cset-tabs{ display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:4px; }
+  @media (min-width:600px){ .cset-tabs{ grid-template-columns:repeat(5, minmax(0, 1fr)); } }
+  @media (max-width:340px){ .cset-tabs .cset-tab b{ font-size:10.5px; } .cset-yr-chip{ font-size:10.5px; } }
+  .cset-fests{ list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px; }
+  .cset-fest{
+    width:100%;display:flex;align-items:flex-start;gap:7px;
+    padding:5px 7px;border:1px solid transparent;border-radius:8px;
+    background:rgba(255,255,255,.02);color:var(--cream);
+    font-family:inherit;font-size:12px;line-height:1.3;text-align:left;cursor:pointer;
+  }
+  .cset-fest-date{ flex:none;width:40px;font-family:'Gmarket Sans',sans-serif;font-size:10.5px;color:var(--gold-soft);padding-top:1px; }
+  .cset-fest-name{ flex:1;min-width:0;word-break:keep-all; }
+  .cset-fest-name small{ display:block;margin-top:1px;font-size:10.5px;color:var(--gold-soft);opacity:.7; }
+  .cset-fest.active{ border-color:var(--gold);background:rgba(233,217,163,.12); }
+  .cset-fest.active .cset-fest-name{ color:var(--gold); }
+  .cset-src{ display:inline-block;margin-top:4px;font-size:12px;color:var(--gold); }
+  .cset-tab{
+    min-width:0;
+    display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+    min-height:30px;padding:4px 7px;
+    text-align:left;
+    border:1px solid var(--line);border-radius:10px;
+    background:var(--surface);
+    color:var(--cream);font-family:inherit;cursor:pointer;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .cset-tab small{ font-family:'Gmarket Sans',sans-serif;font-size:10px;letter-spacing:.12em;color:var(--gold-soft);opacity:.8; }
+  .cset-tab b{ font-family:'Gmarket Sans',sans-serif;font-weight:inherit;font-size:11px;line-height:1.2;word-break:keep-all }
+  .cset-tab.active{ border-color:var(--gold);background:rgba(233,217,163,.12); }
+  .cset-tab.active b{ color:var(--gold); }
+  .set-title.none{ opacity:.45; }
+  .set-note{ display:block;margin-top:2px;font-size:11px;font-weight:400;color:var(--gold-soft);opacity:.8; }
+  .day-chip.alt{ font-size:10.5px; }
+  .cset-horo{ color:var(--gold); }
+
   .setlist-note{
     max-width:640px;margin:18px auto 0;
     font-size:11.5px;line-height:1.9;
@@ -2740,6 +2841,8 @@
      공식 사이트 LIVE 페이지(https://vaundy.jp/news/2/?lang=ko) 기준, 2026.09.21 정리.
      · 홈의 카운트다운은 이 표에서 "아직 끝나지 않은 첫 공연" 을 자동으로 센다.
      · 라이브 일정 카드도 이 표로 그린다 — 끝난 공연은 저절로 목록에서 빠진다.
+     · open 은 개장, eventStart 는 이벤트 전체 개연(출연 순서가 따로 있는 날)
+       → 공연 당일 홈에 뜨는 "오늘 공연" 카드가 이 시각들로 실시간 현황을 보여 준다
      · start 는 공식 안내에 적힌 개연(또는 Vaundy 출연) 시각. 모르면 비워 둔다
        → 카운트다운은 날짜만 세고, 시각 자리에 TBA 라고 표시한다.
      · tz 는 공연지 시간대 (일본은 한국과 같은 +09:00, 홍콩·타이베이·상하이는 +08:00)
@@ -2751,25 +2854,25 @@
   };
   const LIVE_SCHEDULE = [
     { series:"event", title:"熱闘甲子園 presents 熱闘JAM 2026", venue:"GLION ARENA KOBE", place:"효고현", slot:true,
-      days:[ { date:"2026-09-23", url:"https://vaundy.jp/news/detail/11201?lang=ko", start:"18:45", note:"Vaundy 18:45~ 트리 출연" } ] },
+      days:[ { date:"2026-09-23", url:"https://vaundy.jp/news/detail/11201?lang=ko", open:"14:00", eventStart:"15:00", start:"18:45", note:"Vaundy 18:45~ 트리 출연" } ] },
     { series:"horo", venue:"AsiaWorld-Arena", place:"홍콩", soldout:true,
       days:[ { date:"2026-10-03", url:"https://vaundy.jp/news/detail/11103?lang=ko", tz:"+08:00" } ] },
     { series:"horo", venue:"기타큐슈 메세", place:"후쿠오카현", soldout:true,
-      days:[ { date:"2026-10-24", url:"https://vaundy.jp/news/detail/11104?lang=ko", start:"18:00" },
-             { date:"2026-10-25", url:"https://vaundy.jp/news/detail/11105?lang=ko", start:"16:00" } ] },
+      days:[ { date:"2026-10-24", url:"https://vaundy.jp/news/detail/11104?lang=ko", open:"16:30", start:"18:00" },
+             { date:"2026-10-25", url:"https://vaundy.jp/news/detail/11105?lang=ko", open:"14:30", start:"16:00" } ] },
     { series:"horo", venue:"Taipei Arena", place:"타이베이", soldout:true,
       days:[ { date:"2026-10-31", url:"https://vaundy.jp/news/detail/11106?lang=ko", tz:"+08:00" },
              { date:"2026-11-01", url:"https://vaundy.jp/news/detail/11107?lang=ko", tz:"+08:00" } ] },
     { series:"event", title:"バズリズム LIVE 2026", venue:"요코하마 아레나", place:"가나가와현",
-      days:[ { date:"2026-11-08", url:"https://vaundy.jp/news/detail/11262?lang=ko", start:"16:00", note:"이벤트 시작 16:00(예정) · 출연 순서 미정" } ] },
+      days:[ { date:"2026-11-08", url:"https://vaundy.jp/news/detail/11262?lang=ko", open:"15:00", start:"16:00", note:"이벤트 시작 16:00(예정) · 출연 순서 미정" } ] },
     { series:"horo", venue:"상하이", place:"중국", cancelled:true,
       days:[ { date:"2026-11-14", url:"https://vaundy.jp/news/detail/11108?lang=ko", tz:"+08:00" },
              { date:"2026-11-15", url:"https://vaundy.jp/news/detail/11109?lang=ko", tz:"+08:00" } ] },
     { series:"japan", venue:"GLION ARENA KOBE", place:"효고현",
-      days:[ { date:"2027-08-14", url:"https://vaundy.jp/news/detail/11110?lang=ko", start:"18:00" },
-             { date:"2027-08-15", url:"https://vaundy.jp/news/detail/11111?lang=ko", start:"16:00" } ] },
+      days:[ { date:"2027-08-14", url:"https://vaundy.jp/news/detail/11110?lang=ko", open:"17:00", start:"18:00" },
+             { date:"2027-08-15", url:"https://vaundy.jp/news/detail/11111?lang=ko", open:"15:00", start:"16:00" } ] },
     { series:"japan", venue:"크로코쿤 홀 (구 닛폰가이시 홀)", place:"아이치현",
-      days:[ { date:"2027-08-28", url:"https://vaundy.jp/news/detail/11112?lang=ko", start:"18:00" },
+      days:[ { date:"2027-08-28", url:"https://vaundy.jp/news/detail/11112?lang=ko", open:"17:00", start:"18:00" },
              { date:"2027-08-29", url:"https://vaundy.jp/news/detail/11113?lang=ko" } ] },
     { series:"japan", venue:"마린메세 후쿠오카 A관", place:"후쿠오카현",
       days:[ { date:"2027-09-19", url:"https://vaundy.jp/news/detail/11114?lang=ko" },
@@ -2813,6 +2916,221 @@
   ];
   /* 카운트다운 위 머리글에 쓰는 짧은 이름 (좁은 폰에서도 잘리지 않게) */
   const LIVE_SERIES_SHORT = { horo:"“HORO”", japan:"JAPAN ARENA TOUR" };
+  /* ── 지난 콘서트 셋리스트 ─────────────────────────────────────
+     팬이 정리한 셋리스트 표를 옮긴 것. 곡 이름은 일본어 원제 그대로 적는다.
+     · 응원가이드에 있는 곡(SONGS 제목 괄호 안 원제와 같은 곡)은 누르면 가이드로 간다
+     · 없는 곡은 이름만 보인다 (재생 안 됨)
+     · ["A","B"] = 날짜에 따라 A 또는 B / { note:"…" } = 번호 없는 메모 줄 / { se:"…" } = 곡이 아닌 SE
+     새 투어는 맨 앞에 한 덩어리 더 넣으면 된다 (연도 순서대로 보여 준다). */
+  const CONCERT_SETLISTS = [
+    { year:2026, name:"Vaundy DOME TOUR 2026 “SILENCE”", short:"SILENCE", dates:"2026.02 ~ 03",
+      songs:["東京フラッシュ","不可幸力","裸の勇者","常熱","踊り子","そんなbitterな話","恋風邪にのせて","灯火",
+             "偉生人","ずっとラブソング","僕にはどうしてわかるんだろう","融解 sink","タイムパラドックス","しわあわせ",
+             "再会","風神","花占い","極楽浄土","replica","呼び声","泣き地蔵","soramimi","CHAINSAW BLOOD",
+             "Tokimeki","怪獣の花唄","The SILENCE"] },
+    { year:2026, name:"ASIA ARENA TOUR 2026 “HORO”", short:"HORO", dates:"도쿄 · 서울", link:"#/setlist" },
+    { year:2026, name:"VAWS one man live “ART Work Studio live 002”", short:"AWS 002", dates:"2026.08.12 · 13 · Zepp Sapporo (2공연)",
+      basis:"8/13 공연 순서 · 8/12도 같은 곡 (순서만 다름)",
+      songs:["二人話","裸の勇者","気まぐれ","偉生人","走れSAKAMOTO","飛ぶ時","再会","そんなbitterな話","呼び声",
+             "しわあわせ","常熱","花占い","Tokimeki","かげろう","soramimi","CHAINSAW BLOOD","怪獣の花唄",
+             "イデアが溢れて眠れない"] },
+    { year:2026, name:"Vaundy studio mini live 2026", short:"mini live", dates:"2026.07.20 · 온라인 (YouTube)",
+      songs:["イデアが溢れて眠れない","怪獣の花唄","踊り子","かげろう","そんなbitterな話","気まぐれ"] },
+    { year:2025, name:"VAWS premium live house tour “ART Work Studio live 001”", short:"AWS 001", dates:"2025.08.14 ~ 08.20 · BIGCAT · THE BOTTOM LINE · O-EAST (3공연)",
+      basis:"A = 8/14 BIGCAT · B = 8/20 O-EAST",
+      songs:["置き手紙","CHAINSAW BLOOD","かくれんぼ","二人話","再会",{ se:"Audio 003" },"裸の勇者","風神",
+             ["灯火","常熱"],"まじで、サヨナラべぃべぃ","しわあわせ","僕にはどうしてわかるんだろう",
+             ["ずっとラブソング","新曲 (당시 미발표)"],"不可幸力","花占い","soramimi","ホムンクルス","怪獣の花唄"] },
+    { year:2025, name:"Vaundy one man live VAWS hall tour “little punk”", short:"little punk", dates:"2025.07.05 ~ 11.16",
+      songs:["ホムンクルス","裸の勇者","風神","走れSAKAMOTO","HERO","二人話","灯火","napori",
+             "人生はミックスナッツの組み合わせ","世界の秘密","走馬灯",["しわあわせ","呼吸のように"],"踊り子",
+             ["おもかげ","ずっとラブソング","常熱"],"花占い","Tokimeki","再会","不可幸力","CHAINSAW BLOOD",
+             "怪獣の花唄","僕にはどうしてわかるんだろう"] },
+    { year:2024, name:"Vaundy one man live ARENA tour “FUSION”", short:"FUSION", dates:"2024.11.09 ~ 2025.03.02",
+      songs:["不可幸力","東京フラッシュ","そんなbitterな話","常熱","融解 sink","GORILLA芝居","踊り子",
+             ["宮","mabataki"],"タイムパラドックス","しわあわせ",
+             { note:"走れSAKAMOTO", sub:"투어 도중부터" },
+             "風神","恋風邪にのせて","裸の勇者","花占い","Gift","ホムンクルス","泣き地蔵","soramimi",
+             "CHAINSAW BLOOD","怪獣の花唄","1リッター分の愛をこめて"] },
+    { year:2024, name:"Vaundy LIVE in London", short:"London", dates:"2024.09.07 · Old Royal Naval College (영국)",
+      songs:["走馬灯","美電球","不可幸力","宮","napori","mabataki","常熱","踊り子","呼吸のように","タイムパラドックス",
+             "replica","トドメの一撃","怪獣の花唄","そんなbitterな話"] },
+    { year:2024, name:"Vaundy one man live “HEADSHOT” at Makuhari Messe", short:"HEADSHOT", dates:"2024.07.27 · 28",
+      songs:["東京フラッシュ","灯火","花占い","そんなbitterな話","常熱","踊り子","世界の秘密","napori","宮",
+             "タイムパラドックス","しわあわせ","ホムンクルス","恋風邪にのせて","Tokimeki","GORILLA芝居","不可幸力",
+             "soramimi","泣き地蔵","CHAINSAW BLOOD","怪獣の花唄","僕は今日も"] },
+    { year:2023, name:"Vaundy one man live ARENA tour “replica ZERO”", short:"replica ZERO", dates:"2023.11.18 ~ 2024.01.21",
+      songs:["ZERO","裸の勇者","美電球","恋風邪にのせて","カーニバル","踊り子","常熱",{ se:"Audio 006" },"宮",
+             "そんなbitterな話","黒子","NEO JAPAN","不可幸力","呼吸のように","Tokimeki","花占い","トドメの一撃",
+             "CHAINSAW BLOOD","逆光","怪獣の花唄","replica"] },
+    { year:2023, name:"New Album “replica” Release Party", short:"Release Party", dates:"2023.12.01 · 横浜アリーナ",
+      songs:["呼吸のように","ZERO","カーニバル","恋風邪にのせて","裸の勇者","NEO JAPAN","そんなbitterな話","常熱",
+             { se:"Audio 007" },"花占い","replica",{ enc:true },"トドメの一撃","逆光","怪獣の花唄"] },
+    { year:2023, name:"“VAWS” secret live", short:"VAWS secret", dates:"2023.07.26 · 渋谷CLUB QUATTRO",
+      songs:["CHAINSAW BLOOD","そんなbitterな話","napori","灯火","Tokimeki","不可幸力","しわあわせ","踊り子",
+             "恋風邪にのせて","裸の勇者","泣き地蔵","花占い","怪獣の花唄","ZERO"] },
+    { year:2023, name:"Vaundy one man live “replica” -unknown-", short:"unknown", dates:"2023.03.29 · 日本大学 江古田キャンパス",
+      songs:["踊り子","不可幸力","裸の勇者","恋風邪にのせて","忘れ物","融解sink","しわあわせ","まぶた","CHAINSAW BLOOD",
+             "灯火","泣き地蔵","怪獣の花唄","Tokimeki"] },
+    { year:2023, name:"Vaundy one man live tour “replica”", short:"replica", dates:"2023.01.14 ~ 03.26 · 홀 투어 (24공연)",
+      basis:"마지막 공연 3/26 東京ガーデンシアター 순서",
+      songs:["置き手紙","忘れ物","融解sink","まぶた","benefits","HERO","裸の勇者","灯火","瞳惚れ","踊り子",
+             "恋風邪にのせて","mabataki","しわあわせ","不可幸力","CHAINSAW BLOOD","泣き地蔵","soramimi","怪獣の花唄",
+             { note:"Tokimeki", sub:"첫 공연(1/14)에는 있던 곡" }] },
+    { year:2022, name:"Vaundy one man live at BUDOKAN “深呼吸”", short:"BUDOKAN 深呼吸", dates:"2022.09.08 · 09 · 日本武道館",
+      songs:["恋風邪にのせて","灯火","世界の秘密","life hack","HERO","二人話","benefits","おもかげ -self cover-",
+             "踊り子","融解sink","napori","極楽浄土","不可幸力","東京フラッシュ","裸の勇者","走馬灯","泣き地蔵",
+             "soramimi","Tokimeki","花占い","怪獣の花唄","しわあわせ","mabataki"] },
+    { year:2022, name:"Vaundy one man live tour “NIDONE”", short:"NIDONE", dates:"2022.02.05 ~ 05.20 · Zepp 등 (21공연)",
+      basis:"마지막 공연 5/20 KT Zepp Yokohama 순서 · 첫 공연도 같은 곡",
+      songs:["napori","二人話","踊り子","灯火","融解sink","Tokimeki","恋風邪にのせて","HERO","世界の秘密","おもかげ",
+             "benefits","しわあわせ","裸の勇者","不可幸力","東京フラッシュ","泣き地蔵","soramimi","花占い","怪獣の花唄"] },
+    { year:2021, name:"Vaundy one man live tour “HINODE”", short:"HINODE", dates:"2021.09.12 ~ 10.19 · Zepp 5곳 (7공연)",
+      basis:"마지막 공연 10/19 Zepp Tokyo 순서 · 첫 공연도 같은 곡",
+      songs:["napori","世界の秘密","融解sink","benefits","偉生人","灯火","life hack","Tokimeki","Bye by me","しわあわせ",
+             "東京フラッシュ","不可幸力","soramimi","泣き地蔵","怪獣の花唄","花占い","踊り子"] },
+    { year:2021, name:"Vaundy one man live “KATARIBE”", short:"KATARIBE", dates:"2021.05.15 ~ 06.26 · Zepp Tokyo · Haneda · Namba (3공연)",
+      basis:"마지막 공연 6/26 Zepp Namba 순서 · 첫 공연도 같은 곡",
+      songs:["二人話","僕は今日も","benefits","融解sink","HERO","不可幸力","世界の秘密","napori","life hack","Bye by me",
+             "東京フラッシュ","灯火","soramimi","泣き地蔵","怪獣の花唄","しわあわせ"] },
+    { year:2021, name:"studio mini live “HATSUGAの芽”", short:"HATSUGA", dates:"2021.01.11 · 온라인 (YouTube)",
+      songs:["灯火","不可幸力","東京フラッシュ","世界の秘密","二人話"] },
+    { year:2020, name:"2nd one man live “strobo”", short:"strobo", dates:"2020.10.10 · Zepp Haneda",
+      songs:["HERO","napori","life hack","不可幸力","かくれんぼ",{ se:"Audio 001" },{ note:"新曲 (당시 미발표)" },{ se:"Audio 002" },
+             "灯火","pain","融解sink","世界の秘密","Bye by me","僕は今日も","soramimi","東京フラッシュ","怪獣の花唄"] },
+    { year:2020, name:"1st one man live “大人間前夜”", short:"大人間前夜", dates:"2020.08.30 · 渋谷CLUB QUATTRO",
+      songs:["napori","life hack","pain",{ se:"Audio 002" },{ note:"新曲 (당시 미발표)" },"不可幸力","HERO","融解sink","極楽浄土",
+             "soramimi","Bye by me","僕は今日も","灯火","怪獣の花唄","東京フラッシュ"] },
+  ];
+
+  /* ── 페스 · 이벤트 · 대반 셋리스트 (LiveFans 등록 내용) ──────────
+     id = LiveFans 공연 번호 (https://www.livefans.jp/events/<id>)
+     곡 목록이 등록되지 않은 공연(방송 출연·게스트 등)은 넣지 않았다. */
+  const CONCERT_FESTS = [
+    { year:2026, date:"2026.09.12", name:"ROCK IN JAPAN FESTIVAL 2026", venue:"LOTUS STAGE", id:1951436, songs:["soramimi","飛ぶ時","踊り子","常熱","花占い","呼び声","恋風邪にのせて","イデアが溢れて眠れない","そんなbitterな話","CHAINSAW BLOOD","Tokimeki","怪獣の花唄"] },
+    { year:2026, date:"2026.08.30", name:"SWEET LOVE SHOWER 2026", venue:"LAKESIDE", id:1932139, songs:["しわあわせ","CHAINSAW BLOOD","花占い","灯火","イデアが溢れて眠れない","そんなbitterな話","呼び声","soramimi","飛ぶ時","Tokimeki","怪獣の花唄"] },
+    { year:2026, date:"2026.08.29", name:"音楽と髭達2026 - TIME MACHINE -", venue:"HARD OFF ECOスタジアム新潟", id:1941842, songs:["かげろう","常熱","呼び声","そんなbitterな話","花占い","飛ぶ時","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2026, date:"2026.08.15", name:"RISING SUN ROCK FESTIVAL 2026 in EZO", venue:"SUN STAGE", id:1928928, songs:["イデアが溢れて眠れない","飛ぶ時","しわあわせ","踊り子","常熱","不可幸力","花占い","呼び声","かげろう","soramimi","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2026, date:"2026.08.02", name:"OSAKA GIGANTIC MUSIC FESTIVAL 2026", venue:"SKY STAGE", id:1947722, songs:["soramimi","常熱","花占い","飛ぶ時","踊り子","呼び声","しわあわせ","イデアが溢れて眠れない","かげろう","不可幸力","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2026, date:"2026.08.01", name:"NUMBER SHOT 2026", venue:"どんたくSTAGE", id:1929018, songs:["呼び声","CHAINSAW BLOOD","イデアが溢れて眠れない","花占い","しわあわせ","不可幸力","かげろう","soramimi","飛ぶ時","怪獣の花唄"] },
+    { year:2025, date:"2025.12.28", name:"RADIO CRAZY 2025", venue:"Z-STAGE", id:1874554, note:"不可幸力는 리허설로만 표기", songs:["ずっとラブソング","灯火","恋風邪にのせて","風神","踊り子",{ se:"Audio 003" },"裸の勇者","忘れる前に","しわあわせ","再会","泣き地蔵","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2025, date:"2025.12.27", name:"COUNTDOWN JAPAN 25/26", venue:"EARTH STAGE", id:1867543, songs:["再会","恋風邪にのせて","風神","踊り子","裸の勇者","しわあわせ","忘れる前に","不可幸力",{ se:"Audio 003" },"泣き地蔵","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2025, date:"2025.12.13", name:"結びの夢番地2025", venue:"ビッグ・ローズ (広島)", id:1851182, songs:["ホムンクルス","踊り子","裸の勇者","不可幸力","風神","しわあわせ","忘れる前に","恋風邪にのせて","再会",{ se:"Audio 003" },"CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2025, date:"2025.12.05", name:"Clockenflap 2025", venue:"Central Harbourfront (홍콩)", id:1889803, songs:["踊り子","不可幸力","風神","しわあわせ","napori","東京フラッシュ","裸の勇者","恋風邪にのせて","花占い","再会","ホムンクルス","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2025, date:"2025.11.23", name:"RADWIMPS 20th ANNIVERSARY LIVE TOUR (대반)", venue:"横浜アリーナ", id:1825842, songs:["忘れる前に","裸の勇者","しわあわせ","恋風邪にのせて","風神",{ se:"Audio 003" },"不可幸力","踊り子","再会","ホムンクルス","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2025, date:"2025.09.14", name:"ROCK IN JAPAN FESTIVAL 2025", venue:"LOTUS STAGE", id:1807697, songs:["ずっとラブソング","裸の勇者","恋風邪にのせて","しわあわせ","僕にはどうしてわかるんだろう","不可幸力","風神","常熱","再会","ホムンクルス","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2025, date:"2025.07.25", name:"FUJI ROCK FESTIVAL'25", venue:"GREEN STAGE", id:1771842, songs:["常熱","不可幸力","踊り子","風神","裸の勇者","しわあわせ","僕にはどうしてわかるんだろう","タイムパラドックス",{ se:"Audio 003" },"花占い","Tokimeki","再会","ホムンクルス","CHAINSAW BLOOD","怪獣の花唄",{ enc:true },"恋風邪にのせて"] },
+    { year:2025, date:"2025.03.08", name:"BEAT AX Vol.6", venue:"横浜アリーナ", id:1761128, songs:["常熱","風神","不可幸力","しわあわせ","踊り子","そんなbitterな話","花占い","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2024, date:"2024.12.28", name:"COUNTDOWN JAPAN 24/25", venue:"EARTH STAGE", id:1733666, songs:["しわあわせ","soramimi","踊り子","常熱","タイムパラドックス","不可幸力","風神","花占い","そんなbitterな話","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2024, date:"2024.12.27", name:"RADIO CRAZY 2024", venue:"Z-STAGE", id:1726732, songs:["CHAINSAW BLOOD","常熱","そんなbitterな話","不可幸力","タイムパラドックス","花占い","風神","しわあわせ","怪獣の花唄",{ se:"Audio 003" }] },
+    { year:2024, date:"2024.12.22", name:"MERRY ROCK PARADE 2024", venue:"BLESS STAGE", id:1737354, songs:["怪獣の花唄","踊り子","常熱","そんなbitterな話","タイムパラドックス","花占い","風神","しわあわせ","CHAINSAW BLOOD","不可幸力"] },
+    { year:2024, date:"2024.10.12", name:"GFEST.2024", venue:"Gメッセ群馬", id:1701822, songs:["しわあわせ","踊り子","タイムパラドックス","そんなbitterな話","常熱","花占い","ホムンクルス","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2024, date:"2024.08.30", name:"SWEET LOVE SHOWER 2024", venue:"LAKESIDE", id:1667257, songs:["CHAINSAW BLOOD","恋風邪にのせて","踊り子","常熱","不可幸力","ホムンクルス","しわあわせ","タイムパラドックス","灯火","逆光","怪獣の花唄"] },
+    { year:2024, date:"2024.08.25", name:"テレビ朝日ドリームフェスティバル2024", venue:"東京体育館", id:1680011, songs:["常熱","東京フラッシュ","踊り子","不可幸力","恋風邪にのせて",{ se:"Audio 003" },"灯火","タイムパラドックス","しわあわせ","ホムンクルス","CHAINSAW BLOOD","逆光","怪獣の花唄"] },
+    { year:2024, date:"2024.08.24", name:"MONSTER baSH 2024", venue:"WHITE baSH", id:1663646, songs:["踊り子","しわあわせ",{ se:"Audio 003" },"タイムパラドックス","不可幸力","恋風邪にのせて","ホムンクルス","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2024, date:"2024.08.23", name:"WILD BUNCH FEST. 2024", venue:"Pirates Stage", id:1673355, songs:["踊り子","ホムンクルス","不可幸力","恋風邪にのせて","常熱","東京フラッシュ","タイムパラドックス","しわあわせ","灯火","CHAINSAW BLOOD","逆光","怪獣の花唄"] },
+    { year:2024, date:"2024.08.18", name:"SUMMER SONIC 2024", venue:"AIR STAGE", id:1653030, songs:["踊り子","ホムンクルス","不可幸力","恋風邪にのせて","常熱","東京フラッシュ","タイムパラドックス","しわあわせ","灯火","CHAINSAW BLOOD","逆光","怪獣の花唄"] },
+    { year:2024, date:"2024.08.16", name:"RISING SUN ROCK FESTIVAL 2024 in EZO", venue:"SUN STAGE", id:1659147, songs:["恋風邪にのせて","タイムパラドックス","ホムンクルス",{ se:"Audio 003" },"不可幸力","常熱","踊り子","東京フラッシュ","しわあわせ","灯火","CHAINSAW BLOOD","泣き地蔵","怪獣の花唄"] },
+    { year:2024, date:"2024.08.11", name:"anti sleeps tour 2024", venue:"サンドーム福井", id:1672108, note:"LiveFans 요약이 잘렸을 수 있음", songs:["Tokimeki","ホムンクルス","怪獣の花唄","不可幸力","GORILLA芝居","タイムパラドックス","呼吸のように","踊り子","CHAINSAW BLOOD","恋風邪にのせて"] },
+    { year:2024, date:"2024.08.10", name:"anti sleeps tour 2024", venue:"サンドーム福井", id:1672106, note:"LiveFans 요약이 잘렸을 수 있음", songs:["Tokimeki","ホムンクルス","怪獣の花唄","不可幸力","GORILLA芝居","タイムパラドックス","しわあわせ","踊り子","CHAINSAW BLOOD","そんなbitterな話"] },
+    { year:2024, date:"2024.08.04", name:"ROCK IN JAPAN FESTIVAL 2024", venue:"LOTUS STAGE", id:1680231, songs:["CHAINSAW BLOOD","不可幸力","恋風邪にのせて","灯火","常熱","しわあわせ","タイムパラドックス","踊り子","ホムンクルス",{ se:"Audio 003" },"東京フラッシュ","泣き地蔵","怪獣の花唄"] },
+    { year:2024, date:"2024.07.22", name:"バズリズムLIVE -10th Anniversary-", venue:"国立代々木競技場", id:1660874, songs:["恋風邪にのせて","しわあわせ","不可幸力","ホムンクルス","踊り子","タイムパラドックス","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2024, date:"2024.07.20", name:"NUMBER SHOT2024", venue:"どんたく STAGE", id:1656076, songs:["タイムパラドックス","恋風邪にのせて","踊り子","不可幸力","ホムンクルス","しわあわせ","CHAINSAW BLOOD","怪獣の花唄"] },
+    { year:2024, date:"2024.05.25", name:"SUPER DRY SPECIAL LIVE (ONE OK ROCK)", venue:"京セラドーム大阪", id:1642318, songs:["しわあわせ","不可幸力","裸の勇者","泣き地蔵","ZERO","タイムパラドックス","恋風邪にのせて","踊り子",{ se:"Audio 003" },"トドメの一撃","CHAINSAW BLOOD","逆光","怪獣の花唄"] },
+    { year:2024, date:"2024.05.04", name:"VIVA LA ROCK 2024", venue:"VIVA STAGE", id:1648371, songs:["しわあわせ","常熱","タイムパラドックス","不可幸力","踊り子","恋風邪にのせて","CHAINSAW BLOOD","逆光","怪獣の花唄"] },
+    { year:2024, date:"2024.04.29", name:"FM802 REQUESTAGE 2024", venue:"大阪城ホール", id:1637907, songs:["不可幸力","しわあわせ",{ se:"Audio 007" },"タイムパラドックス","灯火","恋風邪にのせて","CHAINSAW BLOOD","逆光","怪獣の花唄"] },
+    { year:2024, date:"2024.04.28", name:"ARABAKI ROCK FEST.24", venue:"BAN-ETSU", id:1645186, songs:["常熱","トドメの一撃","不可幸力","灯火","踊り子","恋風邪にのせて","タイムパラドックス","しわあわせ","そんなbitterな話","CHAINSAW BLOOD","逆光","怪獣の花唄"] },
+    { year:2024, date:"2024.03.23", name:"ツタロックフェス2024", venue:"MASSIVE STAGE", id:1624981, songs:["怪獣の花唄","不可幸力","常熱","踊り子","タイムパラドックス","CHAINSAW BLOOD","トドメの一撃","呼吸のように","逆光","恋風邪にのせて"] },
+    { year:2023, date:"2023.12.29", name:"COUNTDOWN JAPAN 23/24", venue:"EARTH STAGE", id:1604637, songs:["逆光","裸の勇者","常熱","不可幸力","恋風邪にのせて","CHAINSAW BLOOD","花占い","トドメの一撃",{ se:"Audio 003" },"ZERO","怪獣の花唄"] },
+    { year:2023, date:"2023.12.28", name:"RADIO CRAZY 2023", venue:"Z-STAGE", id:1609781, songs:["恋風邪にのせて","CHAINSAW BLOOD","怪獣の花唄",{ se:"Audio 007" },"不可幸力","トドメの一撃","花占い","ZERO","逆光","裸の勇者"] },
+    { year:2023, date:"2023.11.10", name:"ヨーロー劇場TOUR 2023 (대반)", venue:"Zepp Haneda", id:1593338, songs:["しわあわせ","Tokimeki","そんなbitterな話","恋風邪にのせて","踊り子","CHAINSAW BLOOD","不可幸力","裸の勇者","ZERO","怪獣の花唄"] },
+    { year:2023, date:"2023.10.28", name:"BETTER VIBES presented by isai", venue:"東京国際フォーラム ホールA", id:1607261, songs:["泣き地蔵","mabataki","Tokimeki","そんなbitterな話","しわあわせ","ZERO","CHAINSAW BLOOD","踊り子","裸の勇者","恋風邪にのせて","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.08.27", name:"SWEET LOVE SHOWER 2023", venue:"LAKESIDE", id:1538477, songs:["CHAINSAW BLOOD","しわあわせ","不可幸力","そんなbitterな話","踊り子","恋風邪にのせて","裸の勇者","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.08.26", name:"音楽と髭達 2023-WA-", venue:"HARD OFF ECOスタジアム新潟", id:1554049, songs:["怪獣の花唄","しわあわせ","踊り子","そんなbitterな話","不可幸力","Tokimeki","裸の勇者","CHAINSAW BLOOD","花占い","恋風邪にのせて"] },
+    { year:2023, date:"2023.08.20", name:"Sky Jamboree 2023", venue:"稲佐山公園 野外ステージ", id:1549982, songs:["裸の勇者","しわあわせ","CHAINSAW BLOOD","そんなbitterな話","踊り子","恋風邪にのせて","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.08.19", name:"MONSTER baSH 2023", venue:"STAGE空海", id:1534864, songs:["踊り子","裸の勇者","怪獣の花唄",{ se:"Audio 003" },"しわあわせ","不可幸力","CHAINSAW BLOOD","恋風邪にのせて","花占い","そんなbitterな話","ZERO"] },
+    { year:2023, date:"2023.08.13", name:"ROCK IN JAPAN FESTIVAL 2023", venue:"GRASS STAGE", id:1560170, songs:["泣き地蔵","napori","Tokimeki","そんなbitterな話","踊り子","CHAINSAW BLOOD","不可幸力","しわあわせ","裸の勇者","恋風邪にのせて","花占い","怪獣の花唄","ZERO"] },
+    { year:2023, date:"2023.08.12", name:"RISING SUN ROCK FESTIVAL 2023 in EZO", venue:"SUN STAGE", id:1540404, songs:["裸の勇者","CHAINSAW BLOOD","Tokimeki","そんなbitterな話","しわあわせ","恋風邪にのせて","不可幸力","何なんw (藤井風 커버)","踊り子","泣き地蔵","花占い","怪獣の花唄","ZERO"] },
+    { year:2023, date:"2023.07.29", name:"FUJI ROCK FESTIVAL'23", venue:"WHITE STAGE", id:1524873, songs:["裸の勇者","そんなbitterな話","踊り子","napori","Tokimeki","CHAINSAW BLOOD","不可幸力","しわあわせ","恋風邪にのせて","泣き地蔵","花占い","怪獣の花唄","replica"] },
+    { year:2023, date:"2023.05.21", name:"TOKYO METROPOLITAN ROCK FESTIVAL 2023", venue:"WINDMILL FIELD", id:1519448, songs:["踊り子","不可幸力","Tokimeki","まぶた","そんなbitterな話","恋風邪にのせて","しわあわせ","裸の勇者","灯火","CHAINSAW BLOOD","泣き地蔵","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.05.18", name:"THIS SUMMER FESTIVAL TOUR '23", venue:"KT Zepp Yokohama", id:1525688, songs:["Tokimeki","裸の勇者","CHAINSAW BLOOD","恋風邪にのせて","そんなbitterな話","踊り子","しわあわせ","灯火","不可幸力","まぶた","泣き地蔵","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.05.06", name:"JAPAN JAM 2023", venue:"SKY STAGE", id:1512305, songs:["不可幸力","泣き地蔵","そんなbitterな話","Tokimeki","しわあわせ","恋風邪にのせて","CHAINSAW BLOOD","裸の勇者","踊り子","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.05.04", name:"VIVA LA ROCK 2023", venue:"STAR STAGE", id:1510946, songs:["しわあわせ","まぶた","不可幸力","踊り子","そんなbitterな話","恋風邪にのせて","Tokimeki","CHAINSAW BLOOD","裸の勇者","泣き地蔵","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.04.07", name:"マカロックツアーvol.15 (대반)", venue:"KT Zepp Yokohama", id:1506764, songs:["CHAINSAW BLOOD","まぶた","忘れ物","踊り子","灯火","不可幸力","しわあわせ","融解sink","恋風邪にのせて","裸の勇者","泣き地蔵","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.04.01", name:"EIGHT BALL FESTIVAL 2023", venue:"SOLID STAGE", id:1499898, songs:["しわあわせ","踊り子","不可幸力","恋風邪にのせて","裸の勇者","CHAINSAW BLOOD","花占い","怪獣の花唄"] },
+    { year:2023, date:"2023.03.16", name:"Dancing Room 003", venue:"KT Zepp Yokohama", id:1501812, songs:["CHAINSAW BLOOD","花占い","napori","踊り子","しわあわせ","恋風邪にのせて","裸の勇者","泣き地蔵","不可幸力","怪獣の花唄"] },
+    { year:2023, date:"2023.01.26", name:"J-WAVE THE KINGS PLACE LIVE 2023 WINTER", venue:"KT Zepp Yokohama", id:1509338, songs:["踊り子","裸の勇者","花占い","恋風邪にのせて","napori","しわあわせ","CHAINSAW BLOOD","まぶた","泣き地蔵","不可幸力","怪獣の花唄"] },
+    { year:2022, date:"2022.12.28", name:"COUNTDOWN JAPAN 22/23", venue:"EARTH STAGE", id:1476086, songs:["踊り子","CHAINSAW BLOOD","恋風邪にのせて","裸の勇者","不可幸力","おもかげ","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.12.26", name:"RADIO CRAZY 2022", venue:"Z-STAGE", id:1484708, songs:["おもかげ","踊り子","不可幸力","恋風邪にのせて","裸の勇者","CHAINSAW BLOOD","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.12.18", name:"結びの夢番地2022", venue:"広島グリーンアリーナ", id:1478775, songs:["おもかげ","踊り子","不可幸力","恋風邪にのせて","裸の勇者","CHAINSAW BLOOD","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.12.17", name:"MERRY ROCK PARADE 2022", venue:"BLESS & NOEL STAGE", id:1483390, songs:["花占い","CHAINSAW BLOOD","裸の勇者","不可幸力","おもかげ","恋風邪にのせて","怪獣の花唄"] },
+    { year:2022, date:"2022.12.14", name:"ライブナタリー “フジファブリック × Vaundy”", venue:"昭和女子大学 人見記念講堂", id:1476534, songs:["融解sink","裸の勇者","おもかげ","踊り子","走馬灯","恋風邪にのせて","napori","しわあわせ","不可幸力","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.11.30", name:"Saucy Dog 対バンツアー2022 (대반)", venue:"Zepp Nagoya", id:1474433, songs:["しわあわせ","踊り子","裸の勇者","世界の秘密","恋風邪にのせて","不可幸力","napori","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.11.23", name:"REDLINE ALL THE REVENGE", venue:"ぴあアリーナMM", id:1471243, songs:["恋風邪にのせて","裸の勇者","不可幸力","花占い","踊り子","しわあわせ","怪獣の花唄"] },
+    { year:2022, date:"2022.10.23", name:"PARASITE DEJAVU 2022", venue:"さいたまスーパーアリーナ", id:1451408, songs:["泣き地蔵","しわあわせ","裸の勇者","踊り子","恋風邪にのせて","不可幸力","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.10.21", name:"AIR-G' 40th Anniversary Live", venue:"カナモトホール", id:1453907, songs:["napori","裸の勇者","不可幸力","しわあわせ","恋風邪にのせて","踊り子","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.10.09", name:"京都音楽博覧会2022", venue:"梅小路公園", id:1448780, songs:["恋風邪にのせて","東京フラッシュ","不可幸力","裸の勇者","走馬灯","踊り子","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.10.02", name:"PIA MUSIC COMPLEX 2022", venue:"WIND STAGE", id:1442636, songs:["恋風邪にのせて","東京フラッシュ","不可幸力","裸の勇者","mabataki","踊り子","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.09.28", name:"有明サンセット 2022", venue:"東京ガーデンシアター", id:1440529, songs:["東京フラッシュ","mabataki","裸の勇者","踊り子","恋風邪にのせて","不可幸力","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.09.24", name:"GREENROOM BEACH 2022", venue:"Sandy stage", id:1418746, songs:["裸の勇者","恋風邪にのせて","しわあわせ","踊り子","napori","不可幸力","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.09.23", name:"テレビ朝日ドリームフェスティバル 2022", venue:"幕張メッセ", id:1468421, songs:["恋風邪にのせて","裸の勇者","不可幸力","泣き地蔵","踊り子","しわあわせ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.09.19", name:"INSPIRE TOKYO 2022", venue:"1st STAGE", id:1440353, songs:["恋風邪にのせて","東京フラッシュ","不可幸力","裸の勇者","しわあわせ","踊り子","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.09.18", name:"イナズマロックフェス2022", venue:"雷神ステージ", id:1426033, songs:["東京フラッシュ","napori","裸の勇者","踊り子","恋風邪にのせて","不可幸力","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.09.17", name:"WILD BUNCH FEST. 2022", venue:"Pirates Stage", id:1444880, songs:["恋風邪にのせて","裸の勇者","不可幸力","極楽浄土","踊り子","napori","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.09.03", name:"TREASURE05X 2022", venue:"MERCURY STAGE", id:1440455, songs:["恋風邪にのせて","花占い","不可幸力","怪獣の花唄","踊り子","しわあわせ"] },
+    { year:2022, date:"2022.08.28", name:"SWEET LOVE SHOWER 2022", venue:"LAKESIDE", id:1430767, songs:["東京フラッシュ","しわあわせ","裸の勇者","life hack","踊り子","不可幸力","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.08.27", name:"音楽と髭達 2022", venue:"HARD OFF ECOスタジアム新潟", id:1433901, songs:["恋風邪にのせて","東京フラッシュ","不可幸力","しわあわせ","裸の勇者","踊り子","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.08.21", name:"MONSTER baSH 2022", venue:"STAGE龍神", id:1436757, songs:["東京フラッシュ","不可幸力","踊り子","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.08.20", name:"SUMMER SONIC 2022", venue:"SONIC STAGE", id:1394921, songs:["napori","裸の勇者","不可幸力","恋風邪にのせて","踊り子","東京フラッシュ","泣き地蔵","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.08.06", name:"ROCK IN JAPAN FESTIVAL 2022", venue:"GRASS STAGE", id:1431030, songs:["東京フラッシュ","しわあわせ","裸の勇者","踊り子","恋風邪にのせて","不可幸力","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.07.24", name:"OSAKA GIGANTIC MUSIC FESTIVAL 2022", venue:"SKY STAGE", id:1414403, songs:["恋風邪にのせて","踊り子","灯火","不可幸力","東京フラッシュ","しわあわせ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.07.17", name:"NUMBER SHOT 2022", venue:"どんたくSTAGE", id:1412323, songs:["しわあわせ","恋風邪にのせて","踊り子","東京フラッシュ","怪獣の花唄","花占い","ホムンクルス","CHAINSAW BLOOD"] },
+    { year:2022, date:"2022.07.09", name:"京都大作戦2022", venue:"源氏ノ舞台", id:1431837, songs:["恋風邪にのせて","裸の勇者","不可幸力","花占い","踊り子","しわあわせ","怪獣の花唄"] },
+    { year:2022, date:"2022.06.12", name:"葉加瀬太郎 音楽祭 2022", venue:"上賀茂神社", id:1438245, songs:["踊り子","恋風邪にのせて","しわあわせ","花占い"] },
+    { year:2022, date:"2022.06.05", name:"葉加瀬太郎 音楽祭 2022", venue:"明治神宮", id:1438258, songs:["踊り子","恋風邪にのせて","しわあわせ","花占い"] },
+    { year:2022, date:"2022.06.04", name:"SAKAE SP-RING 2022", venue:"DIAMOND HALL", id:1429591, songs:["裸の勇者","恋風邪にのせて","踊り子","不可幸力","怪獣の花唄","花占い"] },
+    { year:2022, date:"2022.05.29", name:"GREENROOM FESTIVAL'22", venue:"GOOD WAVE", id:1387975, songs:["怪獣の花唄","おもかげ -self cover-","恋風邪にのせて","踊り子","しわあわせ","裸の勇者","napori","東京フラッシュ","花占い","不可幸力"] },
+    { year:2022, date:"2022.05.28", name:"FM802 MEET THE WORLD BEAT 2022", venue:"万博記念公園", id:1429088, songs:["恋風邪にのせて","怪獣の花唄","不可幸力","花占い","灯火","踊り子"] },
+    { year:2022, date:"2022.05.22", name:"TOKYO METROPOLITAN ROCK FESTIVAL 2022", venue:"SEASIDE PARK", id:1394132, songs:["恋風邪にのせて","花占い","不可幸力","怪獣の花唄","踊り子","裸の勇者"] },
+    { year:2022, date:"2022.05.14", name:"OSAKA METROPOLITAN ROCK FESTIVAL 2022", venue:"GREEN HILL", id:1394120, songs:["恋風邪にのせて","花占い","不可幸力","東京フラッシュ","裸の勇者","踊り子","怪獣の花唄"] },
+    { year:2022, date:"2022.05.07", name:"JAPAN JAM 2022", venue:"SUNSET STAGE", id:1383327, songs:["napori","しわあわせ","不可幸力","裸の勇者","踊り子","恋風邪にのせて","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.05.04", name:"SOUND CONNECTION 2022", venue:"フェスティバルホール", id:1394010, songs:["裸の勇者","恋風邪にのせて","しわあわせ","踊り子","napori","不可幸力","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.04.30", name:"VIVA LA ROCK 2022", venue:"PEACE STAGE", id:1378305, songs:["しわあわせ","napori","踊り子","東京フラッシュ","恋風邪にのせて","不可幸力","裸の勇者","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.04.29", name:"ARABAKI ROCK FEST.22", venue:"MICHINOKU", id:1380444, songs:["napori","しわあわせ","不可幸力","裸の勇者","踊り子","恋風邪にのせて","泣き地蔵","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.04.24", name:"THE PARADE", venue:"幕張メッセ", id:1387554, songs:["裸の勇者","恋風邪にのせて","しわあわせ","踊り子","napori","不可幸力","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.04.17", name:"MY FIRST STORY 『Giant Killing』Vol.2 (대반)", venue:"LINE CUBE SHIBUYA", id:1397219, note:"앙코르 怪獣の花唄는 MY FIRST STORY와 함께", songs:["soramimi","東京フラッシュ","napori","踊り子","恋風邪にのせて","裸の勇者","しわあわせ","おもかげ","泣き地蔵","不可幸力","花占い",{ enc:true },"怪獣の花唄"] },
+    { year:2022, date:"2022.04.02", name:"YON FES 2022", venue:"SKY STAGE", id:1386716, songs:["恋風邪にのせて","東京フラッシュ","不可幸力","裸の勇者","しわあわせ","踊り子","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.03.20", name:"ツタロックフェス2022", venue:"幕張メッセ", id:1376788, songs:["napori","しわあわせ","不可幸力","裸の勇者","踊り子","恋風邪にのせて","泣き地蔵","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.03.08", name:"J-WAVE TOKIO HOT 100 LIVE", venue:"豊洲PIT", id:1383126, songs:["napori","恋風邪にのせて","不可幸力","裸の勇者","踊り子","しわあわせ","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2022, date:"2022.01.22", name:"WIRED X", venue:"Aichi Sky Expo", id:1378909, note:"+ Nulbarich 「ASH feat. Vaundy」", songs:["怪獣の花唄","融解sink","世界の秘密","napori","踊り子","東京フラッシュ","Tokimeki","しわあわせ","花占い","不可幸力"] },
+    { year:2022, date:"2022.01.16", name:"STUDIO COAST 20th “WANIMA Special”", venue:"USEN STUDIO COAST", id:1375375, songs:["Tokimeki","裸の勇者","しわあわせ","napori","踊り子","不可幸力","東京フラッシュ","花占い","怪獣の花唄"] },
+    { year:2021, date:"2021.12.28", name:"RADIO CRAZY presents THE GRAND SLAM", venue:"京セラドーム大阪", id:1359103, songs:["東京フラッシュ","しわあわせ","Tokimeki","不可幸力","踊り子","灯火","怪獣の花唄","花占い"] },
+    { year:2021, date:"2021.12.19", name:"MERRY ROCK PARADE 2021", venue:"NOEL STAGE", id:1353544, songs:["踊り子","怪獣の花唄","不可幸力","Tokimeki","しわあわせ","泣き地蔵","花占い"] },
+    { year:2021, date:"2021.12.18", name:"MIRRORBALL PARADE vol.2", venue:"フェニックス・プラザ", id:1377693, songs:["花占い","踊り子","napori","世界の秘密","しわあわせ","泣き地蔵","東京フラッシュ","Tokimeki","怪獣の花唄","不可幸力"] },
+    { year:2021, date:"2021.12.16", name:"WONK's Playhouse", venue:"TOKYO DOME CITY HALL", id:1360562, songs:["花占い","しわあわせ"] },
+    { year:2021, date:"2021.11.07", name:"バズリズムLIVE 2021", venue:"横浜アリーナ", id:1349210, songs:["しわあわせ","napori","泣き地蔵","不可幸力","東京フラッシュ","Tokimeki","怪獣の花唄","花占い"] },
+    { year:2021, date:"2021.10.31", name:"ライブナタリー “Vaundy × 04 Limited Sazabys”", venue:"日比谷野外大音楽堂", id:1351677, songs:["Tokimeki","怪獣の花唄","benefits","napori","しわあわせ","不可幸力","東京フラッシュ","泣き地蔵","世界の秘密","花占い"] },
+    { year:2021, date:"2021.10.24", name:"SCANDAL TOUR 2021 (대반)", venue:"Zepp Fukuoka", id:1342074, songs:["世界の秘密","soramimi","花占い","不可幸力","しわあわせ","Tokimeki","東京フラッシュ","泣き地蔵","怪獣の花唄","napori"] },
+    { year:2021, date:"2021.08.29", name:"音楽と髭達 2021-夏の約束-", venue:"朱鷺メッセ", id:1342803, songs:["世界の秘密","泣き地蔵","花占い","napori","融解sink","不可幸力","benefits","東京フラッシュ","怪獣の花唄","しわあわせ"] },
+    { year:2021, date:"2021.08.28", name:"音楽と髭達 2021-夏の約束-", venue:"朱鷺メッセ", id:1329200, songs:["benefits","花占い","不可幸力","napori","融解sink","泣き地蔵","東京フラッシュ","怪獣の花唄","しわあわせ"] },
+    { year:2021, date:"2021.08.20", name:"FUJI ROCK FESTIVAL'21", venue:"PLANET GROOVE", id:1309848, songs:["花占い","融解sink","napori","泣き地蔵","benefits","不可幸力","東京フラッシュ","怪獣の花唄","しわあわせ"] },
+    { year:2021, date:"2021.08.13", name:"ROCK CIRCUIT 2021 in EZO", venue:"札幌芸術の森", id:1333025, songs:["花占い","怪獣の花唄","napori","benefits","世界の秘密","不可幸力","東京フラッシュ","灯火","life hack","しわあわせ"] },
+    { year:2021, date:"2021.08.01", name:"OSAKA GIGANTIC MUSIC FESTIVAL 20>21", venue:"SUN AREA", id:1316183, songs:["東京フラッシュ","世界の秘密","花占い","benefits","napori","不可幸力","怪獣の花唄","しわあわせ"] },
+    { year:2021, date:"2021.07.23", name:"MIRRORBALL PARADE", venue:"本多の森ホール", id:1320125, songs:["東京フラッシュ","世界の秘密","花占い","泣き地蔵","napori","不可幸力","soramimi","怪獣の花唄","しわあわせ"] },
+    { year:2021, date:"2021.07.22", name:"MIRRORBALL PARADE", venue:"キッセイ文化ホール", id:1320121, songs:["napori","泣き地蔵","不可幸力","花占い","世界の秘密","benefits","東京フラッシュ","怪獣の花唄","しわあわせ"] },
+    { year:2021, date:"2021.07.18", name:"J-WAVE LIVE 2021", venue:"横浜アリーナ", id:1320288, songs:["napori","東京フラッシュ","不可幸力","花占い","世界の秘密","灯火","怪獣の花唄","しわあわせ"] },
+    { year:2021, date:"2021.07.17", name:"REDLINE TOUR 2021 SUMMER", venue:"Zepp Namba", id:1324209, songs:["life hack","花占い","不可幸力","世界の秘密","napori","灯火","東京フラッシュ","怪獣の花唄","しわあわせ"] },
+    { year:2021, date:"2021.07.11", name:"Talking Rock! FES.2021", venue:"横浜アリーナ", id:1318432, songs:["napori","怪獣の花唄","不可幸力","花占い","東京フラッシュ","benefits","しわあわせ"] },
+    { year:2021, date:"2021.07.03", name:"京都大作戦2021", venue:"牛若ノ舞台", id:1311732, songs:["泣き地蔵","東京フラッシュ","世界の秘密","benefits","不可幸力","灯火","怪獣の花唄"] },
+    { year:2021, date:"2021.05.23", name:"GREENROOM FESTIVAL '21", venue:"BLUESKY", id:1305657, songs:["しわあわせ","napori","融解sink","世界の秘密","不可幸力","life hack","灯火","東京フラッシュ","怪獣の花唄"] },
+    { year:2021, date:"2021.03.28", name:"THE BONDS 2021 (ジャイガ スピンオフ)", venue:"オリックス劇場", id:1296342, songs:["僕は今日も","灯火","融解sink","HERO","不可幸力","napori","世界の秘密","soramimi",{ se:"Audio 001" },"東京フラッシュ","怪獣の花唄"] },
+    { year:2021, date:"2021.03.13", name:"音×髭 ～THE FIRST NIIGATA LIMITED～", venue:"新潟テルサ", id:1287913, songs:["HERO","灯火","かくれんぼ","融解sink","僕は今日も",{ se:"Audio 001" },"不可幸力","世界の秘密","napori","東京フラッシュ","soramimi","怪獣の花唄"] },
+    { year:2021, date:"2021.01.30", name:"BARIYOKA ROCK 2021", venue:"福岡サンパレス", id:1279278, songs:["泣き地蔵","融解sink","世界の秘密","life hack","napori",{ se:"Audio 001" },"HERO","不可幸力","灯火","Bye by me","僕は今日も","二人話","東京フラッシュ","怪獣の花唄"] },
+    { year:2020, date:"2020.11.26", name:"Spotify presents Tokyo Super Hits Live 2020", venue:"온라인", id:1278363, songs:["東京フラッシュ","不可幸力","怪獣の花唄"] },
+    { year:2020, date:"2020.11.07", name:"JAPAN ONLINE FESTIVAL 2020", venue:"온라인", id:1273381, songs:["融解sink","東京フラッシュ","不可幸力","soramimi","灯火","僕は今日も","怪獣の花唄"] },
+    { year:2020, date:"2020.08.02", name:"THE BONDS 2020 (ジャイガ スピンオフ)", venue:"大阪城ホール", id:1260583, songs:["灯火","怪獣の花唄","不可幸力","東京フラッシュ","life hack","僕は今日も"] },
+  ];
+
   const LIVE_SOURCE_URL = "https://vaundy.jp/news/2/?lang=ko";
 
   /* 가사 한 줄의 형식
@@ -4530,7 +4848,1350 @@
 
       ],
     },
+    {
+      id: "LifeHack",
+      title: "life hack",
+      youtubeId: "Tzyt91TYjLA",
+      /* ── 가사를 통째로 붙여 넣는 칸 ────────────────────────────
+         아래 ` ` 사이에, 보내 주신 모양 그대로 붙여 넣으면 됩니다.
+         빈 줄은 있어도 없어도 괜찮습니다 (글자 모양으로 알아서 나눕니다).
+           일본어 / 한글 발음 / 해석  = 한 소절 (해석은 없어도 됨)
+           한 줄만 따로 쓴 줄        = 그 줄만 크게 ("HERO", "(간주)", "Hu Hu" 같은 줄)
+         · 시간은 전부 같은 값(lyricsTime)으로 들어갑니다.
+           나중에 맞추고 싶으면 일본어 줄 맨 앞에 [12.5] 처럼 초를 적으면 그 줄만 그 시간이 됩니다.
+         · [wave] [clap] [mic] 같은 아이콘 표시도 그대로 쓸 수 있습니다.
+         · ` (백틱) 글자만 쓰지 마세요. */
+      lyricsTime: 0,
+      lyricsText: `[21.5]その態度が不安だな
+소노 타이도 가 후안 다나
+그 태도가 불안하네
+
+
+[24]「気にしない」彩度はそのまま
+"키니 시나이" 사이도와 소노마마
+“신경 쓰지 마” 채도는 그대로
+
+[26.5]何気に初めてで不安だな
+나니게니 하지메테데 후안 다나
+은근히 처음이라 불안하네
+
+[29]「気にしない」感度はそのまま
+"키니 시나이" 칸도와 소노마마
+“신경 쓰지 마” 감도는 그대로
+
+[32]踊るキス香ばしく 不lie阿way
+오도루 키스 코-바시쿠 후라이 아웨이
+춤추는 키스, 향긋하게 플라이 어웨이
+
+[34.5]このまま騒がしく 暗y方e
+코노 마마 사와가시쿠 쿠라이 호-에
+이대로 떠들썩하게 어두운 쪽으로
+
+[37]ちょっとした夜明けのswingも
+춋토 시타 요아케노 스윙 모
+사소한 새벽의 스윙도
+
+[40]身の丈以上のfakeだろ
+미노 타케 이조-노 페이크 다로
+분수 넘는 페이크겠지
+
+[53]挙げ足はないんじゃない？
+아게아시와 나인쟈나이?
+꼬투리 잡기는 없는 거 아냐?
+
+[55.5]作ったもん勝ちでいんじゃない？
+츠쿳타몬가치데 인쟈나이?
+만든 사람이 이기는 거로 괜찮은 거 아냐?
+
+[58.5]フカイ眠りについた君を
+후카이 네무리니 츠이타 키미오
+깊은 잠에 든 너를
+
+[61]前世から探してもいんじゃない？
+젠세카라 사가시테모 인쟈나이?
+전생부터 찾아봐도 되지 않을까?
+
+[63.5]作りたい気持ちは Imagination
+츠쿠리타이 키모치와 이매지네이션
+만들고 싶은 마음은 Imagination
+
+[66]守りたい気持ちは no reaction
+마모리타이 키모치와 노 리액션
+지키고 싶은 마음은 no reaction
+
+[69]自問自答でも不安な回答
+지몬 지토- 데모 후안나 카이토-
+자문자답해도 불안한 대답
+
+[71.5]未来の地図は無地でいいよ
+미라이노 치즈와 무지데 이-요
+미래의 지도는 백지여도 돼
+
+[74.5]愛とかノンフィクション
+아이 토카 논픽숀
+사랑 같은 건 논픽션
+
+[77.5]止まれないくらいがいいの
+토마레나이 쿠라이가 이-노
+멈출 수 없을 정도가 좋아
+
+[80]愛とかノンフィクション
+아이 토카 논픽숀
+사랑 같은 건 논픽션
+
+[82.5]ひたひたの愛の海のような
+히타히타노 아이노 우미노 요-나
+잔잔히 밀려오는 사랑의 바다처럼
+
+[85]夢の中をMELLOWで泳いでこう 沖まで
+유메노 나카오 멜로-데 오요이데 코-오키마데 
+꿈속을 MELLOW하게 헤엄쳐 가자 먼바다까지
+
+[90]そしたらどんどん好きになってく
+소시타라 돈돈 스키니 낫테쿠
+그러면 점점 더 좋아지겠지
+
+[94]自分のことを
+지분노 코토오
+나 자신을
+
+[116.5]足りないならいいじゃない
+타리나이 나라 이-자나이
+모자르다면 그걸로 괜찮잖아
+
+[119]むしろ足りないくらいがいいじゃない？
+무시로 타리나이 쿠라이가 이-자나이?
+오히려 모자랄 정도가 더 좋지 않아?
+
+[121.5]走り出して止まらない君と
+하시리다시테 토마라나이 키미토
+달리기 시작해 멈추지 않는 너와
+
+[124]午前二時にここで星を見よう
+고젠 니지니 코코데 호시오 미요-
+오전 두 시에 여기서 별을 보자
+
+[127]作りたい気持ちは Imagination
+츠쿠리타이 키모치와 이매지네이션
+만들고 싶은 마음은 Imagination
+
+[129.5]守りたい気持ちは no reaction
+마모리타이 키모치와 노 리액션
+지키고 싶은 마음은 no reaction
+
+[132]自問自答でも不安な回答
+지몬 지토- 데모 후안나 카이토-
+자문자답해도 불안한 대답
+
+[134.5]未来の地図は無地でいいよ
+미라이노 치즈와 무지데 이-요
+미래의 지도는 백지여도 돼
+
+[138]愛とかノンフィクション
+아이 토카 논픽숀
+사랑 같은 건 논픽션
+
+[141]止まれないくらいがいいの
+토마레나이 쿠라이가 이-노
+멈출 수 없을 정도가 좋아
+
+[143]愛とかノンフィクション
+아이 토카 논픽숀
+사랑 같은 건 논픽션
+
+[146]ひたひたの愛の海のような
+히타히타노 아이노 우미노 요-나
+잔잔히 밀려오는 사랑의 바다처럼
+
+[148]夢の中をMELLOWで泳いでこう 沖まで
+유메노 나카오 멜로-데 오요이데 코-오키마데
+꿈속을 MELLOW하게 헤엄쳐 가자 먼바다까지
+
+[154]そしたらどんどん好きになってく
+소시타라 돈돈 스키니 낫테쿠
+그러면 점점 더 좋아지겠지
+
+[157]自分のことを
+지분노 코토오
+나 자신을
+
+[172]愛とかノンフィクション
+아이 토카 논픽숀
+사랑 같은 건 논픽션
+
+[175]止まれないくらいがいいの
+토마레나이 쿠라이가 이-노
+멈출 수 없을 정도가 좋아
+
+[177]愛とかノンフィクション
+아이 토카 논픽숀
+사랑 같은 건 논픽션
+
+[180]ひたひたの愛の海のような
+히타히타노 아이노 우미노 요-나
+잔잔히 밀려오는 사랑의 바다처럼
+
+[182.5]夢の中をMELLOWで泳いでこう 沖まで
+유메노 나카오 멜로-데 오요이데 코-오키마데
+꿈속을 MELLOW하게 헤엄쳐 가자 먼바다까지
+
+[188]そしたらどんどん好きになってく
+소시타라 돈돈 스키니 낫테쿠
+그러면 점점 더 좋아지겠지
+
+[192]自分のことを
+지분노 코토오
+나 자신을
+
+`,
+      lyrics: [],
+    },
+    {
+      id: "HERO",
+      title: "HERO",
+      youtubeId: "hfwfAxkK_YU",
+      /* ── 가사를 통째로 붙여 넣는 칸 ────────────────────────────
+         아래 ` ` 사이에, 보내 주신 모양 그대로 붙여 넣으면 됩니다.
+         빈 줄은 있어도 없어도 괜찮습니다 (글자 모양으로 알아서 나눕니다).
+           일본어 / 한글 발음 / 해석  = 한 소절 (해석은 없어도 됨)
+           한 줄만 따로 쓴 줄        = 그 줄만 크게 ("HERO", "(간주)", "Hu Hu" 같은 줄)
+         · 시간은 전부 같은 값(lyricsTime)으로 들어갑니다.
+           나중에 맞추고 싶으면 일본어 줄 맨 앞에 [12.5] 처럼 초를 적으면 그 줄만 그 시간이 됩니다.
+         · [wave] [clap] [mic] 같은 아이콘 표시도 그대로 쓸 수 있습니다.
+         · ` (백틱) 글자만 쓰지 마세요. */
+      lyricsTime: 0,
+      lyricsText: `[15]1000年経っても
+센넨 탓떼모
+천 년이 지나도
+
+[17.5]夢の中で僕はいつもと変わらないまま
+유메노 나카데 보쿠와 이츠모토 카와라나이 마마
+꿈속에서 나는 여전히 변하지 않은 채
+
+[23.5]何年経ったか
+난넨 탓타카
+몇 년이 흘렀는지
+
+[26]わからないまま咲いた希望を数えてるから
+와카라나이 마마 사이타 키보-오 카조에테루카라
+모른 채 피어난 희망을 헤아리고 있으니까
+
+[32.5]チクタクチクタクそうだね
+치쿠타쿠 치쿠타쿠 소-다네
+째깍째깍 째깍째깍, 그렇지
+
+[34.5]こんな言葉に泣いても損だね
+콘나 코토바니 나이테모 손다네
+이런 말에 울어봤자 손해겠지
+
+[36.5]そんなことはわかるよ
+손나 코토와 와카루요
+그런 건 알고있어
+
+[38.5]もう 何もないんでしょ？
+모- 나니모 나인데쇼?
+이제 아무것도 없지?
+
+[40.5]ねぇ チクタクチクタクそうだね
+네- 치쿠타쿠 치쿠타쿠 소-다네
+있잖아 째깍째깍 째깍째깍, 그렇지
+
+[43]こんな言葉を聞いても「そうだね」
+콘나 코토바오 키-테모 “소-다네”
+이런 말을 들어도 “그렇지”라고만 해
+
+[45]もう 何もないんでしょ？
+모- 나니모 나인데쇼?
+이제 아무것도 없지?
+
+[47]ねぇ そんなことも損だ わかるよ
+네- 손나 코토모 손다 와카루요
+있잖아 그런 것도 손해라는 거, 알고 있어
+
+[52][wave]何回聞いてたんだ ねぇ  
+난카이 키-테탄다 네- 
+몇 번 들었던 거야 있잖아 
+
+[56][wave]何回言わせたいんだ ねぇ
+난카이 이와세타인다 네- 
+몇 번이나 말하게 만들고 싶은 거야 있잖아 
+
+[60.5][wave] 何回回してくんだ ねぇ 
+난카이 마와시테쿤다 네- 
+몇 번이나 되풀이하려는 거야 있잖아 
+
+[65][wave]もう何も言わないで
+모- 나니모 이와나이데
+이제 아무 말도 하지 마
+
+[68.5][wave]HERO
+
+[78]何年経っても
+난넨 탓떼모
+몇 년이 지나도
+
+[80.5]夢の中で僕はいつもと変わらないまま
+유메노 나카데 보쿠와 이츠모토 카와라나이 마마
+꿈속에서 나는 여전히 변하지 않은 채
+
+[87]残念だったな
+잔넨 닷타나
+유감이었네
+
+[89]変わらないから咲いた希望も枯れていくから
+카와라나이카라 사이타 키보-모 카레테이쿠카라
+변하지 않으니까 피었던 희망도 시들어가거든
+
+[95.5]チクタクチクタクそうだね
+치쿠타쿠 치쿠타쿠 소-다네
+째깍째깍 째깍째깍, 그렇지
+
+[97.5]こんな言葉に泣いても損だね
+콘나 코토바니 나이테모 손다네
+이런 말에 울어봤자 손해겠지
+
+[99.5]そんなことはわかるよ
+손나 코토와 와카루요
+그런 건 나도 알아
+
+[101.5]もう 何もないんでしょ？
+모- 나니모 나인데쇼?
+이제 아무것도 없지?
+
+[104]ねぇ チクタクチクタクそうだね
+네- 치쿠타쿠 치쿠타쿠 소-다네
+있잖아 째깍째깍 째깍째깍, 그렇지
+
+[106]こんな言葉を聞いても「そうだね」
+콘나 코토바오 키-테모 “소-다네”
+이런 말을 들어도 “그렇지”라고만 해
+
+[108.5]もう 何もないんでしょ？
+모- 나니모 나인데쇼?
+이제 아무것도 없지?
+
+[110.5]ねぇ そんなことも損だ わかるよ
+네- 손나 코토모 손다 와카루요
+있잖아 그런 것조차 손해라는 거, 알고 있어
+
+[115][wave]何回聞いてたんだ ねぇ 
+난카이 키-테탄다 네- 
+몇 번이나 듣고 있었던 거야 있잖아 
+
+[119.5][wave]何回言わせたいんだ ねぇ 
+난카이 이와세타인다 네- 
+몇 번이나 말하게 만들고 싶은 거야 있잖아 
+
+[123.5][wave]何回回してくんだ ねぇ 
+난카이 마와시테쿤다 네- 
+몇 번이나 되풀이하려는 거야 있잖아 
+ 
+[128][wave]もう何も言わないで
+모- 나니모 이와나이데
+이제 아무 말도 하지 마
+
+[132][wave]HERO
+
+[148][wave]何回ついたかな
+난카이 츠이타카나
+몇 번이나 했을까
+
+[152][wave]何回嘘をついたかな
+난카이 우소오 츠이타카나
+몇 번이나 거짓말을 했을까
+
+[157][wave]何回もがいたかな
+난카이 모가이타카나
+몇 번이나 발버둥 쳤을까
+
+[160.5][wave]行き止まっていたってもう
+이키도맛테 이탓떼 모-
+막다른 길에 있다고 해도, 이젠
+
+[165.5][wave]何回ついたかな
+난카이 츠이타카나
+몇 번이나 했을까
+
+[170][wave]何回嘘をついたかな
+난카이 우소오 츠이타카나
+몇 번이나 거짓말을 했을까
+
+[174.5][wave]何回転んだかな
+난카이 코론다카나
+몇 번이나 넘어졌을까
+
+[178][wave]もうわかったって 忘れてよ
+모- 와캇탓테 와스레테요
+이제 알겠다고 해도 잊어줘
+
+[182.5][wave]HERO
+
+`,
+      lyrics: [],
+    },
+    {
+      id: "benefits",
+      title: "benefits",
+      youtubeId: "HH1g5faSLTY",
+      /* ── 가사를 통째로 붙여 넣는 칸 ────────────────────────────
+         아래 ` ` 사이에, 보내 주신 모양 그대로 붙여 넣으면 됩니다.
+         빈 줄은 있어도 없어도 괜찮습니다 (글자 모양으로 알아서 나눕니다).
+           일본어 / 한글 발음 / 해석  = 한 소절 (해석은 없어도 됨)
+           한 줄만 따로 쓴 줄        = 그 줄만 크게 ("HERO", "(간주)", "Hu Hu" 같은 줄)
+         · 시간은 전부 같은 값(lyricsTime)으로 들어갑니다.
+           나중에 맞추고 싶으면 일본어 줄 맨 앞에 [12.5] 처럼 초를 적으면 그 줄만 그 시간이 됩니다.
+         · [wave] [clap] [mic] 같은 아이콘 표시도 그대로 쓸 수 있습니다.
+         · ` (백틱) 글자만 쓰지 마세요. */
+      lyricsTime: 0,
+      lyricsText: `[40.5]愛とかくだらないの
+아이토카 쿠다라나이노
+사랑같은건 시시해
+
+[44.5]me too
+나도
+
+[45.5]観客も知らない
+칸캬쿠모 시라나이
+관객도 모르는
+
+[49]story
+이야기
+
+[51]今夜だけじゃ終われないよ
+콘야다케쟈 오와레나이요
+오늘 밤만으로 끝낼 수 없어
+
+[55.5]with you
+너와 함께
+
+[57]明日の朝も君と2人
+아시타노 아사모 키미토 후타리
+내일 아침도 너와 둘이서
+
+[73]不安にしかなれないよ
+후안니시카 나레나이요
+불안할 수밖에 없어
+
+[76]any time
+항상
+
+[78]感覚がぐらつく
+간카쿠가 구라츠쿠
+감각이 흔들리는
+
+[81]story
+이야기
+
+[83]不意に胸が痛むのよ
+후이니 무네가 이타무노요
+갑자기 가슴이 아파
+
+[87]that hurts
+이 아픔들
+
+[89]2人を繋ぐのは
+후타리오 츠나구노와
+두 사람을 이어논 것은
+
+[92.5]夢とか希望じゃないの
+유메토카 키보-쟈나이노
+꿈이나 희망이 아니야
+
+[98]いえないような
+이에나이요-나
+말할 수 없을 것 같은
+
+[100.5]very deep world
+깊고 깊은 세상
+
+[103]更かしてmore
+후카시테 more
+더 밤을 새우고
+
+[107]won’t come true
+이루어질 수 없어
+
+[109]Hey Throw it away and break it all up
+이봐 모든 것을 버리고 그만둬
+
+[117]You told me “it’s bad love”
+너는 내게 말했지 "이건 나쁜 사랑이야"
+
+[120]Stay Until I leave and forget till it ends
+계속 있어줘 내가 떠나고 끝을 잊을 때까지
+
+[128]I know that you hate it right now
+네가 지금 싫어하는 거 알아
+
+[153]愛情が溢れるよ
+아이죠-가 아후레루요
+애정히 흘러 넘쳐
+
+[156.5]not good
+좋지 않아
+
+[158]選択を迫られる
+센타쿠오 세마라레루
+선택을 강요당하는
+
+[161]story
+이야기
+
+[163]このままじゃ足りないよ
+코노마마쟈 타리나이요
+이대로라면 부족해
+
+[167]sweet time
+달콤한 시간
+
+[169]わがままな2人は
+와가마마나 후타리와
+제멋대로인 두 사람은
+
+
+[172.5]夢にも出てくんだよ
+유메니모 데테쿤다요
+꿈에도 나와
+
+[178]見たくないような
+미타쿠나이요-나
+보고 싶지 않은 듯한
+
+[180]very deep world
+깊고 깊은 세상
+
+[182.5]願ってmore
+네갓테 more
+더 바라
+
+[187]won’t come true
+이루어질 수 없어
+
+[189.5]Hey Throw it away and break it all up
+이봐 모든 것을 버리고 그만둬
+
+[197]You told me “it’s bad love”
+너는 내게 말했지 "이건 나쁜 사랑이야"
+
+[200]Stay Until I leave and forget till it ends
+계속 있어줘 내가 떠나고 끝을 잊을 때까지
+
+[208]I know that you hate it 
+네가 지금 싫어하는 거 알아
+
+[211]残したおかずを
+노코시타 오카즈오
+남긴 간식을
+
+[215]捨てるくらい何でもないんだよな
+스테루쿠라이 난데모 나인다요나
+버리는 정도로 아무것도 아닌거지
+
+[219.5]痛いけど
+이타이케도
+아프지만
+
+[224]You can be friends
+우린 친구가 될 수 있을거야
+
+[227]Hey Throw it away and break it all up
+이봐 모든 것을 버리고 그만둬
+
+[234]You told me “it’s bad love”
+너는 내게 말했지 "이건 나쁜 사랑이야"
+
+[237]Stay Until I leave and forget till it ends
+계속 있어줘 내가 떠나고 끝을 잊을 때까지
+
+[245]I know that you hate it right now
+네가 지금 싫어하는 거 알아
+`,
+      lyrics: [],
+    },
+    {
+      id: "pain",
+      title: "pain",
+      youtubeId: "cgVFGJGFSrE",
+      /* ── 가사를 통째로 붙여 넣는 칸 ────────────────────────────
+         아래 ` ` 사이에, 보내 주신 모양 그대로 붙여 넣으면 됩니다.
+         빈 줄은 있어도 없어도 괜찮습니다 (글자 모양으로 알아서 나눕니다).
+           일본어 / 한글 발음 / 해석  = 한 소절 (해석은 없어도 됨)
+           한 줄만 따로 쓴 줄        = 그 줄만 크게 ("HERO", "(간주)", "Hu Hu" 같은 줄)
+         · 시간은 전부 같은 값(lyricsTime)으로 들어갑니다.
+           나중에 맞추고 싶으면 일본어 줄 맨 앞에 [12.5] 처럼 초를 적으면 그 줄만 그 시간이 됩니다.
+         · [wave] [clap] [mic] 같은 아이콘 표시도 그대로 쓸 수 있습니다.
+         · ` (백틱) 글자만 쓰지 마세요. */
+      lyricsTime: 0,
+      lyricsText: `[19]人は子をなぜ産むのか
+히토와 코오 나제 우무노카
+사람은 어째서 아이를 낳는가
+
+[23]一世一代の博打のつもりか
+잇세이치다이노 바쿠치노 츠모리카
+일생일대의 도박을 할 생각인가
+
+[26.5]ならば子を育てるのが親の務めか
+나라바 코오 소다테루노가 오야노 츠토메카
+그렇다면 아이를 키우는 것이 부모의 임무인가
+
+[30]維持費は数百数千万の金
+이지히와 스햐쿠스센만노 쥬묘
+유지비는 수백수천엔의 돈
+
+[36]誰かのために生きている人と
+다레카노 타메니 이키테이루 히토토
+누군가를 위해 살아가는 사람과
+
+[40]自分のために生きている人
+지분노 타메니 이키테이루 히토
+자신을 위해 살아가는 사람
+
+[44]「背負っている重さがおまえとは違う」と
+세옷테이루 오모사가 오마에토와 치가우토
+「등에 지고있는 무게가 너와는 달라」라고
+
+[47.5]背負われてる君が僕に言う
+세오와레테루 키미가 보쿠니 이우
+등에 짐을 지고 있는 네가 나에게 말하네
+
+[51.5]今日の夜は２人で割り勘
+쿄오노 요루와 후타리데 와리칸
+오늘 밤은 둘이서 더치페이
+
+[55]でもいつかの痛みは１人で割って
+데모 이츠카와 이타미와 히토리데 왓테
+하지만 언젠가 아픔은 혼자서 나누게 되고
+
+[59]残酷な歌詞を書いている手が
+잔고쿠나 카시오 카이테이루 테가
+잔혹한 가사를 쓰고 있는 손이
+
+[63]君のことをまた探している
+키미노 코토오 마타 사가시테이루
+널 다시 찾고 있어
+
+[69]間違っていたんだよ 思い違っていたんだよ
+마치갓테이탄다요 오모이치갓테이탄다요
+틀렸던 거야 잘못 생각했던 거야
+
+[75]胸が痛い理由はさ そんな事じゃなかったの
+무네가 이타이 리유와사 손나 코토쟈나캇타노
+가슴이 아픈 이유는 그런 게 아니었어
+
+[84.5]悲しみが僕達と仲良く握手して
+카나시미가 보쿠타치토 나카요쿠 아쿠슈시테
+슬픔이 우리와 사이좋게 악수하고
+
+[88]摩擦音が僕達の鼓膜内でクラッシュして
+마사츠온가 보쿠타치노 코마쿠나이데 크랏슈시테
+마찰음이 우리 고막 안에서 충돌하고
+
+[92]嬉しみが僕達をさらなる苦しみへと誘う 誘う 
+우레시미가 보쿠타치오 사라나루 쿠루시미에토 이자나우 이자나우
+기쁨이 우리를 한층 더 깊은 고통으로 데려가네 데려가네
+
+[118.5]売れないアーティストが口から吐き出す
+우레나이 아티스토가 쿠치카라 하키다스
+인기 없는 아티스트가 입에서 내뱉네
+
+[122]「これは芸術だ」「文句を言うな」
+코레와 게이쥬츠다 몬쿠오 이우나
+「이건 예술이야」「불평하지마」
+
+[126]誰の助言も 俺にはいらない
+다레카노 죠겐모 오레니와 이라나이
+다른 사람의 조언도 난 필요없어
+
+[130]過信した自我が彼を包む
+카신시타 지가가 카레오 츠츠무
+과신했던 자아가 그를 감싸네
+
+[134]夢は大きく 目標はない
+유메와 오오키쿠 모쿠효와 나이
+꿈은 크고 목표는 없어
+
+[138]口は大きいが 器はちいさい
+쿠치와 오오키이가 우츠와와 치이사이
+입은 크지만 그릇은 작아
+
+[142]もうどうしたらいいんだ と口から吐き出す
+모 도시타라 이인다토 쿠치카라 하키다스
+"이제 어째야 좋은 걸까"라고 입에서 내뱉어
+
+[145]何もしていないことに 気づいていない
+나니모 시테이나이 코토니 키즈이테이나이
+아무것도 하지 않고 있다는 것을 눈치채지 못한 채
+
+[149]間違っていたんだよ 思い違っていたんだよ
+마치갓테이탄다요 오모이치갓테이탄다요
+틀렸던 거야 잘못 생각했던 거야
+
+[156]胸が痛い理由はさ そんな事じゃなかったの
+무네가 이타이 리유와사 손나 코토쟈나캇타노
+가슴이 아픈 이유는 그런 게 아니었어
+
+[165]悲しみが僕達と仲良く握手して
+카나시미가 보쿠타치토 나카요쿠 아쿠슈시테
+슬픔이 우리와 사이좋게 악수하고
+
+[168]摩擦音が僕達の鼓膜内でクラッシュして
+마사츠온가 보쿠타치노 코마쿠나이데 크랏슈시테
+마찰음이 우리 고막 안에서 충돌하고
+
+[172]嬉しみが僕達をさらなる苦しみへと誘う 誘う
+우레시미가 보쿠타치오 사라나루 쿠루시미에토 이자나우 이자나우
+기쁨이 우리를 한층 더 깊은 고통으로 데려가네 데려가네
+
+[235]間違っていたんだよ 思い違っていたんだよ
+마치갓테이탄다요 오모이치갓테이탄다요
+틀렸던 거야 잘못 생각했던 거야
+
+[243]胸が痛い理由はさ そんな事じゃなかったの
+무네가 이타이 리유와사 손나 코토쟈나캇타노
+가슴이 아픈 이유는 그런 게 아니었어
+
+[251]悲しみが僕達と仲良く握手して
+카나시미가 보쿠타치토 나카요쿠 아쿠슈시테
+슬픔이 우리와 사이좋게 악수하고
+
+[255]摩擦音が僕達の鼓膜内でクラッシュして
+마사츠온가 보쿠타치노 코마쿠나이데 크랏슈시테
+마찰음이 우리 고막 안에서 충돌하고
+
+[258]嬉しみが僕達をさらなる苦しみへと誘う 誘う
+우레시미가 보쿠타치오 사라나루 쿠루시미에토 이자나우 이자나우
+기쁨이 우리를 한층 더 깊은 고통으로 데려가네 데려가네
+
+`,
+      lyrics: [],
+    },
+    {
+      id: "YuukaiSink",
+      title: "융해sink(融解sink)",
+      youtubeId: "B383PElQMHo",
+      /* ── 가사를 통째로 붙여 넣는 칸 ────────────────────────────
+         아래 ` ` 사이에, 보내 주신 모양 그대로 붙여 넣으면 됩니다.
+         빈 줄은 있어도 없어도 괜찮습니다 (글자 모양으로 알아서 나눕니다).
+           일본어 / 한글 발음 / 해석  = 한 소절 (해석은 없어도 됨)
+           한 줄만 따로 쓴 줄        = 그 줄만 크게 ("HERO", "(간주)", "Hu Hu" 같은 줄)
+         · 시간은 전부 같은 값(lyricsTime)으로 들어갑니다.
+           나중에 맞추고 싶으면 일본어 줄 맨 앞에 [12.5] 처럼 초를 적으면 그 줄만 그 시간이 됩니다.
+         · [wave] [clap] [mic] 같은 아이콘 표시도 그대로 쓸 수 있습니다.
+         · ` (백틱) 글자만 쓰지 마세요. */
+      lyricsTime: 0,
+      lyricsText: `[55.5]ふらっとさ 何か
+후랏토사 나니카
+문득, 무언가
+
+[58]通り過ぎたような
+토-리 스기타 요-나
+스쳐 지나간 듯한
+
+[61]ぶらっとさ 僕が
+부랏토사 보쿠가
+불쑥, 내가
+
+[63.5]外を見た時
+소토오 미타 토키
+바깥을 봤을 때
+
+[66]他人の 不幸や 不安に
+타닌노 후코-야 후안니
+타인의 불행과 불안에
+
+[70]立ち止まって 幸福と 安堵を
+타치도맛테 코-후쿠토 안도오
+멈춰 서서 행복과 안도를
+
+[74]吸い取って生きてる
+스이톳테 이키테루
+빨아들이며 살고 있어
+
+[77]ほらほら透明だ
+호라 호라 토-메-다
+봐봐, 투명해
+
+[80]ほらほら鮮明だ
+호라 호라 센메-다
+봐봐, 선명해
+
+[83]ほらほら深海に 溶けてくsink
+호라 호라 신카이니 토케테쿠 싱크
+봐봐, 심해 속에 녹아들어가 sink
+
+[88]悲しみが消えるこの夢の中で
+카나시미가 키에루 코노 유메노 나카데
+슬픔이 사라지는 이 꿈속에서
+
+[94]今も あぁ 探して歌っているんだ
+이마모 아- 사가시테 우탓테 이룬다
+지금도 아, 찾아 노래하고 있어
+
+[98.5]悲しみが増えるこの日々の中で
+카나시미가 후에루 코노 히비노 나카데
+슬픔이 늘어가는 이 나날 속에서
+
+[105]今も あぁ 探して歌っているんだ
+이마모 아- 사가시테 우탓테 이룬다
+지금도 아, 찾아 노래하고 있어
+
+[130.5]プシュッとさ 開けた ジュースの缶のような
+푸슛토사 아케타 주-스노 칸노 요-나
+푸슛, 하고 열었다 주스 캔 같은
+
+[135.5]プシュッとさ 心の 気が抜けていく
+푸슛토사 코코로노 키가 누케테 이쿠
+푸슛, 하고 마음의 기운이 빠져 가
+
+[141]他人の 不幸や不安に
+타닌노 후코-야 후안니
+타인의 불행과 불안에
+
+[145]あやかって 幸福と 安堵を
+아야캇테 코-후쿠토 안도오
+편승해서 행복과 안도를
+
+[149]提供している
+테-쿄- 시테이루
+제공하고 있어
+
+[152]ほらほら透明だ
+호라 호라 토-메-다
+봐봐, 투명해
+
+[154.5]ほらほら鮮明だ
+호라 호라 센메-다
+봐봐, 선명해
+
+[157]ほらほら深海に 溶けてくsink
+호라 호라 신카이니 토케테쿠 싱크
+봐봐, 심해 속에 녹아들어가 sink
+
+[162]悲しみが消えるこの夢の中で
+카나시미가 키에루 코노 유메노 나카데
+슬픔이 사라지는 이 꿈속에서
+
+[168.5]今も あぁ 探して歌っているんだ
+이마모 아- 사가시테 우탓테 이룬다
+지금도 아, 찾아 노래하고 있어
+
+[173]悲しみが増えるこの日々の中で
+카나시미가 후에루 코노 히비노 나카데
+슬픔이 늘어가는 이 나날 속에서
+
+[179]今も あぁ 探して歌っているんだ
+이마모 아- 사가시테 우탓테 이룬다
+지금도 아, 찾아 노래하고 있어
+
+[205]ゆらいだゆらいだ
+유라이다 유라이다
+일렁이는, 일렁이는
+
+[208]ゆらいだ水の中
+유라이다 미즈노 나카
+일렁이는 물속에서
+
+[210.5]不快な不快
+후카이나 후카이나
+불쾌한, 불쾌한
+
+[213]息をしている
+이키오 시테이루
+숨을 쉬고 있어
+
+[216]ゆらいだゆらいだ
+유라이다 유라이다
+일렁이는, 일렁이는
+
+[218]ゆらいだ水の中
+유라이다 미즈노 나카
+일렁이는 물속에서
+
+[221]深いな深いな
+후카이나 후카이나
+깊구나, 깊구나
+
+[223.5]沈んでく
+시즌데쿠
+가라앉아 가
+
+
+[226]悲しみが消えるこの夢の中で
+카나시미가 키에루 코노 유메노 나카데
+슬픔이 사라지는 이 꿈속에서
+
+
+[233]今も あぁ 探して歌っているんだ
+이마모 아- 사가시테 우탓테 이룬다
+지금도 아, 찾아 노래하고 있어
+
+[237]悲しみが増えるこの日々の中で
+카나시미가 후에루 코노 히비노 나카데
+슬픔이 늘어가는 이 나날 속에서
+
+
+[243]今も あぁ 探して歌っているんだ
+이마모 아- 사가시테 우탓테 이룬다
+지금도 아, 찾아 노래하고 있어
+
+
+`,
+      lyrics: [],
+    },
+    {
+      id: "Byebyme",
+      title: "Bye by me",
+      youtubeId: "b3H5RvRHiYs",
+      /* ── 가사를 통째로 붙여 넣는 칸 ────────────────────────────
+         아래 ` ` 사이에, 보내 주신 모양 그대로 붙여 넣으면 됩니다.
+         빈 줄은 있어도 없어도 괜찮습니다 (글자 모양으로 알아서 나눕니다).
+           일본어 / 한글 발음 / 해석  = 한 소절 (해석은 없어도 됨)
+           한 줄만 따로 쓴 줄        = 그 줄만 크게 ("HERO", "(간주)", "Hu Hu" 같은 줄)
+         · 시간은 전부 같은 값(lyricsTime)으로 들어갑니다.
+           나중에 맞추고 싶으면 일본어 줄 맨 앞에 [12.5] 처럼 초를 적으면 그 줄만 그 시간이 됩니다.
+         · [wave] [clap] [mic] 같은 아이콘 표시도 그대로 쓸 수 있습니다.
+         · ` (백틱) 글자만 쓰지 마세요. */
+      lyricsTime: 0,
+      lyricsText: `[13]まんでい今日は どこへ行くの？
+만데이 쿄-와 도코에 이쿠노?
+월요일인 오늘은 어디에 가는 거야?
+
+[19]まぁいいけど ちゅーすでぃ今日も
+마- 이-케도 츄-스데이 쿄-모
+뭐, 괜찮지만 화요일인 오늘도
+
+[26]お仕事だったんでしょ？
+오시고토 닷탄데쇼?
+일이었잖아?
+
+[29]まぁいいけど
+마- 이-케도 x 2
+뭐, 괜찮지만 x2
+
+[43]うぇんずでぃ今日は 何を見ているの？
+웬즈데이 쿄-와 나니오 미테이루노?
+수요일인 오늘은 무엇을 보고 있어?
+
+[49]辛いでしょ またさ
+츠라이데쇼 마타사
+괴롭지? 또 있잖아
+
+[53]遠く去った過去の日々に
+토-쿠 삿타 카코노 히비니
+멀리 떠나간 지난날들에
+
+[57.5]名前をつけて いたんでしょ
+나마에오 츠케테 이탄데쇼
+이름을 붙이고 그러고 있었지?
+
+[65]お帰り、でももういいよ
+오카에리, 데모 모- 이-요
+어서 와, 하지만 이제 됐어
+
+[69]伝えたいことは特にないから
+츠타에타이 코토와 토쿠니 나이카라
+전하고 싶은 건 특별히 없으니까
+
+[75]お帰り、でももういいの
+오카에리, 데모 모- 이-노
+어서 와, 그래도 이제 괜찮아
+
+[79]覚えてることも もうないよ
+오보에테루 코토모 모- 나이요
+기억하고 있는 것들도 이젠 없어
+
+[96]さーすでぃ今日は どこに行ってきたの？
+사-스데이 쿄-와 도코니 잇테 키타노?
+목요일인 오늘은 어디에 다녀온 거야?
+
+[101.5]遅いでしょ
+오소이데쇼
+늦었잖아
+
+[106]ふらいでぃ今日は 思い出していたの？
+후라이데이 쿄-와 오모이다시테 이타노?
+금요일인 오늘은 떠올리고 있었어?
+
+[111.5]あのことを でもさ
+아노 코토오 데모사
+그 일을 하지만 말이야
+
+[115]遠く去った過去の日々と
+토-쿠 삿타 카코노 히비토
+멀리 떠나간 지난날들과
+
+[120.5]サヨナラしたら 楽でしょ
+사요나라 시타라 라쿠데쇼
+작별하면 편하잖아
+
+[128]お帰り、でももういいよ
+오카에리, 데모 모- 이-요
+어서 와, 하지만 이제 됐어
+
+[132]伝えたいことは特にないから
+츠타에타이 코토와 토쿠니 나이카라
+전하고 싶은 건 특별히 없으니까
+
+[137.5]お帰り、でももういいの
+오카에리, 데모 모- 이-노
+어서 와, 그래도 이제 괜찮아
+
+[142]覚えてることも もうないよ
+오보에테루 코토모 모- 나이요
+기억하고 있는 것들도 이젠 없어
+
+[158]休みの夜のやけ酒も
+야스미노 요루노 야케자케모
+쉬는 날 밤의 홧술도
+
+[163]それくらいにして もういいだろ？
+소레쿠라이니 시테 모- 이-다로?
+그 정도로 해두고 이제 됐지?
+
+[170]愛していたんだきっと 思い出すことを
+아이시테 이탄다 킷토 오모이다스 코토오
+사랑하고 있었던 거야, 분명 떠올리는 일을
+
+[175]愛して、愛して 満たしているなら
+아이시테, 아이시테 미타시테 이루나라
+사랑하고, 또 사랑해서 그것으로 채워지고 있다면
+
+[180]忘れても、もういいよ
+와스레테모, 모- 이-요
+잊어버려도, 이제 괜찮아
+
+[184]伝えたいことはもう伝えたから
+츠타에타이 코토와 모- 츠타에타카라
+전하고 싶은 말은 이미 다 전했으니까
+
+[190]忘れても、もういいよ
+와스레테모, 모- 이-요
+잊어도, 이제 괜찮아
+
+[194]この先もいっぱいたまっていくから
+코노 사키모 잇파이 타맛테 이쿠카라
+앞으로도 잔뜩 쌓여 갈 테니까
+
+[200]愛してやまない傷を
+아이시테 야마나이 키즈오
+사랑해 마지않는 상처를
+
+[203]無くして新しい日々を
+나쿠시테 아타라시- 히비오
+없애 버리고 새로운 날들을
+
+[207]またね
+마타네
+또 보자
+
+[209]Bye by me
+`,
+      lyrics: [],
+    },
+    {
+      id: "Me Today",
+      title: "나는 오늘도(僕は今日も)",
+      youtubeId: "LKyx3EYVlkA",
+      /* ── 가사를 통째로 붙여 넣는 칸 ────────────────────────────
+         아래 ` ` 사이에, 보내 주신 모양 그대로 붙여 넣으면 됩니다.
+         빈 줄은 있어도 없어도 괜찮습니다 (글자 모양으로 알아서 나눕니다).
+           일본어 / 한글 발음 / 해석  = 한 소절 (해석은 없어도 됨)
+           한 줄만 따로 쓴 줄        = 그 줄만 크게 ("HERO", "(간주)", "Hu Hu" 같은 줄)
+         · 시간은 전부 같은 값(lyricsTime)으로 들어갑니다.
+           나중에 맞추고 싶으면 일본어 줄 맨 앞에 [12.5] 처럼 초를 적으면 그 줄만 그 시간이 됩니다.
+         · [wave] [clap] [mic] 같은 아이콘 표시도 그대로 쓸 수 있습니다.
+         · ` (백틱) 글자만 쓰지 마세요. */
+      /* ── 이 곡의 소절별 시간(초) ────────────────────────────────
+         僕は今日も 음원 기준으로 맞춰 둔 시간표입니다. 소절(일본어/발음/해석
+         세 줄 묶음) 순서대로 위에서부터 하나씩 들어갑니다. 소절은 모두 56개.
+         · 아래 lyricsText 에 가사를 붙여 넣을 때 줄 앞에 [초] 를 적지 마세요.
+           적으면 그 줄은 적어 준 시간이 우선합니다.
+         · 전체가 조금 밀리거나 당겨지면 lyricsShift 숫자만 바꾸면 됩니다
+           (가사가 1초 늦게 나오면 -1, 1초 빨리 나오면 1). */
+      lyricsShift: 0,
+      lyricsTimes: [
+        15.06, 21.56, 28.63, 35.64, 49.24, 55.92, 62.87, 68.28,
+        75.8, 79.24, 82.6, 86.27, 89.76, 93.17, 96.47, 99.83,
+        101.9, 103.43, 110, 117.02, 122.93, 129.54, 138.24, 145.31,
+        151.86, 157.38, 164.96, 168.49, 171.87, 175.35, 178.88, 182.04,
+        185.42, 188.82, 191.08, 192.57, 199.04, 206.16, 212.15, 218.44,
+        220.7, 227.46, 233.41, 236.57, 241.03, 246.08, 247.31, 254.14,
+        260.92, 267.11, 273.56, 274.76, 281.65, 288.31, 294.37, 300.92
+      ],
+      lyricsTime: 0,
+      lyricsText: `母さんが言ってたんだ
+카-상가 잇테탄다
+엄마가 그러더라
+
+「お前は才能があるから
+「오마에와 사이노-가 아루카라
+너는 재능이 있으니까
+
+芸術家にでもなりな」と
+게이쥬츠카니 데모 나리나」
+예술가라도 되라고
+
+また根拠の無い夢を語る
+마타 콘쿄노 나이 유메오 카타루
+또 근거 없는 꿈을 늘어놓는다
+
+父さんが言ってたんだ
+토-상가 잇테탄다
+아빠가 그랬었어
+
+「お前は親不孝だから
+「오마에와 오야후코- 다카라
+너는 불효자라서
+
+1人で生きていきなさい」
+히토리데 이키테 이키나사이」
+혼자서 살아가거라
+
+また意味もわからず罵倒する
+마타 이미모 와카라즈 바토- 스루
+또 뜻도 모른 채 욕을 퍼부어
+
+1人ではないと暗示をして
+히토리데와 나이토 안지오 시테
+혼자가 아니라며 암시하며
+
+2人ではないとそう聞こえて
+후타리데와 나이토 소- 키코에테
+둘도 아니라고 그렇게 들려와서
+
+思ってるだけじゃ そう 辛くてでも
+오못테루 다케쟈 소- 츠라쿠테 데모
+생각만 하고 있으면, 그래, 괴롭지만
+
+そうする他にすべはなくて
+소- 스루 호카니 스베와 나쿠테
+그렇게 하는 수밖에 없어서
+
+愉快な日々だと暗示をして
+유카이나 히비다토 안지오 시테
+즐거운 나날이라고 암시해
+
+不協和音が 聞こえてきた
+후쿄-와온가 키코에테 키타
+불협화음이 들려오기 시작했어
+
+抑えてるだけじゃ そう 辛くて
+오사에테루 다케쟈 소- ㅊ라쿠테
+억누르기만 해서는, 그래, 괴로워서
+
+だから この気持ちを
+다카라 코노 키모치오
+그러니 이 마음을
+
+弾き語るよ
+히키가타루요
+노래할게
+
+もしも僕らが生まれてきて
+모시모 보쿠라가 우마레테 키테
+만약 우리가 태어나서
+
+もしも僕らが大人になっても
+모시모 보쿠라가 오토나니 낫테모
+만약 우리가 어른이 되어도
+
+もしも僕らがいなくなって
+모시모 보쿠라가 이나쿠 낫테
+만약 우리가 사라져 버려도
+
+いても そこに僕の歌があれば
+이테모 소코니 보쿠노 우타가 아레바
+그래도 거기에 나의 노래가 있다면
+
+それでいいさ
+소레데 이-사
+그걸로 충분해
+
+彼女が言ってたんだ
+카노조가 잇테탄다
+그녀가 말했어
+
+「あなたはカッコイイから
+「아나타와 캇코이-카라
+"너는 멋지니까
+
+イケメンじゃなくていいんだよ」
+이케멘쟈 나쿠테 이-인다요」
+잘생기지 않아도 괜찮아"
+
+また 元も子も無い言葉を君は言う
+마타 모토모 코모 나이 코토바오 키미와 이우
+또 모든 걸 무로 돌려버리는 말을 해
+
+僕はできる子と暗示をして
+보쿠와 데키루 코 토 안지오 시테
+나는 잘하는 아이라고 스스로 암시해
+
+心が折れる音が聞こえた
+코코로가 오레루 오토가 키코에타
+마음이 꺾이는 소리가 들렸어
+
+思ってるだけじゃ そう 辛くてでも
+오못테루 다케쟈 소- 츠라쿠테 데모
+생각만 하고 있으면, 그래, 괴롭지만
+
+そうする他にすべはなくて
+소- 스루 호카니 스베와 나쿠테
+그렇게 하는 수밖에 없어서
+
+明日は晴れると暗示をして
+아시타와 하레루토 안지오 시테
+내일은 맑을 거라고 암시하며
+
+次の日は傘を持って行った
+츠기노 히와 카사오 못테 잇타
+다음 날은 우산을 가지고 갔어
+
+抑えてるだけじゃ そう 辛くて
+오사에테루 다케쟈 소- 츠라쿠테
+억누르기만 해서는, 그래, 괴로워서
+
+だから この気持ちを
+다가라 코노 키모치오
+그래서 이 마음을
+
+弾き語るよ
+히키가타루요
+노래할게
+
+もしも僕らが生まれてきて
+모시모 보쿠라가 우마레테 키테
+만약 우리가 태어나서
+
+もしも僕らが大人になっても
+모시모 보쿠라가 오토나니 낫테모
+만약 우리가 어른이 되어도
+
+もしも僕らがいなくなって
+모시모 보쿠라가 이나쿠 낫테
+만약 우리가 사라져 버려도
+
+いても そこに僕の歌があれば
+이테모 소코니 보쿠노 우타가 아레바
+그래도 거기에 나의 노래가 있다면
+
+それでいいさ
+소레데 이-사
+그걸로 충분해
+
+ピアノの音が聞こえる
+피아노노 오토가 키코에루
+피아노 소리가 들려와
+
+ガラガラの声が聞こえる
+가라가라노 코에가 키코에루
+갈라진 목소리가 들려와
+
+枯れてく僕らの音楽に
+카레테쿠 보쿠라노 온가쿠니
+메말라 가는 우리의 음악에
+
+飴をやって もう少しと
+아메오 얏테 모- 스코시토
+사탕을 건네며 조금만 더라고
+
+その気持ちを
+소노 키모치오
+그 마음을
+
+弾き語るよ
+히키가타루요
+치며 노래할게
+
+もしも僕らが生まれてきて
+모시모 보쿠라가 우마레테 키테
+만약 우리가 태어나서
+
+もしも僕らが大人になっても
+모시모 보쿠라가 오토나니 낫테모
+만약 우리가 어른이 되어도
+
+もしも僕らがいなくなって
+모시모 보쿠라가 이나쿠 낫테
+만약 우리가 사라져 버려도
+
+いても そこに僕の歌があれば
+이테모 소코니 보쿠노 우타가 아레바
+그래도 거기에 나의 노래가 있다면
+
+それでいいさ
+소레데 이-사
+그걸로 충분해
+
+もしも僕らに才能がなくて
+모시모 보쿠라니 사이노-가 나쿠테
+만약 우리에게 재능이 없고
+
+もしも僕らが親孝行して
+모시모 보쿠라가 오야코-코- 시테
+만약 우리가 효도하고
+
+もしも僕らがイケていたら
+모시모 보쿠라가 이케테 이타라
+만약 우리가 잘나갔다면
+
+ずっとそんなことを思ってさ
+즛토 손나 코토오 오못테사
+계속 그런 생각을 하면서
+
+弾き語るよ
+히키가타루요
+노래할게
+`,
+      lyrics: [],
+    },
   ];
+
+  /* 붙여 넣은 가사(lyricsText)를 가사 줄로 바꾼다.
+     세 줄씩 = [일본어, 한글 발음, 해석]. 일본어 줄 앞의 [초] 는 그 줄의 시간.
+     시간을 하나도 안 적었으면(전부 같은 시간) "싱크 전" 곡으로 표시해 두고,
+     재생 중에도 줄을 켜거나 자동으로 스크롤하지 않는다 (마지막 줄로 튀지 않도록). */
+  /* 붙여 넣은 가사를 소절로 나눈다. 빈 줄은 몇 개든 상관없이 무시하고,
+     글자 모양으로 판단한다 (한 줄마다 빈 줄을 넣어도, 안 넣어도 똑같이 읽힘).
+       · 한글이 없는 줄(일본어·영어) 다음 줄이 한글이면 → 그 두 줄 + (다음도 한글이면) 해석 줄
+         = 일본어 / 한글 발음 / 해석   (해석이 없으면 두 줄짜리)
+       · 그 밖의 줄은 → 그 한 줄만 크게  ("HERO", "(간주)", "Hu Hu" 같은 줄)
+     줄 맨 앞의 [12.5] 는 그 소절의 시간. */
+  const HANGUL = /[가-힣]/;
+  SONGS.forEach(sg => {
+    if (typeof sg.lyricsText !== "string" || !sg.lyricsText.trim()) return;
+    const rows = sg.lyricsText.split(/\r?\n/).map(t => t.trim()).filter(Boolean);
+    const base = Number(sg.lyricsTime) || 0;
+    const shift = Number(sg.lyricsShift) || 0;                             // 전체를 몇 초 밀거나 당길지
+    const preset = Array.isArray(sg.lyricsTimes) ? sg.lyricsTimes : null;  // 미리 적어 둔 소절별 시간(초)
+    let presetAt = 0;
+    const out = [];
+    let timed = false;
+    const bare = (t)=> t.replace(/^\[\d+(?:\.\d+)?\]\s*/, "").replace(/\[(wave|clap|mic|chant|jump|spin|turn)\]|\((wave|clap|mic|chant|jump|spin|turn)\)/gi, "");
+    for (let i = 0; i < rows.length; ){
+      let first = rows[i], time = base;
+      const m = first.match(/^\[(\d+(?:\.\d+)?)\]\s*/);
+      if (m){ time = Number(m[1]); first = first.slice(m[0].length); timed = true; }
+      else if (preset && presetAt < preset.length){        // 줄 앞에 직접 적은 시간이 없을 때만 쓴다
+        const t = Number(preset[presetAt]);
+        if (isFinite(t)){ time = t; timed = true; }
+      }
+      if (preset) presetAt++;                              // 소절 번호는 줄 앞 시간과 상관없이 하나씩 올라간다
+      time += shift;
+      const next = rows[i + 1], third = rows[i + 2];
+      if (!HANGUL.test(bare(rows[i])) && next !== undefined && HANGUL.test(bare(next))){
+        const hasTr = third !== undefined && HANGUL.test(bare(third));
+        out.push({ time, jp: first, ko: next, tr: hasTr ? third : "" });
+        i += hasTr ? 3 : 2;
+      } else {
+        out.push({ time, jp: "", ko: first, tr: "" });
+        i += 1;
+      }
+    }
+    out.sort((a, b) => a.time - b.time);
+    sg.lyrics = out;
+    if (!timed) sg.unsynced = true;
+  });
 
   const app = document.getElementById("app");
   const songView = document.getElementById("song-view");
@@ -4546,6 +6207,7 @@
   const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
   const SEAT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><rect x="9.6" y="10.2" width="4.8" height="3.6" rx="1.2"/></svg>';
   const MANNER_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.2-4.4-7.2-9.6A3.9 3.9 0 0 1 12 8.4a3.9 3.9 0 0 1 7.2 2.5c0 5.2-7.2 9.6-7.2 9.6z"/><path d="M8.4 5.2 9.6 3"/><path d="M12 4.2V2"/><path d="M15.6 5.2 14.4 3"/></svg>';
+  const LIST_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11"/><path d="M9 12h11"/><path d="M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>';
   const CALENDAR_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17"/><path d="M8 3v4"/><path d="M16 3v4"/></svg>';
   const WARN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.9 18.2A2 2 0 0 0 3.6 21h16.8a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13.5"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
   /* 폰에 사선을 그은 아이콘 — "폰 플래시는 켜지 말아 주세요"
@@ -4558,7 +6220,7 @@
      서울도 도쿄와 같은 순서였다. songs 가 2개인 번호는 날짜별로 곡이
      달랐던 자리(토 / 일)다. id 는 위 SONGS 의 id 와 같아야 곡 화면으로 넘어간다. */
   const SETLIST = {
-    label: "도쿄 & 서울 공연",
+    label: "“HORO”",
     dates: "도쿄 09.05 · 06  |  서울 09.19 · 20",
     items: [
       { n:1,  songs:[{ id:"NakiJizo" }] },
@@ -4604,7 +6266,7 @@
   /* 지금 폰에 깔려 있는 화면이 몇 번째 판인지 알려 주는 표시.
      새로 올렸는데 화면이 그대로일 때, 옛 판이 남아 있는지 바로 확인할 수 있다.
      sw.js 의 CACHE_VERSION 과 같이 올려 주세요. */
-  const BUILD = "v130";
+  const BUILD = "v150";
 
   /* 주소 뒤에 ?debug=1 을 붙이면 화면 위에 상태가 뜬다.
      "재생 중인 줄이 여러 개" 같은 문제가 폰에서만 날 때 원인을 보기 위한 것. */
@@ -4692,6 +6354,14 @@
     } else if (hash === "setlist") {
       leaveSongView();
       renderSetlist();
+    } else if (hash === "concerts") {
+      const back = (songFrom === "concerts");        // 곡을 보고 '뒤로' 돌아온 경우
+      leaveSongView();
+      renderConcerts();
+      window.scrollTo(0,0);
+      applyTheme(currentTheme);
+      if (back) restoreConcertsScroll(); else concertsScrollY = 0;
+      return;
     } else {
       leaveSongView();
       setSongFrom("guide");
@@ -5073,6 +6743,7 @@
   }
 
   function renderHome(){
+    hideNoCall = true;            // 홈에 나오면 '응원 없는 곡 숨김'이 다시 켜진다
     app.innerHTML = `
       <section class="hero">
         ${themeToggleHtml("home-theme")}
@@ -5090,6 +6761,13 @@
 
           <!-- 다음 공연 — LIVE_SCHEDULE 에서 자동으로 채운다 -->
           <div class="show-meta" id="next-live"></div>
+
+          <!-- 공연 당일에만 나타나는 오늘의 일정 (LIVE_SCHEDULE 의 개장·개연 시각) -->
+          <div class="today-card" id="today-card" hidden>
+            <div class="today-head"><span class="dot"></span><span id="today-title">TODAY</span></div>
+            <div class="today-now" id="today-now"></div>
+            <ul class="today-list" id="today-list"></ul>
+          </div>
 
           <nav class="main-menu">
             <button class="menu-btn" id="guide-btn">
@@ -5111,6 +6789,12 @@
             </div>
           </div>
         </div>
+
+        <button class="menu-row menu-link-row" type="button" id="concerts-btn">
+          <span class="info-toggle-icon">${LIST_SVG}</span>
+          <span class="info-toggle-label">콘서트 셋리스트</span>
+          <span class="menu-row-go">›</span>
+        </button>
 
         <div class="info-card" id="manner-card">
           <button class="menu-row info-toggle" aria-expanded="false">
@@ -5172,7 +6856,7 @@
           </a>
           <button class="menu-chip spoiler" type="button" id="setlist-btn">
             <span class="chip-ico warn">${WARN_SVG}</span>
-            <span class="chip-label">도쿄·서울 셋리</span>
+            <span class="chip-label">HORO 셋리스트</span>
             <span class="chip-note">스포 포함</span>
           </button>
         </div>
@@ -5191,6 +6875,7 @@
     document.getElementById("guide-btn").addEventListener("click", ()=>{ location.hash = "#/guide"; });
     document.getElementById("setlist-btn").addEventListener("click", ()=>{ location.hash = "#/setlist"; });
     setupAccordions();
+    document.getElementById("concerts-btn").addEventListener("click", ()=>{ location.hash = "#/concerts"; });
     setupHomeExtras();
     startCountdown();
 
@@ -5302,7 +6987,10 @@
             <button class="song-sort" type="button" data-sort="title" id="sort-title">가나다</button>
             <button class="song-sort" type="button" data-sort="chant" id="sort-chant">떼창</button>
           </div>
-          <div class="song-search-meta"><span id="song-count">전체 ${SONGS.length}곡</span></div>
+          <div class="song-search-meta">
+            <span id="song-count">전체 ${SONGS.length}곡</span>
+            <button class="song-filter" type="button" id="nocall-toggle" aria-pressed="false"></button>
+          </div>
           <p class="song-empty" id="song-empty" hidden><b>찾는 곡이 없어요</b>제목 일부나 곡 번호를 입력해 보세요</p>
           <ul class="song-list" id="song-list"></ul>
         </section>
@@ -5330,6 +7018,232 @@
     paintSongList();
   }
 
+  /* ---------------- 콘서트 셋리스트 (지난 투어) ----------------
+     도쿄·서울 셋리스트 화면과 같은 모양. 위에서 투어를 고르면 아래에 그 투어의
+     공연 순서가 나온다. 지난 공연이라 스포 가림막은 두지 않는다.
+     · 가이드가 있는 곡 → 누르면 곡 화면 (이전/다음 곡도 이 투어 순서대로)
+     · 없는 곡 → 이름만 (눌러도 아무 일 없음) */
+  let concertKind = "tour";      // "tour" = 원맨 투어 · "fest" = 페스·이벤트
+  let concertTour = 0;           // 지금 보고 있는 투어 (concertTours() 번호)
+  let concertFest = 0;           // 지금 보고 있는 페스 (CONCERT_FESTS 번호)
+  let concertOpenYear = null;    // 위쪽 메뉴에서 펼쳐 둔 연도 (하나만 열린다)
+  let concertOpenMonth = 0;      // 페스 목록에서 고른 달 (0 = 그 해 전체)
+  let concertsScrollY = 0;       // 곡을 보러 가기 전 스크롤 위치
+
+  function concertTours(){ return CONCERT_SETLISTS.filter(t => !t.link); }
+  function concertItems(){ return concertKind === "fest" ? CONCERT_FESTS : concertTours(); }
+  function concertIndex(){ return concertKind === "fest" ? concertFest : concertTour; }
+  function concertPick(i){ if (concertKind === "fest") concertFest = i; else concertTour = i; }
+  function concertCurrent(){ const list = concertItems(); return list[concertIndex()] || list[0]; }
+
+  /* 이 투어에서 가이드가 있는 곡만, 공연 순서대로 (같은 곡은 한 번만) */
+  function concertNavList(){
+    const t = concertCurrent();
+    if (!t || !t.songs) return [];
+    const seen = new Set(), out = [];
+    t.songs.forEach(item => {
+      const names = Array.isArray(item) ? item : (item && item.note ? [item.note] : (typeof item === "string" ? [item] : []));
+      names.forEach(n => { const sg = findSongByJp(n); if (sg && !seen.has(sg.id)){ seen.add(sg.id); out.push(sg); } });
+    });
+    return out;
+  }
+
+  function concertRowHtml(name, num, extra){
+    const sg = findSongByJp(name);
+    return `
+          <button class="set-row${extra && extra.sub ? " sub" : ""}" ${sg ? `data-id="${escapeHtml(sg.id)}"` : "disabled"}>
+            ${extra && extra.chip ? `<span class="day-chip alt">${extra.chip}</span>` : `<span class="set-num">${num}</span>`}
+            <span class="set-title${sg ? "" : " none"}">${escapeHtml(sg ? sg.title : name)}${extra && extra.note ? `<small class="set-note">${escapeHtml(extra.note)}</small>` : ""}</span>
+            <span class="set-go">${sg ? "›" : ""}</span>
+          </button>`;
+  }
+
+  function paintConcert(){
+    const t = concertCurrent();
+    const listEl = document.getElementById("cset-list");
+    if (!t || !listEl) return;
+
+    let n = 0, have = 0;
+    listEl.innerHTML = t.songs.map(item => {
+      if (item && item.enc){
+        return `<li class="set-item cset-enc">ENCORE</li>`;
+      }
+      if (item && item.se){
+        return `<li class="set-item">${concertRowHtml(item.se, "SE")}</li>`;
+      }
+      if (item && item.note){
+        if (findSongByJp(item.note)) have++;
+        return `<li class="set-item">${concertRowHtml(item.note, "+", { note: item.sub })}</li>`;
+      }
+      n++;
+      if (Array.isArray(item)){
+        if (item.some(findSongByJp)) have++;
+        return `
+        <li class="set-item">
+          <div class="set-split">
+            <div class="set-split-head">
+              <span class="set-num">${pad(n)}</span>
+              <span class="set-split-note">공연마다 다른 곡</span>
+            </div>
+            ${item.map((nm, i)=> concertRowHtml(nm, "", { sub:true, chip:"ABC"[i] })).join("")}
+          </div>
+        </li>`;
+      }
+      if (findSongByJp(item)) have++;
+      return `<li class="set-item">${concertRowHtml(item, pad(n))}</li>`;
+    }).join("");
+
+    const when = t.dates ? t.dates : `${t.date} · ${t.venue}`;
+    document.getElementById("cset-title").textContent = t.name;
+    document.getElementById("cset-desc").innerHTML =
+      `${escapeHtml(when)}` +
+      (t.basis ? `<br><span class="cset-basis">${escapeHtml(t.basis)}</span>` : "") +
+      (t.note  ? `<br><span class="cset-basis">${escapeHtml(t.note)}</span>` : "") +
+      `<br>› 가 있는 곡은 누르면 응원가이드로 넘어가요` +
+      (t.id ? `<br><a class="cset-src" href="https://www.livefans.jp/events/${t.id}" target="_blank" rel="noopener">LiveFans에서 원본 보기 ↗</a>` : "");
+    document.getElementById("cset-count").textContent = `총 ${n}곡 · 가이드 ${have}곡`;
+    document.getElementById("cset-year").textContent = String(t.year);
+
+    listEl.querySelectorAll(".set-row[data-id]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const target = SONGS.find(sg => sg.id === btn.dataset.id);
+        if (!target) return;
+        concertsScrollY = window.scrollY;     // 돌아왔을 때 보던 자리로
+        setSongFrom("concerts");
+        gotoSong(target);                     // 탭한 그 순간 재생 (모바일 소리 허용)
+      });
+    });
+  }
+
+  function renderConcerts(){
+    if (concertTour >= concertTours().length) concertTour = 0;
+    if (concertFest >= CONCERT_FESTS.length) concertFest = 0;
+    const horo = CONCERT_SETLISTS.find(t => t.link);
+    app.innerHTML = `
+      <div class="setlist-page concerts-page">
+        <div class="song-topbar">
+          <button class="back-btn" id="cset-back-btn">← 홈으로</button>
+          <h1>콘서트 셋리스트</h1>
+          ${themeToggleHtml()}
+        </div>
+
+        <section class="setlist-body">
+          <div class="cset-kinds" role="group" aria-label="종류 고르기">
+            <button class="cset-kind" type="button" data-kind="tour">원맨 투어 <small>${concertTours().length}</small></button>
+            <button class="cset-kind" type="button" data-kind="fest">페스 · 이벤트 <small>${CONCERT_FESTS.length}</small></button>
+          </div>
+          <div class="cset-years" id="cset-picker" role="group" aria-label="공연 고르기"></div>
+
+          <div class="setlist-head">
+            <h2 id="cset-title"></h2>
+            <p id="cset-desc"></p>
+          </div>
+
+          <div class="setlist-meta">
+            <span id="cset-count"></span>
+            <span id="cset-year"></span>
+          </div>
+
+          <ul class="set-list" id="cset-list"></ul>
+
+          <p class="setlist-note">
+            ※ 팬이 정리한 비공식 셋리스트입니다. 페스·이벤트와 2020~2023년 공연은 LiveFans에 등록된 내용을 옮겼어요. 공연마다 다른 곡이 있었던 자리는 <b>A</b> · <b>B</b> 로 나눠 두었습니다.<br>
+            ※ 응원가이드에 아직 없는 곡은 이름만 보여요.
+            ${horo ? `<br>※ ${escapeHtml(horo.name)} 셋리스트는 <a href="${horo.link}" class="cset-horo">이 링크</a>에서 볼 수 있어요 (스포 포함).` : ""}
+          </p>
+        </section>
+      </div>
+    `;
+    document.getElementById("cset-back-btn").addEventListener("click", ()=>{ location.hash = "#/"; });
+    app.querySelectorAll(".cset-kind").forEach(b => b.addEventListener("click", ()=>{
+      if (concertKind === b.dataset.kind) return;
+      concertKind = b.dataset.kind;
+      concertOpenYear = null;              // 고른 공연이 있는 연도가 열린다
+      concertOpenMonth = 0;
+      paintPicker();
+      paintConcert();
+    }));
+    paintPicker();
+    paintConcert();
+  }
+
+  /* 위쪽 메뉴 — 연도 하나만 열리는 접이식. 지금 보고 있는 공연의 연도가 기본으로 열린다 */
+  function paintPicker(){
+    const box = document.getElementById("cset-picker");
+    if (!box) return;
+    const list = concertItems(), idx = concertIndex();
+    const years = [...new Set(list.map(it => it.year))];
+    app.querySelectorAll(".cset-kind").forEach(k=>{
+      const on = k.dataset.kind === concertKind;
+      k.classList.toggle("active", on);
+      k.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    const open = years.includes(concertOpenYear) ? concertOpenYear : (list[idx] && list[idx].year);
+
+    // 연도는 한 줄에 칩으로, 고른 연도의 공연만 바로 아래에 보여 준다
+    let rows = list.map((it, i)=>({ it, i })).filter(o => o.it.year === open);
+
+    // 페스는 한 해에 40개가 넘기도 해서, 공연이 있는 달만 칩으로 한 줄 더 보여 준다
+    let months = [], monthRow = "";
+    if (concertKind === "fest"){
+      months = [...new Set(rows.map(o => Number(o.it.date.slice(5, 7))))].sort((a,b)=> a - b);
+      const has = months.includes(concertOpenMonth);
+      if (!has && concertOpenMonth !== 0) concertOpenMonth = 0;
+      monthRow = months.length < 2 ? "" : `
+        <div class="cset-mons" role="group" aria-label="달 고르기">
+          <button class="cset-mon${concertOpenMonth === 0 ? " active" : ""}" type="button" data-month="0">전체 ${rows.length}</button>
+          ${months.map(m => `<button class="cset-mon${concertOpenMonth === m ? " active" : ""}" type="button" data-month="${m}">${m}월</button>`).join("")}
+        </div>`;
+      if (concertOpenMonth) rows = rows.filter(o => Number(o.it.date.slice(5, 7)) === concertOpenMonth);
+    }
+
+    box.innerHTML = `
+      <div class="cset-yrs" role="group" aria-label="연도 고르기">
+        ${years.map(y => `<button class="cset-yr-chip${y === open ? " active" : ""}" type="button" data-year="${y}" aria-pressed="${y === open ? "true" : "false"}">${String(y).slice(2)}</button>`).join("")}
+      </div>
+      ${monthRow}
+      <div class="cset-yr-panel${concertKind === "fest" ? " scroll" : ""}">
+        ${concertKind === "tour"
+          ? `<div class="cset-tabs">${rows.map(o=>`
+              <button class="cset-tab${o.i === idx ? " active" : ""}" type="button" data-pick="${o.i}"><b>${escapeHtml(o.it.short)}</b></button>`).join("")}</div>`
+          : `<ul class="cset-fests">${rows.map(o=>`
+              <li><button class="cset-fest${o.i === idx ? " active" : ""}" type="button" data-pick="${o.i}">
+                <span class="cset-fest-date">${escapeHtml(o.it.date.slice(5))}</span>
+                <span class="cset-fest-name">${escapeHtml(o.it.name)}<small>${escapeHtml(o.it.venue)}</small></span>
+              </button></li>`).join("")}</ul>`}
+      </div>`;
+
+    box.querySelectorAll(".cset-mon").forEach(b => b.addEventListener("click", ()=>{
+      concertOpenMonth = Number(b.dataset.month);
+      paintPicker();
+    }));
+
+    box.querySelectorAll(".cset-yr-chip").forEach(b => b.addEventListener("click", ()=>{
+      concertOpenYear = Number(b.dataset.year);   // 고른 연도만 아래에 펼쳐진다
+      concertOpenMonth = 0;                       // 연도를 바꾸면 달 고르기는 '전체'로
+      paintPicker();
+    }));
+    box.querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", ()=>{
+      concertPick(Number(b.dataset.pick));
+      concertOpenYear = open;
+      paintPicker();
+      paintConcert();     // 보던 자리 그대로 둔다 (자동으로 스크롤하지 않음)
+    }));
+  }
+
+  /* 곡을 보고 '뒤로' 왔을 때 보던 자리로 (글꼴이 늦게 잡혀도 맞도록 몇 번 더) */
+  function restoreConcertsScroll(){
+    const y = concertsScrollY;
+    if (!(y > 0)) return;
+    const restore = ()=>{
+      const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      window.scrollTo(0, Math.min(y, max));
+    };
+    requestAnimationFrame(restore);
+    setTimeout(restore, 80);
+    setTimeout(restore, 260);
+  }
+
   /* ---------------- SETLIST (스포일러) ----------------
      보기 방식을 직접 고르기 전까지 목록 데이터를 화면에 넣지 않는다. */
   let setlistScrollHandler = null;
@@ -5338,9 +7252,13 @@
      새로고침 뒤에는 셋리스트 맥락을 복원하지 않아 순서가 노출되지 않는다. */
   let songFrom = "guide";
   function setSongFrom(v){
-    songFrom = (v === "setlist") ? "setlist" : "guide";
+    songFrom = (v === "setlist" || v === "concerts") ? v : "guide";
   }
-  function songBackHash(){ return songFrom === "setlist" ? "#/setlist" : "#/guide"; }
+  function songBackHash(){
+    if (songFrom === "setlist") return "#/setlist";
+    if (songFrom === "concerts") return "#/concerts";   // 콘서트 셋리스트에서 들어온 곡
+    return "#/guide";
+  }
 
   function teardownSetlistReveal(){
     if (setlistScrollHandler){
@@ -5784,6 +7702,20 @@
         <a href="${LIVE_SOURCE_URL}" target="_blank" rel="noopener">공식 LIVE 일정 ↗</a></p>`;
   }
 
+  /* 셋리스트 표의 일본어 원제로 응원가이드 곡을 찾는다 (없으면 null) */
+  let songByJp = null;
+  function findSongByJp(name){
+    if (!songByJp){
+      songByJp = new Map();
+      SONGS.forEach(sg => {
+        const m = String(sg.title).match(/\(([^()]*)\)\s*$/);
+        const key = (m ? m[1] : sg.title).trim().toLowerCase().replace(/\s+/g, "");
+        songByJp.set(key, sg);
+      });
+    }
+    return songByJp.get(String(name).trim().toLowerCase().replace(/\s+/g, "")) || null;
+  }
+
   /* ── 히어로: 다음 공연 표시 ──────────────────────────────────
      카운트다운이 세는 공연(같은 공연장 이틀이면 이틀 모두)을 날짜·시각 줄로 보여 준다. */
   let nextLiveGi = -2;
@@ -5810,6 +7742,78 @@
           + `<a class="show-venue" href="${focus.d.url}" target="_blank" rel="noopener">${escapeHtml(grp.venue)} · ${escapeHtml(grp.place)}</a>`;
       }
     }
+  }
+
+  /* ── 오늘의 공연 — 실시간 현황 ────────────────────────────────
+     공연지 날짜로 "오늘" 공연이 있으면 카드가 나타나고, 개장 · 개연 중
+     지금 어느 단계인지와 다음 단계까지 남은 시간을 1초마다 갱신한다.
+     시각은 공식 안내에 적힌 현지 시각 그대로 보여 준다
+     (일본은 한국과 같은 시각, 홍콩·타이베이는 한국보다 1시간 늦다). */
+  function todaySteps(x){
+    const d = x.d, steps = [];
+    if (d.open) steps.push({ t:d.open, label:"개장 · 입장 시작" });
+    if (x.grp.slot){
+      if (d.eventStart) steps.push({ t:d.eventStart, label:"이벤트 시작" });
+      if (d.start)      steps.push({ t:d.start, label:"Vaundy 출연", main:true });
+    } else if (x.grp.series === "event"){
+      if (d.start) steps.push({ t:d.start, label:"이벤트 시작", sub:"Vaundy 출연 순서 미정", main:true });
+    } else if (d.start){
+      steps.push({ t:d.start, label:"공연 시작", main:true });
+    }
+    const tz = d.tz || "+09:00";
+    steps.forEach(v => { v.ms = new Date(`${d.date}T${v.t}:00${tz}`).getTime(); });
+    return steps;
+  }
+  const leftText = (ms)=>{
+    const h = Math.floor(ms/3600000), m = Math.floor(ms%3600000/60000), sec = Math.floor(ms%60000/1000);
+    return h > 0 ? `${h}시간 ${pad(m)}분 ${pad(sec)}초` : `${m}분 ${pad(sec)}초`;
+  };
+
+  let todayBuiltKey = null;
+  function updateTodayCard(now){
+    const card = document.getElementById("today-card");
+    if (!card) return;
+    const x = liveDays().find(v => !v.cancelled && now >= v.dayFrom && now < v.dayTo);
+    if (!x){ card.hidden = true; todayBuiltKey = null; return; }
+    card.hidden = false;
+
+    const key = x.d.date;
+    if (todayBuiltKey !== key){
+      todayBuiltKey = key;
+      const name = x.grp.title ? shortLiveTitle(x.grp.title) : (LIVE_SERIES_SHORT[x.grp.series] || "");
+      document.getElementById("today-title").textContent =
+        `오늘 공연 · ${Number(key.slice(5,7))}/${Number(key.slice(8,10))}(${DOW_KO[x.dow]}) · ${name}`;
+    }
+
+    const steps   = todaySteps(x);
+    const list    = document.getElementById("today-list");
+    const nowEl   = document.getElementById("today-now");
+    const venue   = `${escapeHtml(x.grp.venue)} · ${escapeHtml(x.grp.place)}`;
+    const link    = `<a class="today-link" href="${x.d.url}" target="_blank" rel="noopener">공식 안내 ↗</a>`;
+
+    if (!steps.length){                    // 시각이 발표되지 않은 날
+      list.innerHTML = "";
+      nowEl.innerHTML = `<b>${venue}</b><br>개장·개연 시각은 아직 발표되지 않았어요. ${link}`;
+      return;
+    }
+
+    const nextIdx = steps.findIndex(v => v.ms > now);
+    const ended   = nextIdx === -1 && now >= x.endMs;       // 공연까지 끝났으면 전부 흐리게
+    const curIdx  = ended ? steps.length : (nextIdx === -1 ? steps.length - 1 : nextIdx - 1);
+    list.innerHTML = steps.map((v,i)=>{
+      const cls = i < curIdx ? "past" : (i === curIdx ? "now" : "");
+      const sub = v.sub ? ` <small>${escapeHtml(v.sub)}</small>` : "";
+      return `<li class="${cls}${v.main ? " main" : ""}"><span class="t">${v.t}</span><span class="l">${escapeHtml(v.label)}${sub}</span></li>`;
+    }).join("");
+
+    if (nextIdx === -1){
+      nowEl.innerHTML = now < x.endMs
+        ? `<b>지금 공연 중</b> · ${venue}`
+        : `<b>오늘 공연은 끝났을 시간이에요.</b> 고생 많으셨어요!`;
+      return;
+    }
+    const cur = curIdx >= 0 ? `<b>${escapeHtml(steps[curIdx].label)}</b> 진행 중<br>` : `<b>${venue}</b><br>`;
+    nowEl.innerHTML = `${cur}${escapeHtml(steps[nextIdx].label)}까지 <span class="left">${leftText(steps[nextIdx].ms - now)}</span> ${curIdx < 0 ? link : ""}`;
   }
 
   /* 끝난 날은 흐리게, 진행 중인 날은 주황으로 */
@@ -5877,7 +7881,7 @@
     if (!ul) return;
 
     ul.innerHTML = sortedSongs().map(s=>`
-      <li data-no="${songNo(s)}">
+      <li data-no="${songNo(s)}"${songHasCall(s) ? "" : ' data-nocall="1"'}>
         <button class="song-row" data-id="${escapeHtml(s.id)}">
           <span class="song-num">${pad(songNo(s))}</span>
           <span class="song-title">${escapeHtml(s.title)}</span>
@@ -5941,11 +7945,25 @@
       const ok = !q || (isNum
         ? (no === String(Number(q)) || pad(Number(no)) === q)      // 번호 검색
         : (squash(title).includes(q) || squash(toCho(title)).includes(q)));  // 제목 · 초성
-      li.hidden = !ok;
-      if (ok) hit++;
+      // 검색 중에는 숨김을 잠시 풀어 준다 (찾는 곡이 안 나오면 더 헷갈리니까)
+      const show = ok && (!!q || !hideNoCall || li.dataset.nocall !== "1");
+      li.hidden = !show;
+      if (show) hit++;
     });
 
-    if (count) count.textContent = q ? `검색 결과 ${hit}곡` : `전체 ${items.length}곡`;
+    const hid = (hideNoCall && !q) ? noCallCount() : 0;
+    if (count) count.textContent = q
+      ? `검색 결과 ${hit}곡`
+      : (hid ? `응원콜 ${hit}곡 · ${hid}곡 숨김` : `전체 ${hit}곡`);
+
+    const toggle = document.getElementById("nocall-toggle");
+    if (toggle){
+      const n = noCallCount();
+      toggle.hidden = n === 0;
+      toggle.textContent = hideNoCall ? `응원콜 없는 곡 보기 (${n})` : `응원콜 없는 곡 숨기기 (${n})`;
+      toggle.setAttribute("aria-pressed", hideNoCall ? "true" : "false");
+      toggle.classList.toggle("on", !hideNoCall);
+    }
     if (empty) empty.hidden = hit !== 0;
     if (clear) clear.classList.toggle("show", !!input.value);
   }
@@ -5968,6 +7986,12 @@
 
     input.addEventListener("input", apply);
     clear.addEventListener("click", ()=>{ input.value = ""; apply(); input.focus(); });
+
+    const toggle = document.getElementById("nocall-toggle");
+    if (toggle) toggle.addEventListener("click", ()=>{
+      hideNoCall = !hideNoCall;      // 이 화면에 있는 동안만 유지 (다시 들어오면 또 숨김)
+      apply();
+    });
     apply();
   }
 
@@ -5980,10 +8004,12 @@
       const now   = Date.now();
       const focus = focusLiveDay(now);
       paintNextLive(focus);
+      updateTodayCard(now);               // 공연 당일이면 오늘의 일정 · 실시간 현황
       markShowRows(focus, now);
 
       if (!focus){                        // 발표된 공연이 모두 끝남
         setPill("END", "", "end");
+        updateTodayCard(now);
         stopCountdown();
         return;
       }
@@ -6126,6 +8152,10 @@
      셋리스트 화면에서 보던 그 순서 그대로 보여 준다.
      (랜덤 모드면 섞여 있던 그 순서) */
   function sheetSongs(){
+    if (songFrom === "concerts"){
+      const list = concertNavList();
+      if (list.length) return list;
+    }
     if (songFrom === "setlist"){
       const list = setlistNavList();
       if (list.length){
@@ -6141,6 +8171,14 @@
        (공연 순서 모드면 공연 순서, 랜덤 모드면 섞여 있던 그 순서)
      · 곡 목록에서 들어왔으면  → 곡 목록에서 고른 정렬 순서 */
   function songNeighbors(song){
+    if (songFrom === "concerts"){
+      const list = concertNavList();
+      const pos = list.findIndex(x => x.id === song.id);
+      if (pos >= 0){
+        return { idx: pos, prev: list[(pos - 1 + list.length) % list.length],
+                 next: list[(pos + 1) % list.length] };
+      }
+    }
     if (songFrom === "setlist"){
       const list = setlistNavList();
       if (list.length){
@@ -6611,7 +8649,7 @@
     // 어디서 들어왔는지에 따라 '뒤로' 버튼의 안내 글을 바꾼다
     const backBtn = document.getElementById("song-back-btn");
     if (backBtn){
-      const label = songFrom === "setlist" ? "셋리스트로" : "곡 목록으로";
+      const label = (songFrom === "setlist" || songFrom === "concerts") ? "셋리스트로" : "곡 목록으로";
       backBtn.title = label;
       backBtn.setAttribute("aria-label", label);
     }
@@ -6644,7 +8682,9 @@
 
     const sheetTitle = document.getElementById("song-sheet-title");
     if (sheetTitle) sheetTitle.textContent =
-      songFrom === "setlist" ? "셋리스트 곡" : "곡 선택";
+      songFrom === "setlist" ? "셋리스트 곡"
+      : songFrom === "concerts" ? (((concertCurrent() || {}).short || (concertCurrent() || {}).name || "") + " 셋리스트 곡")
+      : "곡 선택";
 
     closeSongSheet();
     applySheetFilter();
@@ -7001,6 +9041,16 @@
     return ["default","title","title-desc","chant-desc","chant-asc"].includes(v) ? v : "default";
   })();
 
+  /* 응원콜(떼창·박수·손 흔들기·점프 등)이 하나도 없는 곡은 곡 목록에서 숨긴다.
+     보이는 것만 바뀌는 것이라 이전/다음 곡 순서(재생 목록)에는 영향을 주지 않는다. */
+  let hideNoCall = true;   /* 응원 없는 곡 숨기기. 홈 화면으로 나갈 때만 '숨김'으로 되돌아가고,
+                              곡을 보고 목록으로 돌아올 때는 보던 상태를 그대로 유지한다. */
+  function songHasCall(song){
+    const m = songMarks(song);
+    return !!(m.chant || m.clap || m.wave || m.jump || m.spin);
+  }
+  function noCallCount(){ return SONGS.filter(s => !songHasCall(s)).length; }
+
   /* 곡의 원래 번호(1부터). 정렬을 바꿔도 이 번호는 그대로라 번호 검색이 계속 통한다. */
   function songNo(song){ return SONGS.findIndex(s => s.id === song.id) + 1; }
 
@@ -7114,12 +9164,28 @@
     }
   }
 
-  function onPlayerError(){
+  /* 유튜브가 알려 주는 오류 번호를 사람 말로 바꿔서 보여 준다.
+     (특히 파일을 직접 열었을 때(file://) 유튜브가 막는 경우를 바로 알 수 있게) */
+  const YT_ERROR_TEXT = {
+    2:   "영상 주소(ID)가 잘못됐어요.",
+    5:   "이 브라우저에서 재생할 수 없는 영상이에요.",
+    100: "영상이 삭제됐거나 비공개예요.",
+    101: "이 영상은 다른 사이트에서 재생하지 못하게 막혀 있어요.",
+    150: "이 영상은 다른 사이트에서 재생하지 못하게 막혀 있어요.",
+    153: "지금 열어 둔 주소에서는 유튜브가 재생을 막아요."
+  };
+  function onPlayerError(e){
     clearTimeout(videoStatusTimer);
     const status = document.getElementById("video-status");
     if (!status) return;
+    const code = e && e.data;
+    const isFile = location.protocol === "file:";
+    let msg = YT_ERROR_TEXT[code] || "영상을 재생할 수 없어요.";
+    if (isFile){
+      msg = "파일을 직접 열면(file:///…) 유튜브가 영상을 막아요. VS Code 의 Live Server 같은 걸로 열어 주세요 (http://127.0.0.1:…).";
+    }
     status.hidden = false;
-    status.textContent = "영상을 재생할 수 없어요. 아래에서 유튜브로 열어 보세요.";
+    status.innerHTML = escapeHtml(msg) + ' <small style="opacity:.7">(유튜브 오류 ' + escapeHtml(String(code)) + ')</small><br>아래에서 유튜브로 열어 보세요.';
   }
 
   /* ── 볼륨 기억하기 ────────────────────────────────────────────
@@ -7274,6 +9340,7 @@
     chantOnlyTick(cur);
 
     let activeIdx = lastActiveIdx;
+    if (currentSong && currentSong.unsynced){ cur = null; activeIdx = -1; }   // 싱크 전 곡
     if (cur !== null && isFinite(cur)){
       activeIdx = -1;
       for (let i = 0; i < lines.length; i++) {
